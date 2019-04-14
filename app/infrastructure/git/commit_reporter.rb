@@ -1,10 +1,10 @@
-require 'git'
+# frozen_string_literal: true
 
+require 'git'
 
 module GitCommit
   class CommitReporter
-
-    EMPTY_SHA = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
+    EMPTY_SHA = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'.freeze
 
     def initialize(gitrepo)
       @local = gitrepo.local

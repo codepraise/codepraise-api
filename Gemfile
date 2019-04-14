@@ -43,6 +43,9 @@ gem 'unparser'
 # Git Operation by using git object
 gem 'git', '~> 1.5'
 
+# MongoDB Driver
+gem 'mongo', '~> 2.8'
+
 group :development, :test do
   gem 'database_cleaner'
   gem 'sqlite3'

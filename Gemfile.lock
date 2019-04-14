@@ -31,6 +31,7 @@ GEM
     backports (3.11.4)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
+    bson (4.4.2)
     codeclimate-engine-rb (0.4.1)
       virtus (~> 1.0)
     coderay (1.1.2)
@@ -175,6 +176,8 @@ GEM
     minitest (5.11.3)
     minitest-rg (5.2.0)
       minitest (~> 5.0)
+    mongo (2.8.0)
+      bson (>= 4.4.2, < 5.0.0)
     multi_json (1.13.1)
     multipart-post (2.0.0)
     net-http-persistent (3.0.0)
@@ -320,6 +323,7 @@ DEPENDENCIES
   http (~> 3.0)
   minitest (~> 5.11)
   minitest-rg (~> 5.2)
+  mongo (~> 2.8)
   multi_json
   pg (~> 0.18)
   pry

@@ -2,14 +2,17 @@
 development:
   API_HOST: http://localhost:9090
   # Infrastructure
-  DB_FILENAME:    app/infrastructure/database/local/dev.db
+  DB_FILENAME: app/infrastructure/database/local/dev.db
   REPOSTORE_PATH: app/infrastructure/git/repostore
+  MONGODB_URL: 'mongodb://127.0.0.1:27017/dev'
 
 test:
   API_HOST: http://localhost:9090
   # Infrastructure
   DB_FILENAME:    app/infrastructure/database/local/test.db
   REPOSTORE_PATH: app/infrastructure/git/repostore
+  MONGODB: '127.0.0.1:27017'
+  MONGODB_URL: 'mongodb://127.0.0.1:27017/test'
 
 app_test:
   API_HOST: http://localhost:9090
