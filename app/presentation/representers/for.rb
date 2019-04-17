@@ -12,6 +12,7 @@ module CodePraise
         Value::ProjectsList => ProjectsList,
         Value::ProjectFolderContributions => ProjectFolderContributions,
         Entity::Project => Project,
+        Entity::Appraisal => nil,
         String => HttpResponse
       }.freeze
 
@@ -19,12 +20,14 @@ module CodePraise
 
       def initialize(result)
         if result.failure?
-          @status_rep = Representer::HttpResponse.new(result.failure)
-          @body_rep = @status_rep
+          value = result.failure
+          @status_rep = Representer::HttpResponse.new(value)
+          @body_rep = value.status == :ok ? value.message : @status_rep
         else
           value = result.value!
           @status_rep = Representer::HttpResponse.new(value)
-          @body_rep = REP_KLASS[value.message.class].new(value.message)
+          @body_rep = REP_KLASS[value.message.class]&.new(value.message)
+          @body_rep ||= value.message
         end
       end
 

@@ -9,9 +9,11 @@ module CodePraise
       include Dry::Transaction
 
       step :find_project_details
+      step :appraisal_exist?
       step :check_project_eligibility
       step :request_cloning_worker
       step :appraise_contributions
+      step :store_appraisal
 
       private
 
@@ -20,6 +22,7 @@ module CodePraise
       SIZE_ERR = 'Project too large to analyze'
       CLONE_ERR = 'Could not clone this project'
       NO_FOLDER_ERR = 'Could not find that folder'
+      STORE_ERR = 'Could not store the project appraisal'
 
       # input hash keys required: :project, :requested, :config
       def find_project_details(input)
@@ -33,6 +36,19 @@ module CodePraise
         end
       rescue StandardError
         Failure(Value::Result.new(status: :internal_error, message: DB_ERR))
+      end
+
+      def appraisal_exist?(input)
+        owner_name = input[:requested].owner_name
+        project_name = input[:requested].project_name
+        appraisal = Repository::Appraisal.find(owner_name, project_name)
+        if appraisal.nil?
+          Success(input)
+        else
+          Failure(Value::Result.new(status: :ok,
+                                    message: appraisal
+                                      .content(input[:requested].folder_name)))
+        end
       end
 
       def check_project_eligibility(input)
@@ -64,10 +80,25 @@ module CodePraise
 
         Value::ProjectFolderContributions.new(input[:project], input[:folder], input[:commits])
           .yield_self do |appraisal|
-            Success(Value::Result.new(status: :ok, message: appraisal))
+            input[:appraisal] = appraisal
+            Success(input)
           end
       rescue StandardError
         Failure(Value::Result.new(status: :not_found, message: NO_FOLDER_ERR))
+      end
+
+      def store_appraisal(input)
+        appraisal_representer = Representer::ProjectFolderContributions.new(input[:appraisal])
+        appraisal_hash = JSON.parse(appraisal_representer.to_json)
+        appraisal = Repository::Appraisal.create(appraisal_hash)
+        if result.nil?
+          Failure(Value::Result.new(status: :internal_error, message: STORE_ERR))
+        else
+          input[:gitrepo].delete
+          Success((Value::Result.new(status: :ok,
+                                     message: appraisal
+                                      .content(input[:requested].folder_name))))
+        end
       end
 
       # Utility functions

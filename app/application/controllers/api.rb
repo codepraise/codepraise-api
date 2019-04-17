@@ -41,23 +41,13 @@ module CodePraise
                 owner_name, project_name, request
               )
 
-              project_folder_contributions = Repository::ProjectFolderContributions
-                .find_name(project_name)
-
-              return project_folder_contributions.first.document[project_name].to_json unless project_folder_contributions.nil?
-
               result = Service::AppraiseProject.new.call(
                 requested: path_request,
                 request_id: request_id,
                 config: Api.config
               )
 
-              result_representer = Representer::For.new(result)
-
-              Repository::ProjectFolderContributions
-                .create({"#{project_name}" => JSON.parse(result_representer.to_json)})
-
-              result_representer.status_and_body(response)
+              Representer::For.new(result).status_and_body(response)
             end
 
             # POST /projects/{owner_name}/{project_name}

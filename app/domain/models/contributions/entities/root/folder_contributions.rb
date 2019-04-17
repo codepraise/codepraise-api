@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module CodePraise
   module Entity
     # Entity for folder contributions
