@@ -2,18 +2,35 @@ require_relative 'member_factory'
 
 FactoryBot.define do
   factory :project, class: "CodePraise::Database::ProjectOrm" do
-    origin_id { 131723249 }
-    name {"talkup_api"}
-    size { 168 }
-    ssh_url { "git@github.com:PigAndChicken/talkup_api.git" }
-    http_url { "https://github.com/PigAndChicken/talkup_api.git" }
+    origin_id { 104999627 }
+    name {"YPBT-app"}
+    size { 551 }
+    ssh_url { "git://github.com/soumyaray/YPBT-app.git" }
+    http_url { "https://github.com/soumyaray/YPBT-app" }
     association :owner, factory: :member
-    initialize_with { CodePraise::Database::ProjectOrm.find(origin_id: 131723249) || CodePraise::Database::ProjectOrm.create(attributes) }
+    initialize_with { CodePraise::Database::ProjectOrm.find(origin_id: 104999627) || CodePraise::Database::ProjectOrm.create(attributes) }
 
-    factory :project_with_contributor do
-      after(:create) do |project|
-        contributor = FactoryBot.create(:member)
-        project.add_contributor(contributor)
+    after(:create) do |project|
+      contributors = [
+        {
+          origin_id: 8809778,
+          username: 'Yuan-Yu',
+          email: 'Yuan-Yu@gmail.com'
+        },
+        {
+          origin_id: 22166763,
+          username: 'SOA-KunLin',
+          email: 'SOA-KunLin@gmail.com'
+        },
+        {
+          origin_id: 17100800,
+          username: 'luyimin',
+          email: 'luyimin@gmail.com'
+        }
+      ]
+      contributors.each do |contributor|
+        contributor_record = FactoryBot.create(:member, origin_id: contributor[:origin_id], username: contributor[:username], email: contributor[:email])
+        project.add_contributor(contributor_record)
       end
     end
   end
