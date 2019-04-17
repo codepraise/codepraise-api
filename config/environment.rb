@@ -58,6 +58,13 @@ module CodePraise
       def self.DB # rubocop:disable Naming/MethodName
         DB
       end
+
+      require 'mongo'
+      MONGO = Mongo::Client.new(config.MONGODB_URL)
+
+      def self.mongo
+        MONGO
+      end
     end
   end
 end

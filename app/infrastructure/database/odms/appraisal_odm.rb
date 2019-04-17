@@ -5,8 +5,7 @@ require 'mongo'
 module CodePraise
   module Database
     class AppraisalOdm
-      CLIENT = Mongo::Client.new(CodePraise::Api.config.MONGODB_URL)
-      COLLECTION = CLIENT['appraisals']
+      COLLECTION = Api.mongo['appraisals']
 
       attr_reader :document, :id
 

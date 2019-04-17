@@ -91,7 +91,7 @@ module CodePraise
         appraisal_representer = Representer::ProjectFolderContributions.new(input[:appraisal])
         appraisal_hash = JSON.parse(appraisal_representer.to_json)
         appraisal = Repository::Appraisal.create(appraisal_hash)
-        if result.nil?
+        if appraisal.nil?
           Failure(Value::Result.new(status: :internal_error, message: STORE_ERR))
         else
           input[:gitrepo].delete

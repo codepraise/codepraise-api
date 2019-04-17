@@ -47,17 +47,18 @@ describe 'AppraiseProject Service Integration Test' do
 
       # THEN: we should get an appraisal
       folder = appraisal[:folder]
-      _(folder).must_be_kind_of CodePraise::Entity::FolderContributions
-      _(folder.subfolders.count).must_equal 10
-      _(folder.base_files.count).must_equal 2
 
-      first_file = folder.base_files.first
-      _(%w[init.rb README.md]).must_include first_file.file_path.filename
-      _(folder.subfolders.first.path.size).must_be :>, 0
+      # _(folder).must_be_kind_of CodePraise::Entity::FolderContributions
+      _(folder['subfolders'].count).must_equal 10
+      _(folder['base_files'].count).must_equal 2
 
-      _(folder.subfolders.map(&:credit_share).reduce(&:+) +
-        folder.base_files.map(&:credit_share).reduce(&:+))
-        .must_equal(folder.credit_share)
+      first_file = folder['base_files'].first
+      _(%w[init.rb README.md]).must_include first_file['file_path']['filename']
+      _(folder['subfolders'].first['path'].size).must_be :>, 0
+
+      total_credits = folder['subfolders'].map { |folder| folder['total_line_credits'] }.reduce(&:+) +
+                      folder['base_files'].map {|file| file['total_line_credits']}.reduce(&:+)
+      _(total_credits).must_equal(folder['total_line_credits'])
     end
 
     it 'SAD: should not give contributions for non-existent project' do

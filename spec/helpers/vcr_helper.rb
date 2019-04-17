@@ -27,7 +27,7 @@ class VcrHelper
     VCR.insert_cassette(
       GITUB_CASSETTE,
       record: recording,
-      match_requests_on: %i[method uri headers],
+      match_requests_on: %i[method uri],
       allow_playback_repeats: true
     )
   end

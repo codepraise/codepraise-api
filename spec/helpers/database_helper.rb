@@ -14,5 +14,6 @@ class DatabaseHelper
     CodePraise::Api.DB.run('PRAGMA foreign_keys = OFF')
     DatabaseCleaner.clean
     CodePraise::Api.DB.run('PRAGMA foreign_keys = ON')
+    CodePraise::Api.mongo[:appraisals].drop
   end
 end
