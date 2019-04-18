@@ -1,5 +1,11 @@
 config/secrets.yml
-coverage/
+# coverage/
+# !coverage/.resultset.json
+!coverage/.resultset.json
+coverage/assets
+coverage/.last_run.json
+coverage/index.html
+coverage/.resultset.json.lock
 *.db
 .bundle/
 _snippets/

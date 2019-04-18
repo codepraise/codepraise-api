@@ -17,6 +17,10 @@ class MeasurementHelper
     @git_repo = CodePraise::GitRepo.new(project, CodePraise::Api.config)
   end
 
+  def contributors
+    @project.contributors.map(&:username)
+  end
+
   def setup_project
     clone unless @git_repo.exists_locally?
   end

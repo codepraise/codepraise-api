@@ -25,25 +25,25 @@ describe CodePraise::Entity::Complexity do
       _(@idiomaticity.offenses[0]).must_be_kind_of CodePraise::Entity::Offense
     end
 
-    describe 'Offense#type'do
+    describe 'Offense#type' do
       it 'show the type of offense' do
         type = @idiomaticity.offenses[0].type.split('/').first
         _(COPS).must_include type
       end
     end
 
-    describe 'Offense#message'do
+    describe 'Offense#message' do
       it { _(@idiomaticity.offenses[0].message).must_be_kind_of String }
     end
 
-    describe 'Offense#location'do
+    describe 'Offense#location' do
       it 'has start line and end line' do
         _(@idiomaticity.offenses[0].location.keys.sort)
           .must_equal %w[start_line last_line].sort
       end
     end
 
-    describe 'Offense#line_count'do
+    describe 'Offense#line_count' do
       it { _(@idiomaticity.offenses[0].line_count).must_be :>, 0 }
     end
   end

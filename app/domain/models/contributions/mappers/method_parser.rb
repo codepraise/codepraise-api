@@ -29,15 +29,9 @@ module CodePraise
       end
 
       def self.select_entities(method_ast, line_entities)
-        method_name = method_name(method_ast)
         end_amount = count_end(method_ast)
-
-        number = line_entities.select do |line_entity|
-          line_entity.code.include?("def #{method_name}")
-        end.first.number
-
+        number = method_location(method_ast)
         method_entities = []
-
         while end_amount.positive?
           line_entity = select_entity(line_entities, number)
 
@@ -47,11 +41,14 @@ module CodePraise
           number += 1
           method_entities << line_entity
         end
-
         method_entities
       end
 
       private
+
+      def self.method_name(method_ast)
+        method_ast.loc.expression.source_line
+      end
 
       def self.select_entity(line_entities, number)
         line_entities.select do |line_entity|
@@ -60,7 +57,7 @@ module CodePraise
       end
 
       def self.end_entity?(line_entity)
-        line_entity.code.strip == 'end'
+        %w[end }].include?(line_entity.code.strip)
       end
 
       def self.count_end(method_ast)
@@ -68,14 +65,14 @@ module CodePraise
         method_lines.scan(/end/).count
       end
 
-      def self.method_name(method_ast)
-        method_ast.children[0].to_s
+      def self.method_location(method_ast)
+        method_ast.loc.expression.line
       end
 
       def self.find_methods_tree(ast, methods_ast)
         return nil unless ast.is_a?(Parser::AST::Node)
 
-        if ast.type == :def
+        if %i[def block defs].include?(ast.type)
           methods_ast.append(ast)
         else
           ast.children.each do |child_ast|
@@ -84,8 +81,8 @@ module CodePraise
         end
       end
 
-      private_class_method :find_methods_tree, :count_end,
-                           :method_name, :select_entity, :end_entity?
+      private_class_method :find_methods_tree, :count_end, :method_name,
+                           :method_location, :select_entity, :end_entity?
     end
   end
 end
