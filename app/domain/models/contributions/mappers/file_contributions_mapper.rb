@@ -36,7 +36,7 @@ module CodePraise
 
       def idiomaticity
         file_path = Value::FilePath.new(filename)
-        @idiomaticity_mapper.build_entity(file_path)
+        @idiomaticity_mapper.build_entity(file_path, contributions)
       end
 
       def summarize_line_reports(line_reports)

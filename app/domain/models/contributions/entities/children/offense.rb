@@ -10,7 +10,8 @@ module CodePraise
 
       attribute :type, Strict::String
       attribute :message, Strict::String
-      attribute :location, Strict::Integer
+      attribute :location, Strict::Hash
+      attribute :line_count, Strict::Integer
     end
   end
 end

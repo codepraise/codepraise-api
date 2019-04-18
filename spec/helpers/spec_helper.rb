@@ -9,6 +9,7 @@ require 'yaml'
 
 require 'minitest/autorun'
 require 'minitest/rg'
+require 'minitest/hooks/default'
 
 require 'pry' # for debugging
 

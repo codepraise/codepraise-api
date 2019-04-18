@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
+require_relative '../factories/init'
 
 class MeasurementHelper
   attr_reader :git_repo
+
+  def self.setup
+    project = FactoryBot.create(:project)
+    object = new(project)
+    object.setup_project
+    return object
+  end
 
   def initialize(project)
     @project = project
@@ -13,8 +21,8 @@ class MeasurementHelper
     clone unless @git_repo.exists_locally?
   end
 
-  def folder_measurement
-    @folder_measurement ||= CodePraise::Mapper::Contributions.new(@git_repo).for_folder('')
+  def folder_contributions
+    @folder_contributions ||= CodePraise::Mapper::Contributions.new(@git_repo).for_folder('')
   end
 
   def delete_project?
@@ -23,8 +31,8 @@ class MeasurementHelper
     @git_repo.delete if %w[yes y].include?(ans)
   end
 
-  def ruby_file_path
-    "#{repo_path}/#{ruby_file}"
+  def file_path
+    "#{repo_path}/#{file_name}"
   end
 
   def repo_path
@@ -37,11 +45,18 @@ class MeasurementHelper
     CodePraise::Mapper::BlamePorcelain.parse_file_blame(ruby_blame[1])
   end
 
-  private
-
-  def ruby_file
-    @git_repo.local.files.select { |f| File.extname(f) == '.rb' }.first
+  def file_name
+    @git_repo.local.files.select { |f| f == 'controllers/youtagit_ajax.rb' }.first
   end
+
+  def file
+    subfolder_name, file = file_name.split('/')
+    folder_contributions.subfolders.select do |subfolder|
+      subfolder.path == subfolder_name
+    end.first[file]
+  end
+
+  private
 
   def clone
     @git_repo.clone_locally do |line|

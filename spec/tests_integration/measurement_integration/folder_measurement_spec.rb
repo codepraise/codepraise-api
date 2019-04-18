@@ -8,7 +8,6 @@ describe 'File-Level Measurement' do
   DatabaseHelper.setup_database_cleaner
 
   before do
-    DatabaseHelper.wipe_database
     project = create(:project)
     @measurement_helper = MeasurementHelper.new(project)
     @measurement_helper.setup_project
@@ -17,6 +16,7 @@ describe 'File-Level Measurement' do
   end
 
   after do
+    DatabaseHelper.wipe_database
     @measurement_helper.delete_project?
   end
 
