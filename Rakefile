@@ -140,6 +140,7 @@ end
 namespace :db do
   task :config do
     require 'sequel'
+    require 'mongo'
     require_relative 'config/environment.rb' # load config info
     @api = CodePraise::Api
   end
@@ -167,6 +168,13 @@ namespace :db do
 
     FileUtils.rm(@api.config.DB_FILENAME)
     puts "Deleted #{@api.config.DB_FILENAME}"
+  end
+
+  namespace :mongo do
+    task :drop do
+      client = Mongo::Client.new(@api.config.MONGODB_URL)
+      client.database.drop
+    end
   end
 end
 
