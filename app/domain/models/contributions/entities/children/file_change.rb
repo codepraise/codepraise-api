@@ -8,7 +8,6 @@ module CodePraise
   module Entity
     # Entity for a single line of code contributed by a team-member
     class FileChange < Dry::Struct
-
       include Dry::Types.module
 
       attribute :path,     Strict::String

@@ -17,7 +17,8 @@ module CodePraise
           complexity: complexity,
           idiomaticity: idiomaticity,
           methods: methods,
-          comments: comments
+          comments: comments,
+          test_cases: test_cases
         )
       end
 
@@ -63,6 +64,16 @@ module CodePraise
 
       def ruby_file?
         File.extname(@file_report[0]) == '.rb'
+      end
+
+      def test_files?
+        !(filename =~ /spec|test/).nil?
+      end
+
+      def test_cases
+        return nil unless test_files?
+
+        TestCases.new(contributions).build_entities
       end
 
       def contributor_from(report)

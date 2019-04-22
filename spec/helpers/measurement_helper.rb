@@ -35,6 +35,16 @@ class MeasurementHelper
     @git_repo.delete if %w[yes y].include?(ans)
   end
 
+  def test_files
+    folder_contributions.files.select do |file|
+      test_file?(file)
+    end
+  end
+
+  def test_file?(file)
+    !(file.file_path =~ /spec|test/).nil?
+  end
+
   def file_path
     "#{repo_path}/#{file_name}"
   end
