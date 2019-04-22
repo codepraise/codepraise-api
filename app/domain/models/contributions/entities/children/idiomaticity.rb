@@ -12,6 +12,10 @@ module CodePraise
       attribute :offenses, Strict::Array.of(Entity::Offense).optional
       attribute :offense_ratio, Strict::Float
 
+      def offense_count
+        offenses.length
+      end
+
       def level
         case offense_ratio * 100
         when 0..5

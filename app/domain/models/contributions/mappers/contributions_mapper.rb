@@ -10,20 +10,21 @@ module CodePraise
 
       def for_folder(folder_name)
         blame = Git::BlameReporter.new(@gitrepo).folder_report(folder_name)
-
         Mapper::FolderContributions.new(
           folder_name,
           parse_file_reports(blame),
-          @gitrepo.local.git_repo_path
+          @gitrepo.local.git_repo_path,
+          commits
         ).build_entity
       end
 
-      def commits(since=nil)
-        commit_report = GitCommit::CommitReporter.new(@gitrepo)
-        commits = commit_report.commits(since)
-        empty_commit = commit_report.empty_commit
+      def commits
+        return @commits if @commits
 
-        commits.map do |commit|
+        commit_report = GitCommit::CommitReporter.new(@gitrepo)
+        commits = commit_report.commits
+        empty_commit = commit_report.empty_commit
+        @commits = commits.map do |commit|
           Mapper::Commit.new(commit, empty_commit).build_entity
         end
       end

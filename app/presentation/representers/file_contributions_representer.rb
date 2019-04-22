@@ -22,6 +22,10 @@ module CodePraise
       property :line_count
       property :total_line_credits
       property :total_methods
+      property :total_comments
+      property :has_documentation
+      property :commits_count
+      property :ownership_level
       property :file_path, extend: Representer::FilePath, class: OpenStruct
       property :line_credit_share, extend: Representer::CreditShare, class: OpenStruct
       property :complexity, extend: Representer::Complexity, class: OpenStruct

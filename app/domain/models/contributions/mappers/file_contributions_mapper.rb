@@ -4,10 +4,11 @@ module CodePraise
   module Mapper
     # Summarizes a single file's contributions by team members
     class FileContributions
-      def initialize(file_report, repo_path, idiomaticity_mapper)
+      def initialize(file_report, repo_path, idiomaticity_mapper, commits)
         @file_report = file_report
         @repo_path = repo_path
         @idiomaticity_mapper = idiomaticity_mapper
+        @commits = commits
       end
 
       def build_entity
@@ -18,7 +19,8 @@ module CodePraise
           idiomaticity: idiomaticity,
           methods: methods,
           comments: comments,
-          test_cases: test_cases
+          test_cases: test_cases,
+          commits_count: commits_count
         )
       end
 
@@ -80,6 +82,18 @@ module CodePraise
         return nil unless test_files?
 
         TestCases.new(contributions).build_entities
+      end
+
+      def commits_count
+        @commits.select do |commit|
+          change_file(commit)
+        end.length
+      end
+
+      def change_file(commit)
+        commit.file_changes.select do |file_change|
+          file_change.path == filename
+        end.length.positive?
       end
 
       def contributor_from(report)
