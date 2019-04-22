@@ -33,10 +33,14 @@ module CodePraise
       end
 
       def complexity
+        return nil unless ruby_file?
+
         Mapper::Complexity.new("#{@repo_path}/#{filename}").build_entity
       end
 
       def idiomaticity
+        return nil unless ruby_file?
+
         file_path = Value::FilePath.new(filename)
         @idiomaticity_mapper.build_entity(file_path, contributions)
       end
@@ -53,12 +57,14 @@ module CodePraise
       end
 
       def methods
-        return [] unless ruby_file?
+        return nil unless ruby_file?
 
         MethodContributions.new(contributions).build_entity
       end
 
       def comments
+        return nil unless ruby_file?
+
         Comments.new(contributions).build_entities
       end
 

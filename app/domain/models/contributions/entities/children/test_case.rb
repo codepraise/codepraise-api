@@ -11,7 +11,7 @@ module CodePraise
 
       attribute :message, Strict::String
 
-      def functionality?
+      def is_functionality
         !(message =~ /#{KEY_WORD}/).nil?
       end
     end

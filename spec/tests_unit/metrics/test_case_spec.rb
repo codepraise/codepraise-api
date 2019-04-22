@@ -24,7 +24,7 @@ describe CodePraise::Entity::TestCase do
     end
   end
 
-  describe '#functionality?' do
-    it { _([true, false]).must_include @test_cases[0].functionality? }
+  describe '#is_functionality' do
+    it { _([true, false]).must_include @test_cases[0].is_functionality }
   end
 end

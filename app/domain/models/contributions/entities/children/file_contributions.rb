@@ -5,7 +5,6 @@ module CodePraise
     # Entity for file contributions
     class FileContributions
       include Mixins::ContributionsCalculator
-      include Mixins::CommentCalculator
 
       DOT = '\.'
       LINE_END = '$'

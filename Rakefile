@@ -170,8 +170,8 @@ namespace :db do
     puts "Deleted #{@api.config.DB_FILENAME}"
   end
 
-  namespace :mongo => :config do
-    task :drop do
+  namespace :mongo do
+    task :drop => :config do
       client = Mongo::Client.new(@api.config.MONGODB_URL)
       client.database.drop
     end

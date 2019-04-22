@@ -9,6 +9,7 @@ module CodePraise
 
       property :average
       property :methods
+      property :level
     end
   end
 end

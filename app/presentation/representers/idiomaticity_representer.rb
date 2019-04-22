@@ -11,6 +11,8 @@ module CodePraise
     class Idiomaticity < Roar::Decorator
       include Roar::JSON
 
+      property :offense_ratio
+      property :level
       collection :offenses, extend: Representer::Offense, class: OpenStruct
     end
   end
