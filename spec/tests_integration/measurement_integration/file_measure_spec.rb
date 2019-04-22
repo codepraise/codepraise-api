@@ -12,41 +12,45 @@ describe 'File-Level Measurement' do
     project = create(:project)
     @measurement_helper = MeasurementHelper.new(project)
     @measurement_helper.setup_project
-    @file_contributions = @measurement_helper.ruby_file
+    @file_contributions = @measurement_helper.folder_contributions
   end
 
   after do
-    @measurement_helper.delete_project?
+    # @measurement_helper.delete_project?
   end
 
-  describe CodePraise::Entity::FileContributions do
-    describe 'Measure File Quality' do
-      it 'should calculate average complexity and give a complexity level'do
-      end
+  it "" do
 
-      it 'should calculate complexity for each methods' do
-      end
-
-      it 'should calculate total offenses of idiomaticity' do
-      end
-
-      it 'should calculate test coverage' do
-
-      end
-
-      it 'should calculate documentation ratio' do
-      end
-    end
-
-    describe 'Measure File Size' do
-      it 'should calculate number of line of code' do
-      end
-
-      it 'should calculate number of method' do
-      end
-
-      it 'should calculate number of comment' do
-      end
-    end
   end
+
+  # describe CodePraise::Entity::FileContributions do
+  #   describe 'Measure File Quality' do
+  #     it 'should calculate average complexity and give a complexity level'do
+  #     end
+
+  #     it 'should calculate complexity for each methods' do
+  #     end
+
+  #     it 'should calculate total offenses of idiomaticity' do
+  #     end
+
+  #     it 'should calculate test coverage' do
+
+  #     end
+
+  #     it 'should calculate documentation ratio' do
+  #     end
+  #   end
+
+  #   describe 'Measure File Size' do
+  #     it 'should calculate number of line of code' do
+  #     end
+
+  #     it 'should calculate number of method' do
+  #     end
+
+  #     it 'should calculate number of comment' do
+  #     end
+  #   end
+  # end
 end

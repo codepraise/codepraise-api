@@ -11,8 +11,8 @@ describe CodePraise::Entity::Complexity do
     @measurement_helper = MeasurementHelper.setup
 
     @comments = CodePraise::Mapper::Comments
-      .new(@measurement_helper.folder_contributions.files[0].lines,
-           @measurement_helper.folder_contributions.files[0].file_path).build_entities
+      .new(@measurement_helper.folder_contributions.files[0].lines)
+      .build_entities
   end
 
   after do

@@ -16,7 +16,8 @@ module CodePraise
           lines: contributions,
           complexity: complexity,
           idiomaticity: idiomaticity,
-          methods: methods
+          methods: methods,
+          comments: comments
         )
       end
 
@@ -54,6 +55,10 @@ module CodePraise
         return [] unless ruby_file?
 
         MethodContributions.new(contributions).build_entity
+      end
+
+      def comments
+        Comments.new(contributions).build_entities
       end
 
       def ruby_file?
