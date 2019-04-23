@@ -19,7 +19,7 @@ module CodePraise
 
       def contributros_subfolders_percentage
         percentage_array = subfolders.map do |subfolder|
-          subfolder.line_credit_share.share_percentage
+          subfolder.credit_share.line_percentage
         end
         contributors_hash = contributors.each_with_object({}) {|contributor, hash| hash[contributor.username] = []; hash}
         percentage_array.each do |subfolder_percentage|

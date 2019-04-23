@@ -27,7 +27,7 @@ module CodePraise
       property :commits_count
       property :ownership_level
       property :file_path, extend: Representer::FilePath, class: OpenStruct
-      property :line_credit_share, extend: Representer::CreditShare, class: OpenStruct
+      property :credit_share, extend: Representer::CreditShare, class: OpenStruct
       property :complexity, extend: Representer::Complexity, class: OpenStruct
       property :idiomaticity, extend: Representer::Idiomaticity, class: OpenStruct
       collection :contributors, extend: Representer::Contributor, class: OpenStruct

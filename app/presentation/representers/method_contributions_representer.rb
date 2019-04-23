@@ -13,7 +13,7 @@ module CodePraise
       include Roar::JSON
 
       property :name
-      property :share
+      property :line_credits
     end
   end
 end

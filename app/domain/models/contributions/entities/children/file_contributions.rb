@@ -25,11 +25,11 @@ module CodePraise
       end
 
       def total_line_credits
-        line_credit_share.total_credits
+        credit_share.total_line_credits
       end
 
       def total_comments
-        comments.each_with_object(Hash.new(0)) do |comment, hash|
+        comments&.each_with_object(Hash.new(0)) do |comment, hash|
           hash[comment.type] += 1
         end
       end
@@ -39,11 +39,13 @@ module CodePraise
       end
 
       def has_documentation
+        return false if @comments.nil?
+
         @comments.select(&:is_documentation).length.positive?
       end
 
       def ownership_level
-        max_percentage = line_credit_share.share_percentage.values.max
+        max_percentage = credit_share.line_percentage.values.max
         case max_percentage
         when 25..40
           'A'
@@ -54,20 +56,27 @@ module CodePraise
         end
       end
 
-      def line_credit_share
+      def credit_share
         return Value::CreditShare.new if not_wanted
 
-        @line_credit_share ||= lines
+        @credit_share = lines
           .each_with_object(Value::CreditShare.new) do |line, credit|
-            credit.add_credit(line)
+            credit.add_line_credit(line)
           end
+        @credit_share.add_quality_credits(@complexity.level, @idiomaticity.level) if ruby_file?
+        @credit_share.add_method_credits(@methods) if !@methods.nil? && ruby_file?
+        @credit_share
       end
 
       def contributors
-        line_credit_share.contributors
+        credit_share.contributors
       end
 
       private
+
+      def ruby_file?
+        File.extname(file_path.filename) == '.rb'
+      end
 
       def not_wanted
         !wanted

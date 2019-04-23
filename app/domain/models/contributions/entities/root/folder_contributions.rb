@@ -67,12 +67,16 @@ module CodePraise
         base_files.count.positive?
       end
 
-      def line_credit_share
-        @credit_share ||= files.map(&:line_credit_share).reduce(&:+)
+      def credit_share
+        return @credit_share if @credit_share
+
+        @credit_share = files.map(&:credit_share).reduce(&:+)
+        @credit_share.add_collective_ownership(coefficient_variation) if any_subfolders?
+        @credit_share
       end
 
       def contributors
-        line_credit_share.contributors
+        credit_share.contributors
       end
 
       private
