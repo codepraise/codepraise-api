@@ -5,15 +5,14 @@ require 'dry/transaction'
 module CodePraise
   module Service
     # Analyzes contributions to a project
-    class AppraiseProject
+    class UpdateAppraisal
       include Dry::Transaction
 
       step :find_project_details
-      step :appraisal_exist?
       step :check_project_eligibility
       step :request_cloning_worker
       step :appraise_contributions
-      step :store_appraisal
+      step :update_appraisal
 
       private
 
@@ -87,8 +86,8 @@ module CodePraise
         Failure(Value::Result.new(status: :not_found, message: NO_FOLDER_ERR))
       end
 
-      def store_appraisal(input)
-        appraisal = Repository::Appraisal.create(appraisal_hash(input[:appraisal]))
+      def update_appraisal(input)
+        appraisal = Repository::Appraisal.update(appraisal_hash(input[:appraisal]))
         if appraisal.nil?
           Failure(Value::Result.new(status: :internal_error, message: STORE_ERR))
         else
@@ -98,8 +97,6 @@ module CodePraise
                                       .content(input[:requested].folder_name)))
         end
       end
-
-      # Utility functions
 
       def appraisal_hash(appraisal_entity)
         appraisal_representer = Representer::ProjectFolderContributions

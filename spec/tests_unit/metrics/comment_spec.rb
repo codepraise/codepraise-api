@@ -33,11 +33,11 @@ describe CodePraise::Entity::Complexity do
     it { _([true, false]).must_include @comments[0].is_documentation }
   end
 
-  describe '#credit_share' do
+  describe '#line_credits' do
     it 'show the contribution information of comment' do
       _(@measurement_helper.contributors)
-        .must_include @comments[0].credit_share.keys[0]
-      _(@comments[0].credit_share.values.reduce(&:+))
+        .must_include @comments[0].line_credits.keys[0]
+      _(@comments[0].line_credits.values.reduce(&:+))
         .must_equal @comments[0].lines.size
     end
   end

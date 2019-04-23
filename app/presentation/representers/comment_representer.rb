@@ -10,7 +10,7 @@ module CodePraise
 
       property :type
       property :is_documentation
-      property :credit_share
+      property :line_credits
     end
   end
 end

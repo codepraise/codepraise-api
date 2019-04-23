@@ -23,10 +23,6 @@ module CodePraise
       def line_credits
         credit_share.line_credits
       end
-
-      def contributors
-        credit_share.contributors
-      end
     end
   end
 end

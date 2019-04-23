@@ -20,7 +20,7 @@ module CodePraise
         end
       end
 
-      def credit_share
+      def line_credits
         lines.each_with_object({}) do |line, hash|
           hash[line.contributor.username] ||= 0
           hash[line.contributor.username] += 1

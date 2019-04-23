@@ -14,13 +14,17 @@ module CodePraise
 
         methods.map do |method|
           Entity::MethodContribution.new(
-            name: method[:name],
+            name: method_name(method[:name]),
             lines: method[:lines]
           )
         end
       end
 
       private
+
+      def method_name(name)
+        name.split('def').last.strip
+      end
 
       def all_methods
         MethodParser.parse_methods(@file_contributions)

@@ -28,11 +28,11 @@ describe CodePraise::Entity::FileContributions do
     end
   end
 
-  describe '#share' do
+  describe '#line_credits' do
     it 'show the information of contributors' do
       _(@measurement_helper.contributors)
-        .must_include @method_contributions[0].share.keys[0]
-      _(@method_contributions[0].share.values.reduce(&:+))
+        .must_include @method_contributions[0].line_credits.keys[0]
+      _(@method_contributions[0].line_credits.values.reduce(&:+))
         .must_be :<=, @method_contributions[0].lines.count
     end
   end
