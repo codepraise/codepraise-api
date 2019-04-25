@@ -8,10 +8,11 @@ module CodePraise
     class Offense < Dry::Struct
       include Dry::Types.module
 
-      attribute :type, Strict::String
-      attribute :message, Strict::String
-      attribute :location, Strict::Hash
-      attribute :line_count, Strict::Integer
+      attribute :type,         Strict::String
+      attribute :message,      Strict::String
+      attribute :location,     Strict::Hash
+      attribute :line_count,   Strict::Integer
+      attribute :contributors, Strict::Hash
     end
   end
 end

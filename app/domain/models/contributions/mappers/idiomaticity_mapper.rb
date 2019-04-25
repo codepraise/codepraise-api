@@ -6,7 +6,7 @@ module CodePraise
       end
 
       def build_entity(file_path, file_contributions)
-        offenses = offenses(file_path)
+        offenses = offenses(file_path, file_contributions)
 
         Entity::Idiomaticity.new(
           offenses: offenses,
@@ -16,19 +16,29 @@ module CodePraise
 
       private
 
-      def offenses(file_path)
+      def offenses(file_path, file_contributions)
         idiomaticity_result = @rubocop_reporter.report[file_path]
 
         return nil if idiomaticity_result.nil?
 
-        idiomaticity_result.map do |error_hash|
+        idiomaticity_result.map do |offense_hash|
           Entity::Offense.new(
-            type: error_hash['cop_name'],
-            message: error_hash['message'],
-            location: error_hash['location'].slice('start_line', 'last_line'),
-            line_count: line_count(error_hash['location'])
+            type: offense_hash['cop_name'],
+            message: offense_hash['message'],
+            location: offense_hash['location'].slice('start_line', 'last_line'),
+            line_count: line_count(offense_hash['location']),
+            contributors: contributors(offense_hash, file_contributions)
           )
         end
+      end
+
+      def contributors(offense_hash, file_contributions)
+        first_line = offense_hash['location']['start_line'] - 1
+        last_line = offense_hash['location']['last_line'] - 1
+        file_contributions[first_line..last_line]
+          .each_with_object(Hash.new(0)) do |line_contribution, hash|
+            hash[line_contribution.contributor.username] += 1
+          end
       end
 
       def line_count(location)

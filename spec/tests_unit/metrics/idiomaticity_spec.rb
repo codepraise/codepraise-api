@@ -46,6 +46,15 @@ describe CodePraise::Entity::Complexity do
     describe 'Offense#line_count' do
       it { _(@idiomaticity.offenses[0].line_count).must_be :>, 0 }
     end
+
+    describe 'Offense#contributors' do
+      it 'show contributor of this offense' do
+        _(@idiomaticity.offenses[0].contributors.keys[0])
+          .must_be_kind_of String
+        _(@idiomaticity.offenses[0].contributors.values[0])
+          .must_be_kind_of Integer
+      end
+    end
   end
 
   describe '#offense_ratio' do
