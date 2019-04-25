@@ -20,6 +20,13 @@ module CodePraise
         }
       end
 
+      def self.flog_code(code)
+        flog = Flog.new
+        flog.flog_ruby(code)
+        flog.calculate_total_scores
+        flog
+      end
+
       private
 
       def flog_process

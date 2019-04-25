@@ -2,19 +2,19 @@
 
 require 'dry-types'
 require 'dry-struct'
-require_relative 'method_complexity'
 
 module CodePraise
   module Entity
-    # Complexity for file and methods of this file
-    class Complexity < Dry::Struct
+    # Entity for a single method complexity by a team-member
+    class MethodComplexity < Dry::Struct
       include Dry::Types.module
 
-      attribute :average, Coercible::Float
-      attribute :methods_complexity, Strict::Array.of(Entity::MethodComplexity).optional
+      attribute :name,         Strict::String
+      attribute :complexity,   Coercible::Float
+      attribute :contributors, Strict::Hash.optional
 
       def level
-        case average
+        case complexity
         when 0..10
           'A'
         when 10..20

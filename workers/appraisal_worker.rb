@@ -39,13 +39,11 @@ module Appraisal
 
       gitrepo = CodePraise::GitRepo.new(project, Worker.config)
 
-      unless gitrepo.exists_locally
-        gitrepo.clone_locally do |line|
-          reporter.publish CloneMonitor.progress(line)
-        end
+      gitrepo.clone_locally do |line|
+        reporter.publish CloneMonitor.progress(line)
       end
 
-      appraise_repo(gitrepo, folder_name, project)
+      appraise_repo(gitrepo, project)
       reporter.publish(CloneMonitor.progress('Appraised'))
       gitrepo.delete
       # Keep sending finished status to any latecoming subscribers
@@ -57,9 +55,9 @@ module Appraisal
 
     private
 
-    def appraise_repo(gitrepo, folder_name, project)
+    def appraise_repo(gitrepo, project)
       contributions = CodePraise::Mapper::Contributions.new(gitrepo)
-      folder_contributions = contributions.for_folder(folder_name)
+      folder_contributions = contributions.for_folder('')
       commit_contributions = contributions.commits
       appraisal = CodePraise::Value::ProjectFolderContributions
         .new(project, folder_contributions, commit_contributions)

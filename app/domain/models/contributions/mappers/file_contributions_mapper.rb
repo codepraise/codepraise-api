@@ -37,7 +37,7 @@ module CodePraise
       def complexity
         return nil unless ruby_file?
 
-        Mapper::Complexity.new("#{@repo_path}/#{filename}").build_entity
+        Mapper::Complexity.new(contributions, methods).build_entity
       end
 
       def idiomaticity

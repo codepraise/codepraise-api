@@ -57,10 +57,8 @@ module CodePraise
       end
 
       def request_appraise_worker(input)
-        return Success(input) if input[:gitrepo].exists_locally?
-
         notify_workers(input)
-        Failure(
+        Success(
           Value::Result.new(status: :processing,
                             message: { request_id: input[:request_id] })
         )

@@ -10,7 +10,8 @@ describe CodePraise::Entity::Complexity do
   before do
     @measurement_helper = MeasurementHelper.setup
     @complexity = CodePraise::Mapper::Complexity
-      .new(@measurement_helper.file_path).build_entity
+      .new(@measurement_helper.file.lines,
+           @measurement_helper.file.methods).build_entity
   end
 
   after do
@@ -24,12 +25,27 @@ describe CodePraise::Entity::Complexity do
     end
   end
 
-  describe '#methods' do
-    it 'calculate ABC score for each methods' do
-      _(@complexity.methods).must_be_kind_of Hash
-      _(@complexity.methods.values.reduce(&:+)).must_be :>=, 0
-      average_score = @complexity.methods.values.reduce(&:+) / @complexity.methods.values.length
-      _(average_score).must_equal @complexity.average
+  describe '#methods_complexity' do
+    it 'collect MethodComplexity entity' do
+      _(@complexity.methods_complexity[0])
+        .must_be_kind_of CodePraise::Entity::MethodComplexity
+    end
+
+    describe CodePraise::Entity::MethodComplexity do
+      describe '#complexity' do
+        it { _(@complexity.methods_complexity[0].complexity).must_be :>=, 0 }
+      end
+      describe '#level' do
+        it { _(%w[A B C D E F]).must_include @complexity.methods_complexity[0].level }
+      end
+      describe '#contributors' do
+        it 'show the contributor and his contribution in this method' do
+          _(@complexity.methods_complexity[0].contributors.keys[0])
+            .must_be_kind_of String
+          _(@complexity.methods_complexity[0].contributors.values[0])
+            .must_be_kind_of Integer
+        end
+      end
     end
   end
 
