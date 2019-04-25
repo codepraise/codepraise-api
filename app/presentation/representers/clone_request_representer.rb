@@ -10,7 +10,6 @@ module CodePraise
       include Roar::JSON
 
       property :project, extend: Project, class: OpenStruct
-      property :folder_name
       property :id
     end
   end

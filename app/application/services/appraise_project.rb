@@ -9,9 +9,9 @@ module CodePraise
       include Dry::Transaction
 
       step :find_project_details
-      step :appraisal_exist?
+      step :check_appraisal_in_mongo
       step :check_project_eligibility
-      step :request_cloning_worker
+      step :request_appraise_worker
 
       private
 
@@ -19,8 +19,6 @@ module CodePraise
       DB_ERR = 'Having trouble accessing the database'
       SIZE_ERR = 'Project too large to analyze'
       CLONE_ERR = 'Could not clone this project'
-      NO_FOLDER_ERR = 'Could not find that folder'
-      STORE_ERR = 'Could not store the project appraisal'
 
       # input hash keys required: :project, :requested, :config
       def find_project_details(input)
@@ -36,7 +34,7 @@ module CodePraise
         Failure(Value::Result.new(status: :internal_error, message: DB_ERR))
       end
 
-      def appraisal_exist?(input)
+      def check_appraisal_in_mongo(input)
         owner_name = input[:requested].owner_name
         project_name = input[:requested].project_name
         appraisal = Repository::Appraisal.find(owner_name, project_name)
@@ -58,7 +56,7 @@ module CodePraise
         end
       end
 
-      def request_cloning_worker(input)
+      def request_appraise_worker(input)
         return Success(input) if input[:gitrepo].exists_locally?
 
         notify_workers(input)
@@ -74,8 +72,7 @@ module CodePraise
       # Utility functions
 
       def clone_request_json(input)
-        Value::CloneRequest.new(input[:project], input[:request_id],
-                                input[:requested].folder_name)
+        Value::CloneRequest.new(input[:project], input[:request_id])
           .yield_self { |request| Representer::CloneRequest.new(request) }
           .yield_self(&:to_json)
       end

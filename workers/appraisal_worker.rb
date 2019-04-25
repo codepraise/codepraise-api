@@ -33,14 +33,16 @@ module Appraisal
     shoryuken_options queue: config.CLONE_QUEUE_URL, auto_delete: true
 
     def perform(_sqs_msg, request)
-      project, reporter, folder_name = setup_job(request)
+      project, reporter = setup_job(request)
 
       reporter.publish(CloneMonitor.starting_percent)
 
       gitrepo = CodePraise::GitRepo.new(project, Worker.config)
 
-      gitrepo.clone_locally do |line|
-        reporter.publish CloneMonitor.progress(line)
+      unless gitrepo.exists_locally
+        gitrepo.clone_locally do |line|
+          reporter.publish CloneMonitor.progress(line)
+        end
       end
 
       appraise_repo(gitrepo, folder_name, project)
@@ -80,8 +82,7 @@ module Appraisal
         .new(OpenStruct.new).from_json(request)
 
       [clone_request.project,
-       ProgressReporter.new(Worker.config, clone_request.id),
-       clone_request.folder_name]
+       ProgressReporter.new(Worker.config, clone_request.id),]
     end
 
     def each_second(seconds)
