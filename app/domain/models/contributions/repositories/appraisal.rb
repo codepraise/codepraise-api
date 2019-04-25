@@ -19,6 +19,9 @@ module CodePraise
         key = find_key(project_contributions)
         db_record = Database::AppraisalOdm
           .create("#{key}": project_contributions)
+
+        return nil unless db_record
+
         build_entity(db_record, key)
       end
 
@@ -54,7 +57,7 @@ module CodePraise
         Base64.urlsafe_encode64(Digest::SHA256.digest(project_info))
       end
 
-      private_class_method :document_key, :build_entity
+      private_class_method :document_key, :build_entity, :find_key
     end
   end
 end

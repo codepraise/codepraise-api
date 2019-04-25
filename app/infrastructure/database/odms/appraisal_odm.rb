@@ -5,7 +5,7 @@ require 'mongo'
 module CodePraise
   module Database
     class AppraisalOdm
-      COLLECTION = Api.mongo['appraisals']
+      COLLECTION = CodePraise::Api.mongo['appraisals']
 
       attr_reader :document, :id
 

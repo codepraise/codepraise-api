@@ -2,7 +2,7 @@
 
 require 'http'
 
-module GitClone
+module Appraisal
   # Reports progress as percent to Faye endpoint
   class ProgressReporter
     def initialize(config, channel_id)

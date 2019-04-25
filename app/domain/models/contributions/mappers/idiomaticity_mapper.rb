@@ -2,7 +2,7 @@ module CodePraise
   module Mapper
     class Idiomaticity
       def initialize(git_repo_path)
-        @rubocop_reporter = Rubocop::Reporter.new(git_repo_path)
+        @rubocop_reporter = CodePraise::Rubocop::Reporter.new(git_repo_path)
       end
 
       def build_entity(file_path, file_contributions)

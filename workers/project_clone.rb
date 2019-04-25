@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
-module GitClone
+module Appraisal
   # Infrastructure to clone while yielding progress
   module CloneMonitor
     CLONE_PROGRESS = {
       'STARTED'   => 15,
       'Cloning'   => 30,
-      'remote'    => 70,
-      'Receiving' => 85,
-      'Resolving' => 95,
-      'Checking'  => 100,
+      'remote'    => 60,
+      'Receiving' => 70,
+      'Resolving' => 80,
+      'Checking'  => 90,
+      'Appraised' => 95,
       'FINISHED'  => 100
     }.freeze
 

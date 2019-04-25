@@ -12,7 +12,7 @@ module CodePraise
         'D' => 7,
         'E' => 6,
         'F' => 5
-      }
+      }.freeze
 
       attr_accessor :line_credits, :quality_credits, :method_credits
       attr_reader :contributors, :collective_ownership

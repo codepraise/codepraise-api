@@ -12,8 +12,6 @@ module CodePraise
       step :appraisal_exist?
       step :check_project_eligibility
       step :request_cloning_worker
-      step :appraise_contributions
-      step :store_appraisal
 
       private
 
@@ -73,42 +71,11 @@ module CodePraise
         Failure(Value::Result.new(status: :internal_error, message: CLONE_ERR))
       end
 
-      def appraise_contributions(input)
-        contributions = Mapper::Contributions.new(input[:gitrepo])
-        input[:folder] = contributions.for_folder(input[:requested].folder_name)
-        input[:commits] = contributions.commits
-
-        Value::ProjectFolderContributions.new(input[:project], input[:folder], input[:commits])
-          .yield_self do |appraisal|
-            input[:appraisal] = appraisal
-            Success(input)
-          end
-      rescue StandardError
-        Failure(Value::Result.new(status: :not_found, message: NO_FOLDER_ERR))
-      end
-
-      def store_appraisal(input)
-        appraisal = Repository::Appraisal.create(appraisal_hash(input[:appraisal]))
-        if appraisal.nil?
-          Failure(Value::Result.new(status: :internal_error, message: STORE_ERR))
-        else
-          input[:gitrepo].delete
-          Success(Value::Result.new(status: :ok,
-                                    message: appraisal
-                                      .content(input[:requested].folder_name)))
-        end
-      end
-
       # Utility functions
 
-      def appraisal_hash(appraisal_entity)
-        appraisal_representer = Representer::ProjectFolderContributions
-          .new(appraisal_entity)
-        JSON.parse(appraisal_representer.to_json)
-      end
-
       def clone_request_json(input)
-        Value::CloneRequest.new(input[:project], input[:request_id])
+        Value::CloneRequest.new(input[:project], input[:request_id],
+                                input[:requested].folder_name)
           .yield_self { |request| Representer::CloneRequest.new(request) }
           .yield_self(&:to_json)
       end
