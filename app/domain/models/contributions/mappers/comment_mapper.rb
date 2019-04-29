@@ -22,20 +22,21 @@ module CodePraise
       private
 
       def comments
-        CommentParser.parse(@line_entities)
+        @comments ||= CommentParser.parse(@line_entities)
       end
 
       def documentation?(comment_entiies)
-        return false if top_level_entity.nil?
+        next_line = (comment_entiies.last.number + 1).yield_self do |no|
+          @line_entities.select do |line_entity|
+            line_entity.number == no
+          end.first
+        end
 
-        top_level_entity.number == comment_entiies.map(&:number).max + 1
+        method_or_class(next_line.code)
       end
 
-      def top_level_entity
-        @top_level_entity ||= @line_entities.select do |line_entity|
-          line_entity.code.include?('class') ||
-            line_entity.code.include?('module')
-        end.last
+      def method_or_class(code)
+        !(code.strip =~ /^class|^def/).nil?
       end
     end
   end

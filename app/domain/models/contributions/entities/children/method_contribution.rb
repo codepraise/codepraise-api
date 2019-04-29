@@ -13,15 +13,18 @@ module CodePraise
       attribute :name, Coercible::String
       attribute :lines, Array.of(LineContribution)
 
-      def credit_share
-        @credit_share ||= lines
-          .each_with_object(Value::CreditShare.new) do |line, credit|
-            credit.add_line_credit(line)
-          end
+      def line_credits
+        productivity_credit.line_credits
       end
 
-      def line_credits
-        credit_share.line_credits
+      def line_percentage
+        productivity_credit.line_percentage
+      end
+
+      private
+
+      def productivity_credit
+        @productivity_credit ||= Value::ProductivityCredit.build_object(lines)
       end
     end
   end

@@ -14,7 +14,7 @@ module CodePraise
 
         Entity::Complexity.new(
           average: average(methods),
-          methods_complexity: methods
+          method_complexities: methods
         )
       end
 
@@ -35,7 +35,7 @@ module CodePraise
             complexity = abc_metric(ruby_code)
             CodePraise::Entity::MethodComplexity.new(
               complexity: complexity.average,
-              contributors: method_contributions.line_credits,
+              contributors: method_contributions.line_percentage,
               name: method_contributions.name
             )
           end

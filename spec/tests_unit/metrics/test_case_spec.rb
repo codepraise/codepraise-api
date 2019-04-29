@@ -12,6 +12,7 @@ describe CodePraise::Entity::TestCase do
     @test_cases = CodePraise::Mapper::TestCases
       .new(@measurement_helper.test_files[1].lines)
       .build_entities
+    binding.pry
   end
 
   after do

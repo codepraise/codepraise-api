@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'quality_credit'
+require_relative 'productivity_credit'
+
 module CodePraise
   module Value
     # Value of credits shared by contributors for file, files, or folder
-    class CreditShare
+    class CreditShare < SimpleDelegator
       # rubocop:disable Style/RedundantSelf
       LEVEL_SCORE = {
         'A' => 10,
@@ -14,17 +17,91 @@ module CodePraise
         'F' => 5
       }.freeze
 
-      attr_accessor :line_credits, :quality_credits, :method_credits
-      attr_reader :contributors, :collective_ownership
+      def self.build_object(file_contributions)
+        obj = new
+        obj[:quality_credit] = QualityCredit
+          .build_object(file_contributions.complexity,
+                        file_contributions.idiomaticity)
+        obj[:productivity_credit] = ProductivityCredit
+          .build_object(file_contributions.lines,
+                        file_contributions.methods)
+        obj
+      end
+
+      def self.build_by_hash(hash)
+        obj = new
+        obj[:quality_credit] = QualityCredit
+          .build_by_hash(hash[:quality_credit])
+        obj[:productivity_credit] = ProductivityCredit
+          .build_by_hash(hash[:productivity_credit])
+        obj
+      end
 
       def initialize
-        @line_credits = Types::HashedIntegers.new
-        @quality_credits = { complexity: Types::HashedIntegers.new,
-                             idiomaticity: Types::HashedIntegers.new }
-        @method_credits = Types::HashedIntegers.new
-        @collective_ownership = Hash.new()
-        @contributors = Set.new
+        super(Hash.new(Hash))
+        %i[quality_credit productivity_credit].each do |metric|
+          self[metric] = Hash.new(0)
+        end
       end
+
+      def productivity_credit
+        self[:productivity_credit]
+      end
+
+      def contributors
+        productivity_credit.contributors
+      end
+
+      def line_percentage
+        productivity_credit.line_percentage
+      end
+
+      def +(other)
+        raise TypeError, 'Must be CreditShare' unless other.is_a?(CodePraise::Value::CreditShare)
+
+        contributors = self.contributors + other.contributors
+        result = {
+          quality_credit: sum_quality(self[:quality_credit],
+                                      other[:quality_credit]),
+          productivity_credit: sum_productivtiy(self[:productivity_credit],
+                                                other[:productivity_credit],
+                                                contributors),
+        }
+        CreditShare.build_by_hash(result)
+      end
+
+      def sum_quality(qc1, qc2)
+        {
+          complexity: sum_hash(qc1[:complexity], qc2[:complexity]),
+          idiomaticity: sum_hash(qc1[:idiomaticity], qc2[:idiomaticity]),
+          documentation: sum_hash(qc1[:documentation], qc2[:documentation])
+        }
+      end
+
+      def sum_productivtiy(pc1, pc2, contributors)
+        {
+          line: sum_hash(pc1[:line], pc2[:line]),
+          method: sum_hash(pc1[:method], pc2[:method]),
+          contributors: contributors
+        }
+      end
+
+      def sum_hash(hash1, hash2)
+        max_hash(hash1, hash2)
+          .keys.each_with_object(Hash.new(0)) do |name, hash|
+            hash[name] = hash1[name].to_f + hash2[name].to_f
+          end
+      end
+
+      def max_hash(hash1, hash2)
+        if hash1.keys.length > hash2.keys.length
+          hash1
+        else
+          hash2
+        end
+      end
+
+
 
       ### following methods allow two CreditShare objects to test equality
       def sorted_credit
@@ -43,17 +120,7 @@ module CodePraise
         other.class == self.class && other.state == self.state
       end
 
-      def line_percentage
-        sum = line_credits.values.reduce(&:+)
-        line_credits.keys.inject({}) do |result, key|
-          if sum.zero?
-            result[key] = 0
-          else
-            result[key] = ((line_credits[key].to_f / sum) * 100).round
-          end
-          result
-        end
-      end
+
 
       alias eql? ==
 
@@ -62,33 +129,6 @@ module CodePraise
       end
       #############
 
-      def total_line_credits
-        @line_credits.values.sum
-      end
-
-      def add_line_credit(line)
-        @line_credits[line.contributor.username] += line.credit
-        @contributors.add(line.contributor)
-      end
-
-      def add_quality_credits(complexity_level, idiomaticity_level)
-        @contributors.each do |contributor|
-          name = contributor.username
-          @quality_credits[:complexity][name] = LEVEL_SCORE[complexity_level] *
-                                                (line_percentage[name].to_f / 100)
-          @quality_credits[:idiomaticity][name] = LEVEL_SCORE[idiomaticity_level] *
-                                                  (line_percentage[name].to_f / 100)
-        end
-      end
-
-      def add_method_credits(methods)
-        methods.each do |method|
-          total = method.line_credits.values.sum
-          method.line_credits.each do |k, v|
-            @method_credits[k] += (v.to_f / total)
-          end
-        end
-      end
 
       def add_collective_ownership(ownership_score)
         ownership_score.each do |k, v|
@@ -116,44 +156,6 @@ module CodePraise
         end
       end
 
-      def add_credits(contributor, credits_1, credits_2)
-        name = contributor.username
-        @line_credits[name] += credits_1[:line_credits] +
-                               credits_2[:line_credits]
-        @quality_credits.keys.each do |k|
-          @quality_credits[k][name] += credits_1[:quality_credits][k] +
-                                       credits_2[:quality_credits][k]
-        end
-        @method_credits[name] += credits_1[:method_credits] +
-                                 credits_2[:method_credits]
-        @contributors.add(contributor)
-      end
-
-      def +(other)
-        all_contributors = self.contributors + other.contributors
-        all_contributors
-          .each_with_object(Value::CreditShare.new) do |contributor, total|
-            total.add_credits(contributor,
-                              self.by_contributor(contributor),
-                              other.by_contributor(contributor))
-          end
-      end
-
-      def by_email(email)
-        contributor = @contributors.find { |c, _| c.email == email }
-        by_contributor(contributor)
-      end
-
-      def by_contributor(contributor)
-        {
-          line_credits: @line_credits[contributor.username],
-          quality_credits: {
-            complexity: @quality_credits[:complexity][contributor.username],
-            idiomaticity: @quality_credits[:idiomaticity][contributor.username]
-          },
-          method_credits: @method_credits[contributor.username]
-        }
-      end
       # rubocop:enable Style/RedundantSelf
     end
   end

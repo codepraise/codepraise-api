@@ -11,7 +11,7 @@ module CodePraise
       include Dry::Types.module
 
       attribute :average, Coercible::Float
-      attribute :methods_complexity, Strict::Array.of(Entity::MethodComplexity).optional
+      attribute :method_complexities, Strict::Array.of(Entity::MethodComplexity).optional
 
       def level
         case average
