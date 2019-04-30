@@ -4,15 +4,13 @@ require_relative '../../helpers/spec_helper'
 require_relative '../../helpers/measurement_helper'
 require_relative '../../helpers/database_helper'
 
-describe CodePraise::Value::QualityCredit do
+describe CodePraise::Value::OwnershipCredit do
   DatabaseHelper.setup_database_cleaner
-  DatabaseHelper.wipe_database
 
   before(:all) do
     @measurement_helper = MeasurementHelper.setup
-    @file = @measurement_helper.test_files[2]
-    @quality_credits = CodePraise::Value::QualityCredit
-      .build_object(@file.complexity, @file.idiomaticity, @file.comments, @file.test_cases)
+    @folder = @measurement_helper.folder_contributions
+    @ownership_credits = CodePraise::Value::OwnershipCredit.new(@folder).ownership_credits
     binding.pry
   end
 
@@ -20,12 +18,8 @@ describe CodePraise::Value::QualityCredit do
     DatabaseHelper.wipe_database
   end
 
-  it '' do
-
-  end
-
-  describe '#complexity' do
-  end
-  describe '#idiomaticity' do
+  describe '' do
+    it '' do
+    end
   end
 end

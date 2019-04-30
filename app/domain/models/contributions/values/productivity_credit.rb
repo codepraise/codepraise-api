@@ -3,6 +3,7 @@
 module CodePraise
   module Value
     class ProductivityCredit < SimpleDelegator
+      CREDITS = %i[line_credits method_credits contributors].freeze
 
       def self.build_object(line_contributions=nil, method_contributions=nil)
         obj = new
@@ -13,26 +14,25 @@ module CodePraise
 
       def self.build_by_hash(hash)
         obj = new
-        obj[:line] = hash[:line]
-        obj[:method] = hash[:method]
-        obj[:contributors] = hash[:contributors]
+        CREDITS.each do |credit|
+          obj[credit] = hash[credit]
+        end
         obj
       end
 
       def initialize
         super(Hash.new(Hash))
-        %i[line method].each do |metric|
-          self[metric] = Hash.new(0)
+        CREDITS.each do |credit|
+          self[credit] = credit == :contributors ? Set.new : Hash.new(0)
         end
-        self[:contributors] = Set.new
       end
 
-      def line_credits
-        self[:line]
+      CREDITS.each do |credit|
+        define_method(credit) { self[credit] }
       end
 
-      def method_credits
-        self[:method]
+      def credits
+        CREDITS
       end
 
       def line_percentage
@@ -50,7 +50,7 @@ module CodePraise
 
       def self.add_line_credits(obj, line_contributions)
         line_contributions.each do |line|
-          obj[:line][line.contributor.username] += line.credit
+          obj[:line_credits][line.contributor.username] += line.credit
           obj[:contributors].add(line.contributor)
         end
       end
@@ -59,7 +59,7 @@ module CodePraise
         method_contributions.each do |method|
           total = method.line_credits.values.sum
           method.line_credits.each do |k, v|
-            obj[:method][k] += (v.to_f / total)
+            obj[:method_credits][k] += (v.to_f / total)
           end
         end
       end

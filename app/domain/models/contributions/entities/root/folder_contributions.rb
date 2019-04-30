@@ -71,7 +71,7 @@ module CodePraise
         return @credit_share if @credit_share
 
         @credit_share = files.map(&:credit_share).reduce(&:+)
-        @credit_share.add_collective_ownership(coefficient_variation) if any_subfolders?
+        @credit_share.add_onwership_credit(self) if any_subfolders?
         @credit_share
       end
 

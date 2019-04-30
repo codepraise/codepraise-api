@@ -28,6 +28,10 @@ module CodePraise
         credit_share.total_line_credits
       end
 
+      def line_percentage
+        credit_share.line_percentage
+      end
+
       def total_comments
         comments&.each_with_object(Hash.new(0)) do |comment, hash|
           hash[comment.type] += 1
@@ -59,13 +63,7 @@ module CodePraise
       def credit_share
         return Value::CreditShare.new if not_wanted
 
-        @credit_share = lines
-          .each_with_object(Value::CreditShare.new) do |line, credit|
-            credit.add_line_credit(line)
-          end
-        @credit_share.add_quality_credits(@complexity.level, @idiomaticity.level) if ruby_file?
-        @credit_share.add_method_credits(@methods) if !@methods.nil? && ruby_file?
-        @credit_share
+        @credit_share ||= CodePraise::Value::CreditShare.build_object(self)
       end
 
       def contributors

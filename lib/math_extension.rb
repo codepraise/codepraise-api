@@ -3,7 +3,7 @@
 # Math
 module Math
   def self.coefficient_variation(nums)
-    return nil if mean(nums).zero?
+    return nil if mean(nums).nil? || mean(nums).zero?
 
     (sigma(nums) / mean(nums) * 100).round
   end

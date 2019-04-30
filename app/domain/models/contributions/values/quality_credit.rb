@@ -11,27 +11,39 @@ module CodePraise
         'E' => -1,
         'F' => -2
       }.freeze
+      CREDITS = %i[complexity_credits idiomaticity_credits
+                   documentation_credits test_credits].freeze
 
-      def self.build_object(complexity = nil, idiomaticity = nil, comments = nil)
+      def self.build_object(complexity = nil, idiomaticity = nil, comments = nil, test_cases = nil)
         obj = new
         add_complexity_credits(obj, complexity) if complexity
         add_idiomaticity_credits(obj, idiomaticity) if idiomaticity
         add_documentation_credits(obj, comments) if comments
+        add_test_credits(obj, test_cases) if test_cases
         obj
       end
 
       def self.build_by_hash(hash)
         obj = new
-        obj[:complexity] = hash[:complexity]
-        obj[:idiomaticity] = hash[:idiomaticity]
+        CREDITS.each do |credit|
+          obj[credit] = hash[credit]
+        end
         obj
       end
 
       def initialize
         super(Hash.new(Hash))
-        %i[complexity idiomaticity documentation].each do |metric|
-          self[metric] = Hash.new(0)
+        CREDITS.each do |credit|
+          self[credit] = Hash.new(0)
         end
+      end
+
+      CREDITS.each do |credit|
+        define_method(credit) { self[credit] }
+      end
+
+      def credits
+        CREDITS
       end
 
       private
@@ -39,8 +51,8 @@ module CodePraise
       def self.add_complexity_credits(obj, complexity)
         complexity.method_complexities.each do |method_complexity|
           method_complexity.contributors.each do |name, percentage|
-            obj[:complexity][name] += LEVEL_SCORE[method_complexity.level] *
-                                      (percentage.to_f / 100)
+            obj[:complexity_credits][name] += LEVEL_SCORE[method_complexity.level] *
+                                              (percentage.to_f / 100)
           end
         end
       end
@@ -48,7 +60,7 @@ module CodePraise
       def self.add_idiomaticity_credits(obj, idiomaticity)
         idiomaticity.offenses.each do |offense|
           offense.contributors.each do |name, line_count|
-            obj[:idiomaticity][name] += 0.5 * line_count
+            obj[:idiomaticity_credits][name] += -1 * line_count
           end
         end
       end
@@ -57,13 +69,21 @@ module CodePraise
         comments.each do |comment|
           comment.contributors.each do |name, line_count|
             credit = comment.is_documentation ? 1 : 0
-            obj[:documentation][name] += credit * line_count
+            obj[:documentation_credits][name] += credit * line_count
+          end
+        end
+      end
+
+      def self.add_test_credits(obj, test_cases)
+        test_cases.each do |test_case|
+          test_case.contributors.each do |name, line_count|
+            obj[:test_credits][name] += line_count
           end
         end
       end
 
       private_class_method :add_complexity_credits, :add_idiomaticity_credits,
-                           :add_documentation_credits
+                           :add_documentation_credits, :add_test_credits
     end
   end
 end
