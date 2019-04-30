@@ -21,12 +21,26 @@ class MeasurementHelper
     @project.contributors.map(&:username)
   end
 
+  def project
+    CodePraise::Repository::For.klass(CodePraise::Entity::Project).find_full_name(
+      @project.owner.username, @project.name
+    )
+  end
+
   def setup_project
     clone unless @git_repo.exists_locally?
   end
 
+  def contributions
+    CodePraise::Mapper::Contributions.new(@git_repo)
+  end
+
   def folder_contributions
-    @folder_contributions ||= CodePraise::Mapper::Contributions.new(@git_repo).for_folder('')
+    @folder_contributions ||= contributions.for_folder('')
+  end
+
+  def commits
+    contributions.commits
   end
 
   def delete_project?

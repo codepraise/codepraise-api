@@ -43,7 +43,7 @@ module Appraisal
         reporter.publish CloneMonitor.progress(line)
       end
 
-      appraise_repo(gitrepo, project)
+      appraise_and_store(gitrepo, project)
       reporter.publish(CloneMonitor.progress('Appraised'))
       gitrepo.delete
       # Keep sending finished status to any latecoming subscribers
@@ -55,7 +55,7 @@ module Appraisal
 
     private
 
-    def appraise_repo(gitrepo, project)
+    def appraise_and_store(gitrepo, project)
       contributions = CodePraise::Mapper::Contributions.new(gitrepo)
       folder_contributions = contributions.for_folder('')
       commit_contributions = contributions.commits

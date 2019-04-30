@@ -99,11 +99,11 @@ module CodePraise
       end
 
       def add_onwership_credit(folder)
-        self[:ownership_credit] = OwnershipCredit.new(folder)
+        self[:ownership_credit] = OwnershipCredit.new(folder).ownership_credits
       end
 
       def ownership_credit
-        self[:ownership_credit].ownership_credits
+        self[:ownership_credit]
       end
 
       alias eql? ==

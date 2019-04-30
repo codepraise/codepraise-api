@@ -10,6 +10,8 @@ module CodePraise
 
       property :message
       property :is_functionality
+      property :expectation_count
+      property :contributors
     end
   end
 end

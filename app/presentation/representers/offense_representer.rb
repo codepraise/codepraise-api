@@ -13,6 +13,7 @@ module CodePraise
       property :message
       property :location
       property :line_count
+      property :contributors
     end
   end
 end
