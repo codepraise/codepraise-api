@@ -20,7 +20,7 @@ module CodePraise
       CREDITS = %i[quality_credit productivity_credit].freeze
       KLASS = {
         quality_credit: QualityCredit,
-        productivity_credit: ProductivityCredit
+        productivity_credit: ProductivityCredit,
       }.freeze
 
       def self.build_object(file_contributions)
@@ -33,22 +33,31 @@ module CodePraise
         obj[:productivity_credit] = ProductivityCredit
           .build_object(file_contributions.lines,
                         file_contributions.methods)
+        obj[:contributors] = contributors(file_contributions.lines)
         obj
       end
 
-      def self.build_by_hash(hash)
+      def self.contributors(line_contributions)
+        line_contributions.each_with_object(Set.new) do |line, set|
+          set << line.contributor
+        end
+      end
+
+      def self.build_by_hash(hash, contributors)
         obj = new
         CREDITS.each do |credit|
           obj[credit] = KLASS[credit].build_by_hash(hash[credit])
         end
+        obj[:contributors] = contributors
         obj
       end
 
       def initialize
-        super(Hash.new(Hash))
+        super({})
         CREDITS.each do |credit|
           self[credit] = KLASS[credit].new
         end
+        self[:contributors] = Set.new
       end
 
       CREDITS.each do |credit|
@@ -56,15 +65,11 @@ module CodePraise
       end
 
       def contributors
-        productivity_credit.contributors
+        self[:contributors]
       end
 
       def line_percentage
         productivity_credit.line_percentage
-      end
-
-      def total_line_credits
-        productivity_credit.line_credits.values.sum
       end
 
       def +(other)
@@ -75,10 +80,17 @@ module CodePraise
           quality_credit: sum_credits(self[:quality_credit],
                                       other[:quality_credit]),
           productivity_credit: sum_credits(self[:productivity_credit],
-                                           other[:productivity_credit],
-                                           contributors),
+                                           other[:productivity_credit])
         }
-        CreditShare.build_by_hash(result)
+        CreditShare.build_by_hash(result, contributors)
+      end
+
+      def add_onwership_credit(folder)
+        self[:ownership_credit] = OwnershipCredit.new(folder).ownership_credits
+      end
+
+      def ownership_credit
+        self[:ownership_credit]
       end
 
       ### following methods allow two CreditShare objects to test equality
@@ -98,14 +110,6 @@ module CodePraise
         other.class == self.class && other.state == self.state
       end
 
-      def add_onwership_credit(folder)
-        self[:ownership_credit] = OwnershipCredit.new(folder).ownership_credits
-      end
-
-      def ownership_credit
-        self[:ownership_credit]
-      end
-
       alias eql? ==
 
       def hash
@@ -116,9 +120,9 @@ module CodePraise
 
       private
 
-      def sum_credits(credit1, credit2, contributors=nil)
+      def sum_credits(credit1, credit2)
         credit1.credits.each_with_object({}) do |credit, hash|
-          hash[credit] = credit == :contributors ? contributors : sum_hash(credit1[credit], credit2[credit])
+          hash[credit] = sum_hash(credit1[credit], credit2[credit])
         end
       end
 

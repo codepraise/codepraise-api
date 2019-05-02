@@ -11,7 +11,8 @@ module CodePraise
       WANTED_EXTENSION = %w[rb js css html slim md].join('|')
       EXTENSION_REGEX = /#{DOT}#{WANTED_EXTENSION}#{LINE_END}/.freeze
 
-      attr_reader :file_path, :lines, :complexity, :idiomaticity, :methods, :comments, :test_cases, :commits_count
+      attr_reader :file_path, :lines, :complexity, :idiomaticity, :methods,
+                  :comments, :test_cases, :commits_count
 
       def initialize(file_path:, lines:, complexity:, idiomaticity:, methods:, comments:, test_cases:, commits_count:)
         @file_path = Value::FilePath.new(file_path)
@@ -24,40 +25,18 @@ module CodePraise
         @commits_count = commits_count
       end
 
-      def total_line_credits
-        credit_share.total_line_credits
-      end
-
-      def line_percentage
-        credit_share.line_percentage
-      end
-
-      def total_comments
-        comments&.each_with_object(Hash.new(0)) do |comment, hash|
-          hash[comment.type] += 1
-        end
-      end
-
-      def total_methods
-        methods&.length
-      end
-
       def has_documentation
         return false if @comments.nil?
 
         @comments.select(&:is_documentation).length.positive?
       end
 
-      def ownership_level
-        max_percentage = credit_share.line_percentage.values.max
-        case max_percentage
-        when 25..40
-          'A'
-        when 40..60
-          'B'
-        else
-          'C'
-        end
+      def lines_by(contributor)
+        lines.select { |line| line.contributor == contributor }
+      end
+
+      def credits_for(contributor)
+        lines_by(contributor).map(&:credit).sum
       end
 
       def credit_share

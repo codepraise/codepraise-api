@@ -5,7 +5,6 @@ module CodePraise
     # Entity for folder contributions
     class FolderContributions < SimpleDelegator
       include Mixins::ContributionsCalculator
-      include Mixins::CodeOnwershipCalculator
 
       attr_reader :path, :files, :repo_path
 
