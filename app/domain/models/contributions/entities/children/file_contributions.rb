@@ -12,9 +12,9 @@ module CodePraise
       EXTENSION_REGEX = /#{DOT}#{WANTED_EXTENSION}#{LINE_END}/.freeze
 
       attr_reader :file_path, :lines, :complexity, :idiomaticity, :methods,
-                  :comments, :test_cases, :commits_count
+                  :comments, :test_cases, :commits_count, :test_coverage
 
-      def initialize(file_path:, lines:, complexity:, idiomaticity:, methods:, comments:, test_cases:, commits_count:)
+      def initialize(file_path:, lines:, complexity:, idiomaticity:, methods:, comments:, test_cases:, commits_count:, test_coverage:)
         @file_path = Value::FilePath.new(file_path)
         @lines = lines
         @complexity = complexity
@@ -23,6 +23,7 @@ module CodePraise
         @comments = comments
         @test_cases = test_cases
         @commits_count = commits_count
+        @test_coverage = test_coverage
       end
 
       def has_documentation

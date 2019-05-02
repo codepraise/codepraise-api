@@ -11,6 +11,7 @@ describe CodePraise::Entity::TestCase do
     @measurement_helper = MeasurementHelper.setup
     path = @measurement_helper.git_repo.local.git_repo_path
     @coverage = CodePraise::SimpleCov::TestCoverage.new(path)
+    binding.pry
   end
 
   after do
@@ -18,7 +19,7 @@ describe CodePraise::Entity::TestCase do
   end
 
   describe '#coverage_report' do
-    it 'recive file path as parameter and report the test coverage of file' do
+    it 'receive file path as parameter and report the test coverage of file' do
       file = @measurement_helper.file
       test_coverage = @coverage.coverage_report(file.file_path)
       _(test_coverage.keys.sort).must_equal %i[coverage datetime].sort
