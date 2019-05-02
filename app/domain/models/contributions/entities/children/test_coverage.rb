@@ -8,8 +8,9 @@ module CodePraise
     class TestCoverage < Dry::Struct
       include Dry::Types.module
 
-      attribute :coverage, Coercible::Float
-      attribute :time, Strict::Time
+      attribute :coverage, Coercible::Float.optional
+      attribute :time, Strict::Time.optional
+      attribute :message, Strict::String.optional
     end
   end
 end

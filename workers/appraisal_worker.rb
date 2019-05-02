@@ -39,8 +39,10 @@ module Appraisal
 
       gitrepo = CodePraise::GitRepo.new(project, Worker.config)
 
-      gitrepo.clone_locally do |line|
-        reporter.publish CloneMonitor.progress(line)
+      unless gitrepo.exists_locally?
+        gitrepo.clone_locally do |line|
+          reporter.publish CloneMonitor.progress(line)
+        end
       end
 
       appraise_and_store(gitrepo, project)
@@ -65,7 +67,7 @@ module Appraisal
     end
 
     def store_appraisal(appraisal)
-      CodePraise::Repository::Appraisal.create(appraisal_hash(appraisal))
+      CodePraise::Repository::Appraisal.find_or_create(appraisal_hash(appraisal))
     end
 
     def appraisal_hash(appraisal)

@@ -9,19 +9,26 @@ module CodePraise
       COVERAGE_PATH = '/coverage/.resultset.json'
 
       def initialize(repo_path)
-        @coverage_hash = JSON.parse(File.read(repo_path + COVERAGE_PATH))
-      end
-
-      def coverage_hash
-        @coverage_hash['RSpec']['coverage']
+        path = repo_path + COVERAGE_PATH
+        @coverage_hash = File.exist?(path) ? JSON.parse(File.read(path)) : nil
       end
 
       def coverage_report(file_path)
+        return { message: 'There is no coverage file.'} unless @coverage_hash
+
         {
           coverage: test_coverage(file_path),
           time: time
         }
       end
+
+      def coverage_hash
+        return nil unless @coverage_hash
+
+        @coverage_hash['RSpec']['coverage']
+      end
+
+      private
 
       def time
         @time ||= Time.strptime(timestamp, '%s')
@@ -43,8 +50,6 @@ module CodePraise
       def test_coverage(file_path)
         calculate_test_coverage(test_array(file_path))
       end
-
-      private
 
       def longest_repeating_substring(string_array)
         result = ''

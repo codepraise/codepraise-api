@@ -9,9 +9,11 @@ module CodePraise
 
       def build_entity(file_path)
         coverage_hash = test_coverage.coverage_report(file_path)
+
         Entity::TestCoverage.new(
           coverage: coverage_hash[:coverage],
-          time: coverage_hash[:time]
+          time: coverage_hash[:time],
+          message: coverage_hash[:message]
         )
       end
 

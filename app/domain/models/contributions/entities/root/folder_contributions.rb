@@ -31,10 +31,12 @@ module CodePraise
       end
 
       def test_coverage
-        coverage_array = files.map(&:test_coverage).reject(&:nil?).map(&:coverage)
+        coverage_array = files.map(&:test_coverage).reject(&:nil?)
 
-        return 0 if coverage_array.empty?
+        return coverage_array[0].message if coverage_array[0]&.message
+        return 0 if coverage_array.map(&:coverage).empty?
 
+        coverage_array.map!(&:coverage)
         coverage_array.sum / coverage_array.length
       end
 

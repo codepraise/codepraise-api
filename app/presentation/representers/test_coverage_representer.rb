@@ -10,6 +10,7 @@ module CodePraise
 
       property :coverage
       property :time
+      property :message
     end
   end
 end

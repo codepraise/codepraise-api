@@ -25,6 +25,16 @@ module CodePraise
         build_entity(db_record, key)
       end
 
+      def self.find_or_create(project_contributions)
+        key = find_key(project_contributions)
+        db_record = Database::AppraisalOdm
+          .create("#{key}": project_contributions)
+
+        db_record = create(project_contributions) if db_record.nil?
+
+        build_entity(db_record, key)
+      end
+
       def self.update(project_contributions)
         key = find_key(project_contributions)
         db_record = Database::AppraisalOdm
