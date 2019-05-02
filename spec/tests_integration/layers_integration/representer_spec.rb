@@ -12,20 +12,19 @@ describe 'Contributor-Level Measurement' do
     @folder_contributions = @measurement_helper.folder_contributions
     @commit_contributions = @measurement_helper.commits
     @project = @measurement_helper.project
-    appraisal = CodePraise::Value::ProjectFolderContributions
+    @appraisal = CodePraise::Value::ProjectFolderContributions
       .new(@project, @folder_contributions, @commit_contributions)
       .yield_self do |value|
         CodePraise::Representer::ProjectFolderContributions
         .new(value)
       end
-    binding.pry
   end
 
   after(:all) do
     DatabaseHelper.wipe_database
   end
 
-  it '' do
-
+  it 'should render json format' do
+    _(@appraisal.to_json).must_be_kind_of String
   end
 end

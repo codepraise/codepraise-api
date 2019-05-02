@@ -19,12 +19,12 @@ module CodePraise
       def coverage_report(file_path)
         {
           coverage: test_coverage(file_path),
-          datetime: datetime
+          time: time
         }
       end
 
-      def datetime
-        @datetime ||= Time.strptime(timestamp, '%s')
+      def time
+        @time ||= Time.strptime(timestamp, '%s')
       end
 
       def timestamp
@@ -62,6 +62,9 @@ module CodePraise
         return 0 if coverage_array.nil? || coverage_array.empty?
 
         total_lines = coverage_array.reject(&:nil?)
+
+        return 0 if total_lines.empty?
+
         cover_lines = total_lines.reject(&:zero?)
         cover_lines.length.to_f / total_lines.length
       end

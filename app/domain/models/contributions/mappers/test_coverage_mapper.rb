@@ -11,7 +11,7 @@ module CodePraise
         coverage_hash = test_coverage.coverage_report(file_path)
         Entity::TestCoverage.new(
           coverage: coverage_hash[:coverage],
-          datetime: coverage_hash[:datetime]
+          time: coverage_hash[:time]
         )
       end
 

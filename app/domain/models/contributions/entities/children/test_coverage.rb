@@ -9,7 +9,7 @@ module CodePraise
       include Dry::Types.module
 
       attribute :coverage, Coercible::Float
-      attribute :datetime, Strict::Time
+      attribute :time, Strict::Time
     end
   end
 end

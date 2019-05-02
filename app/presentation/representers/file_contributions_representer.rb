@@ -12,6 +12,7 @@ require_relative 'idiomaticity_representer'
 require_relative 'method_contributions_representer'
 require_relative 'comment_representer'
 require_relative 'test_case_representer'
+require_relative 'test_coverage_representer'
 
 module CodePraise
   module Representer
@@ -19,13 +20,16 @@ module CodePraise
     class FileContributions < Roar::Decorator
       include Roar::JSON
 
-      property :line_count
       property :total_line_credits
-      property :total_methods
-      property :total_comments
+      property :total_method_credits
+      property :total_offenses
+      property :total_test_expectation
+      property :total_documentation
+      property :line_percentage
       property :has_documentation
       property :commits_count
       property :ownership_level
+      property :test_coverage, extend: Representer::TestCoverage, class: OpenStruct
       property :file_path, extend: Representer::FilePath, class: OpenStruct
       property :credit_share, extend: Representer::CreditShare, class: OpenStruct
       property :complexity, extend: Representer::Complexity, class: OpenStruct

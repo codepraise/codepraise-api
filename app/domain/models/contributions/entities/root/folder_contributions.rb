@@ -30,6 +30,14 @@ module CodePraise
         files.map(&:lines).reduce(&:+)
       end
 
+      def test_coverage
+        coverage_array = files.map(&:test_coverage).reject(&:nil?).map(&:coverage)
+
+        return 0 if coverage_array.empty?
+
+        coverage_array.sum / coverage_array.length
+      end
+
       def average_complexity
         files_complexity = files.map(&:complexity).reject(&:nil?)
 
