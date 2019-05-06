@@ -37,17 +37,16 @@ module CodePraise
 
       def line_percentage
         sum = line_credits.values.reduce(&:+)
-        line_credits.keys.each_with_object({}) do |email, hash|
-          hash[email] = sum.zero? ? 0 : ((line_credits[email].to_f / sum) * 100).round
+        line_credits.keys.each_with_object({}) do |email_id, hash|
+          hash[email_id] = sum.zero? ? 0 : ((line_credits[email_id].to_f / sum) * 100).round
         end
       end
-
 
       private
 
       def self.add_line_credits(obj, line_contributions)
         line_contributions.each do |line|
-          obj[:line_credits][line.contributor.email] += line.credit
+          obj[:line_credits][line.contributor.email_id] += line.credit
         end
       end
 

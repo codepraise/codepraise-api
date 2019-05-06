@@ -12,7 +12,6 @@ describe 'File-Level Measurement' do
     @folder_contributions = @measurement_helper.folder_contributions
     @file = @measurement_helper.file
     @credit_share = CodePraise::Value::CreditShare.build_object(@file)
-
   end
 
   after do

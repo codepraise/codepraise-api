@@ -17,6 +17,10 @@ module CodePraise
         email == other.email
       end
 
+      def email_id
+        email.split('@').first
+      end
+
       # Redefine hashing (hash uses eql?)
       alias eql? ==
 

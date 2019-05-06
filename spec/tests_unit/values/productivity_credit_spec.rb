@@ -6,6 +6,7 @@ require_relative '../../helpers/database_helper'
 
 describe CodePraise::Value::ProductivityCredit do
   DatabaseHelper.setup_database_cleaner
+  DatabaseHelper.wipe_database
 
   before(:all) do
     @measurement_helper = MeasurementHelper.setup

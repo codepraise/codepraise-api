@@ -6,11 +6,13 @@ require_relative '../../helpers/database_helper'
 
 describe CodePraise::Entity::FileContributions do
   DatabaseHelper.setup_database_cleaner
+  DatabaseHelper.wipe_database
 
   before(:all) do
     @measurement_helper = MeasurementHelper.setup
     @method_contributions = CodePraise::Mapper::MethodContributions
       .new(@measurement_helper.file.lines).build_entity
+    binding.pry
   end
 
   after do

@@ -13,7 +13,7 @@ module CodePraise
       DOT = '\.'
       LINE_END = '$'
       WANTED_EXTENSION = %w[rb js css html slim md coffee].join('|')
-      EXTENSION_REGEX = /#{DOT}#{WANTED_EXTENSION}#{LINE_END}/.freeze
+      EXTENSION_REGEX = /#{DOT}(#{WANTED_EXTENSION})#{LINE_END}/.freeze
 
       attribute :committer,     Contributor
       attribute :sha,           Strict::String

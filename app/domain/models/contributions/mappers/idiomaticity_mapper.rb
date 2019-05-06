@@ -37,7 +37,7 @@ module CodePraise
         last_line = offense_hash['location']['last_line'] - 1
         file_contributions[first_line..last_line]
           .each_with_object(Hash.new(0)) do |line_contribution, hash|
-            hash[line_contribution.contributor.email] += 1
+            hash[line_contribution.contributor.email_id] += 1
           end
       end
 

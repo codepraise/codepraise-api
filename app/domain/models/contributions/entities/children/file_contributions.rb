@@ -8,8 +8,8 @@ module CodePraise
 
       DOT = '\.'
       LINE_END = '$'
-      WANTED_EXTENSION = %w[rb js css html slim md].join('|')
-      EXTENSION_REGEX = /#{DOT}#{WANTED_EXTENSION}#{LINE_END}/.freeze
+      WANTED_EXTENSION = %w[rb js css html slim md coffee].join('|')
+      EXTENSION_REGEX = /#{DOT}(#{WANTED_EXTENSION})#{LINE_END}/.freeze
 
       attr_reader :file_path, :lines, :complexity, :idiomaticity, :methods,
                   :comments, :test_cases, :commits_count, :test_coverage
