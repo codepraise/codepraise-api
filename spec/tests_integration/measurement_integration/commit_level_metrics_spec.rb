@@ -1,13 +1,23 @@
 # frozen_string_literal: true
 
 require_relative '../../helpers/spec_helper.rb'
+require_relative '../../helpers/measurement_helper.rb'
+require_relative '../../helpers/database_helper.rb'
+
 
 describe 'Test Commit-Level Measurement' do
+  DatabaseHelper.setup_database_cleaner
+  DatabaseHelper.wipe_database
+
   before do
-    project = create(:project)
-    git_repo = CodePraise::GitRepo.new(project, CodePraise::Api.config)
+    @measurement_helper = MeasurementHelper.setup
+    git_repo = @measurement_helper.git_repo
     contributions = CodePraise::Mapper::Contributions.new(git_repo)
     @commits = contributions.commits
+  end
+
+  after(:all) do
+    DatabaseHelper.wipe_database
   end
 
   describe 'Entity::Commit' do

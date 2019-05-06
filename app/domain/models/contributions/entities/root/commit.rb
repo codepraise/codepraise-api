@@ -10,6 +10,11 @@ module CodePraise
     class Commit < Dry::Struct
       include Dry::Types.module
 
+      DOT = '\.'
+      LINE_END = '$'
+      WANTED_EXTENSION = %w[rb js css html slim md coffee].join('|')
+      EXTENSION_REGEX = /#{DOT}#{WANTED_EXTENSION}#{LINE_END}/.freeze
+
       attribute :committer,     Contributor
       attribute :sha,           Strict::String
       attribute :date,          Params::DateTime
@@ -27,6 +32,30 @@ module CodePraise
 
       def total_files
         file_changes.count
+      end
+
+      def total_credited_files
+        wanted_files.count
+      end
+
+      def total_addition_credits
+        wanted_files.map(&:addition).reduce(&:+)
+      end
+
+      def total_deletion_credits
+        wanted_files.map(&:deletion).reduce(&:+)
+      end
+
+      private
+
+      def wanted(file)
+        file.path.match(EXTENSION_REGEX)
+      end
+
+      def wanted_files
+        file_changes.select do |file|
+          wanted(file)
+        end
       end
     end
   end
