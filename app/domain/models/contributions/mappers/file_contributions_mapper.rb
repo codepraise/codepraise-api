@@ -90,7 +90,7 @@ module CodePraise
       end
 
       def test_cases
-        return nil unless test_files?
+        return nil unless test_files? && ruby_file?
 
         TestCases.new(contributions).build_entities
       end

@@ -62,11 +62,11 @@ module CodePraise
 
       def array_to_hash(percentage_array, contributors)
         result = contributors.each_with_object({}) do |contributor, hash|
-          hash[contributor.username] = []
+          hash[contributor.email] = []
         end
         percentage_array.each do |percentage_hash|
-          result.each do |username, _|
-            result[username] << percentage_hash[username].to_i
+          result.each do |email, _|
+            result[email] << percentage_hash[email].to_i
           end
         end
         result

@@ -18,6 +18,7 @@ describe 'Contributor-Level Measurement' do
         CodePraise::Representer::ProjectFolderContributions
         .new(value)
       end
+    binding.pry
   end
 
   after(:all) do

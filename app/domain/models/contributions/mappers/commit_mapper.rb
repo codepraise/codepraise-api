@@ -15,20 +15,19 @@ module CodePraise
         Entity::Commit.new(
           committer: committer,
           sha: @commit.sha,
-          date: @commit.date,
+          date: @commit.author_date,
           message: @commit.message,
           size: @commit.size,
           file_changes: file_changes
         )
       end
 
-
       private
 
       def committer
         Entity::Contributor.new(
-          username: @commit.committer.name,
-          email:  @commit.committer.email
+          username: @commit.author.name,
+          email:  @commit.author.email
         )
       end
 

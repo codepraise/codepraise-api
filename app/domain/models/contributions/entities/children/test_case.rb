@@ -21,8 +21,8 @@ module CodePraise
 
       def contributors
         lines.each_with_object({}) do |line, hash|
-          hash[line.contributor.username] ||= 0
-          hash[line.contributor.username] += 1 if expectation?(line.code)
+          hash[line.contributor.email] ||= 0
+          hash[line.contributor.email] += 1 if expectation?(line.code)
         end
       end
 

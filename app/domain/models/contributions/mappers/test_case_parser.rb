@@ -4,16 +4,21 @@ module CodePraise
   module Mapper
     module TestCaseParser
       def self.parse(code)
-        ast = Parser::CurrentRuby.parse(code)
-        test_cases = []
-        find_test_cases(ast, test_cases)
-        test_cases.map do |test_case|
-          {
-            message: test_message(test_case),
-            first_line: test_case.loc.first_line,
-            last_line: test_case.loc.last_line
-          }
+        begin
+          ast = Parser::CurrentRuby.parse(code)
+          test_cases = []
+          find_test_cases(ast, test_cases)
+          test_cases.map do |test_case|
+            {
+              message: test_message(test_case),
+              first_line: test_case.loc.first_line,
+              last_line: test_case.loc.last_line
+            }
+          end
+        rescue => exception
+          binding.pry
         end
+
       end
 
       def self.find_test_cases(ast, result)

@@ -14,20 +14,36 @@ module CodePraise
         Request.new(@gh_token).repo(username, project_name).parse
       end
 
+      def git_repo_contributors(username, project_name)
+        Request.new(@gh_token).contributors(username, project_name).parse
+      end
+
       def contributors_data(contributors_url)
         Request.new(@gh_token).get(contributors_url).parse
       end
 
+      def git_repo_commits(username, project_name)
+        Request.new(@gh_token).commits(username, project_name).parse
+      end
+
       # Sends out HTTP requests to Github
       class Request
-        REPOS_PATH = 'https://api.github.com/repos/'
+        ENDPOINT = 'https://api.github.com/'
 
         def initialize(token)
           @token = token
         end
 
         def repo(username, project_name)
-          get(REPOS_PATH + [username, project_name].join('/'))
+          get(ENDPOINT + 'repos/' + [username, project_name].join('/'))
+        end
+
+        def commits(username, project_name)
+          get(ENDPOINT + 'repos/' + [username, project_name].join('/') + '/commits')
+        end
+
+        def contributors(username, project_name)
+          get(ENDPOINT + 'repos/' + [username, project_name].join('/') + '/contributors')
         end
 
         def get(url)
