@@ -14,8 +14,6 @@ module CodePraise
       end
 
       def coverage_report(file_path)
-        return nil unless @coverage_hash
-
         {
           coverage: test_coverage(file_path),
           time: time
@@ -31,11 +29,13 @@ module CodePraise
       private
 
       def time
-        @time ||= Time.strptime(timestamp, '%s')
+        return nil unless @coverage_hash
+
+        @time ||= Time.at(timestamp).to_time
       end
 
       def timestamp
-        @coverage_hash['RSpec']['timestamp'].to_s
+        @coverage_hash['RSpec']['timestamp'].to_i
       end
 
       def project_path
@@ -48,6 +48,8 @@ module CodePraise
       end
 
       def test_coverage(file_path)
+        return nil unless @coverage_hash
+
         calculate_test_coverage(test_array(file_path))
       end
 
