@@ -62,18 +62,14 @@ module CodePraise
 
       def array_to_hash(percentage_array, contributors)
         result = contributors.each_with_object({}) do |contributor, hash|
-          hash[email_id(contributor.email)] = []
+          hash[contributor.email_id] = []
         end
         percentage_array.each do |percentage_hash|
-          result.each do |email, _|
-            result[email_id(email)] << percentage_hash[email_id(email)].to_i
+          result.each do |email_id, _|
+            result[email_id] << percentage_hash[email_id].to_i
           end
         end
         result
-      end
-
-      def email_id(email)
-        email.split('@').first
       end
 
       def credit(coefficient_variation)

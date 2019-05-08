@@ -3,6 +3,8 @@
 module CodePraise
   module Mapper
     class MethodContributions
+      attr_reader :file_contributions
+
       def initialize(file_contributions)
         @file_contributions = file_contributions
       end
@@ -10,12 +12,11 @@ module CodePraise
       def build_entity
         methods = all_methods
 
-        return nil if methods.nil?
-
         methods.map do |method|
           Entity::MethodContribution.new(
             name: method_name(method[:name]),
             lines: method[:lines],
+            type: method[:type],
             complexity: method_complexity(method[:lines])
           )
         end
@@ -26,7 +27,7 @@ module CodePraise
       def method_complexity(lines)
         ruby_code = lines.map(&:code).join("\n")
         complexity = abc_metric(ruby_code)
-        complexity.average
+        complexity&.average
       end
 
       def abc_metric(code)

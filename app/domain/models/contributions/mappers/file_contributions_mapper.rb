@@ -54,6 +54,24 @@ module CodePraise
         @test_coverage_mapper.build_entity(file_path)
       end
 
+      def methods
+        return [] unless ruby_file?
+
+        MethodContributions.new(contributions).build_entity
+      end
+
+      def comments
+        return [] unless ruby_file?
+
+        Comments.new(contributions).build_entities
+      end
+
+      def test_cases
+        return [] unless test_files? && ruby_file?
+
+        TestCases.new(contributions).build_entities
+      end
+
       def summarize_line_reports(line_reports)
         line_reports.map.with_index do |report, line_index|
           Entity::LineContribution.new(
@@ -69,30 +87,12 @@ module CodePraise
         Value::FilePath.new(filename)
       end
 
-      def methods
-        return nil unless ruby_file?
-
-        MethodContributions.new(contributions).build_entity
-      end
-
-      def comments
-        return nil unless ruby_file?
-
-        Comments.new(contributions).build_entities
-      end
-
       def ruby_file?
         File.extname(@file_report[0]) == '.rb'
       end
 
       def test_files?
         !(filename =~ /spec|test/).nil?
-      end
-
-      def test_cases
-        return nil unless test_files? && ruby_file?
-
-        TestCases.new(contributions).build_entities
       end
 
       def commits_count

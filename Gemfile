@@ -79,8 +79,8 @@ end
 gem 'rack-test' # can also be used to diagnose production
 
 # QUALITY
-group :development, :test do
-  gem 'flog'
+group :development, :test, :production do
+  gem 'flog', '~> 4.6', '>= 4.6.2'
   gem 'reek'
   gem 'rubocop'
 end

@@ -6,11 +6,12 @@ require_relative '../../helpers/database_helper.rb'
 
 describe 'File-Level Measurement' do
   DatabaseHelper.setup_database_cleaner
+  DatabaseHelper.wipe_database
 
   before do
     @measurement_helper = MeasurementHelper.setup
     @folder_contributions = @measurement_helper.folder_contributions
-    @file = @measurement_helper.file
+    @file = @folder_contributions.files[85]
     @credit_share = CodePraise::Value::CreditShare.build_object(@file)
   end
 

@@ -10,7 +10,7 @@ module CodePraise
       end
 
       def build_entity
-        return nil unless methods
+        return nil if methods.empty?
 
         Entity::Complexity.new(
           average: average(methods),
@@ -21,7 +21,7 @@ module CodePraise
       private
 
       def methods
-        none_complexity.nil? ? methods_complexity : methods_complexity + [none_complexity]
+        methods_complexity + none_complexity
       end
 
       def average(methods)
@@ -29,31 +29,33 @@ module CodePraise
       end
 
       def methods_complexity
-        return nil unless @methods_contributions
-          @methods_contributions.map do |method_contributions|
-            ruby_code = method_contributions.lines.map(&:code).join("\n")
-            complexity = abc_metric(ruby_code)
-            CodePraise::Entity::MethodComplexity.new(
-              complexity: complexity.average,
-              contributors: method_contributions.line_percentage,
-              name: method_contributions.name
-            )
-          end
+        @methods_contributions.map do |method_contributions|
+          ruby_code = method_contributions.lines.map(&:code).join("\n")
+          complexity = abc_metric(ruby_code)
+
+          method_complexity_entity(complexity.average,
+                                   method_contributions.line_percentage,
+                                   method_contributions.name)
+        end
       end
 
       def none_complexity
-        return nil
-
         none = @contributions - @methods_contributions.map(&:lines).flatten
+
         code = none.map(&:code).join("\n")
         complexity = abc_metric(code)
-        if complexity.average.positive?
-          CodePraise::Entity::MethodComplexity.new(
-            complexity: complexity.average,
-            contributors: none_contributors(none),
-            name: 'none'
-          )
-        end
+
+        [method_complexity_entity(complexity.average,
+                                  none_contributors(none),
+                                  'none')]
+      end
+
+      def method_complexity_entity(complexity, contributors, name)
+        CodePraise::Entity::MethodComplexity.new(
+          complexity: complexity,
+          contributors: contributors,
+          name: name
+        )
       end
 
       def none_contributors(none)

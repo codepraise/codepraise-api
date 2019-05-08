@@ -18,7 +18,7 @@ module CodePraise
       end
 
       def email_id
-        email.split('@').first
+        email.split('@').first.delete('.')
       end
 
       # Redefine hashing (hash uses eql?)

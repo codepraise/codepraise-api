@@ -14,7 +14,7 @@ module CodePraise
       end
 
       def coverage_report(file_path)
-        return { message: 'There is no coverage file.'} unless @coverage_hash
+        return nil unless @coverage_hash
 
         {
           coverage: test_coverage(file_path),

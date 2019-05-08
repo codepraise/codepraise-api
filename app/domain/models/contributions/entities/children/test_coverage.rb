@@ -10,7 +10,6 @@ module CodePraise
 
       attribute :coverage, Coercible::Float.optional
       attribute :time, Strict::Time.optional
-      attribute :message, Strict::String.optional
     end
   end
 end

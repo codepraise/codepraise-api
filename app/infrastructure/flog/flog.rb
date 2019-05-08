@@ -14,6 +14,7 @@ module CodePraise
         return nil unless ruby_file?
 
         flog_result = flog_process
+
         {
           average: flog_result.average,
           methods: methods_complexity(flog_result.totals)
@@ -21,7 +22,7 @@ module CodePraise
       end
 
       def self.flog_code(code)
-        flog = Flog.new
+        flog = Flog.new(continue: true)
         flog.flog_ruby(code)
         flog.calculate_total_scores
         flog
@@ -30,7 +31,7 @@ module CodePraise
       private
 
       def flog_process
-        flog = Flog.new
+        flog = Flog.new(continue: true)
         flog.flog(*@file_path)
         flog
       end

@@ -21,8 +21,8 @@ module CodePraise
 
       def contributors
         lines.each_with_object({}) do |line, hash|
-          hash[email_id(line.contributor.email)] ||= 0
-          hash[email_id(line.contributor.email)] += 1 if expectation?(line.code)
+          hash[line.contributor.email_id] ||= 0
+          hash[line.contributor.email_id] += 1 if expectation?(line.code)
         end
       end
 
@@ -34,10 +34,6 @@ module CodePraise
 
       def expectation?(code)
         !(code =~ /\.must|\.wont|\.to/).nil?
-      end
-
-      def email_id(email)
-        email.split('@').first
       end
     end
   end

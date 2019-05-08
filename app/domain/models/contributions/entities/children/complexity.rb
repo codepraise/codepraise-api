@@ -15,7 +15,7 @@ module CodePraise
 
       def level
         case average
-        when 0..10
+        when 1..10
           'A'
         when 10..20
           'B'
@@ -26,6 +26,8 @@ module CodePraise
         when 60..100
           'E'
         when 100..(1.0 / 0.0)
+          'F'
+        else
           'F'
         end
       end

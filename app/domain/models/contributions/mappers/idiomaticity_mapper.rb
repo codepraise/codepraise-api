@@ -19,7 +19,7 @@ module CodePraise
       def offenses(file_path, file_contributions)
         idiomaticity_result = @rubocop_reporter.report[file_path]
 
-        return nil if idiomaticity_result.nil?
+        return [] if idiomaticity_result.nil?
 
         idiomaticity_result.map do |offense_hash|
           Entity::Offense.new(
@@ -46,7 +46,7 @@ module CodePraise
       end
 
       def offense_ratio(offenses, file_contributions)
-        return 0.0 if offenses.nil?
+        return 0.0 if offenses.empty?
 
         (offenses.map(&:line_count).reduce(&:+).to_f / file_contributions.size)
           .round(2)

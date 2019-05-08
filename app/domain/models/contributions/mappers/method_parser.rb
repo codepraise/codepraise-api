@@ -20,11 +20,10 @@ module CodePraise
         methods_ast = []
         find_methods_tree(ast, methods_ast)
 
-        return nil if methods_ast.empty?
-
         methods_ast.inject([]) do |result, method_ast|
           result.push(name: method_name(method_ast),
-                      lines: select_entities(method_ast, line_entities))
+                      lines: select_entities(method_ast, line_entities),
+                      type: method_type(method_ast))
         end
       end
 
@@ -35,6 +34,10 @@ module CodePraise
       end
 
       private
+
+      def self.method_type(method_ast)
+        method_ast.type.to_s
+      end
 
       def self.method_name(method_ast)
         method_ast.loc.expression.source_line
@@ -52,7 +55,7 @@ module CodePraise
         end
       end
 
-      private_class_method :find_methods_tree, :method_name
+      private_class_method :find_methods_tree, :method_name, :method_type
     end
   end
 end

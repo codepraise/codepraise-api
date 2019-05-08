@@ -12,7 +12,8 @@ module CodePraise
 
       attribute :name, Coercible::String
       attribute :lines, Array.of(LineContribution)
-      attribute :complexity, Coercible::Float
+      attribute :type, Strict::String
+      attribute :complexity, Coercible::Float.optional
 
       def line_credits
         productivity_credit.line_credits

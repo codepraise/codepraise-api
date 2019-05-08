@@ -39,11 +39,11 @@ module CodePraise
       end
 
       def total_addition_credits
-        wanted_files.map(&:addition).reduce(&:+)
+        wanted_files.map(&:addition).reduce(&:+).to_i
       end
 
       def total_deletion_credits
-        wanted_files.map(&:deletion).reduce(&:+)
+        wanted_files.map(&:deletion).reduce(&:+).to_i
       end
 
       private
