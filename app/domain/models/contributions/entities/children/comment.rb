@@ -2,6 +2,7 @@
 
 require 'dry-types'
 require 'dry-struct'
+require_relative 'line_contribution'
 
 module CodePraise
   module Entity
