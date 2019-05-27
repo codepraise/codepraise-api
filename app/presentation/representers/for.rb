@@ -4,6 +4,7 @@ require_relative 'projects_representer'
 require_relative 'project_folder_contributions_representer'
 require_relative 'project_representer'
 require_relative 'http_response_representer'
+require_relative 'appraisal'
 
 module CodePraise
   module Representer
