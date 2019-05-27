@@ -50,8 +50,8 @@ module CodePraise
 
       use Rack::Cache,
           verbose: true,
-          metastore: config.REDISCLOUD_URL + '/0/metastore',
-          entitystore: config.REDISCLOUD_URL + '/0/entitystore'
+          metastore: ENV['REDIS_URL'] + '/0/metastore',
+          entitystore: ENV['REDIS_URL'] + '/0/entitystore'
     end
 
     configure :app_test do
