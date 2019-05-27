@@ -29,12 +29,12 @@ module CodePraise
 
     configure :development, :test, :app_test do
       ENV['DATABASE_URL'] = 'sqlite://' + config.DB_FILENAME
-      ENV['MONGO_URL'] = 'mongodb://' + config.MONGO_URL
+      ENV['MONGODB_URL'] = 'mongodb://' + config.MONGO_URL
     end
 
     configure :container do
       ENV['DATABASE_URL'] = 'postgres://' + config.DB_URL
-      ENV['MONGO_URL'] = 'mongodb://' + config.MONGO_URL
+      ENV['MONGODB_URL'] = 'mongodb://' + config.MONGO_URL
     end
 
     configure :development do
@@ -69,7 +69,7 @@ module CodePraise
       end
 
       require 'mongo'
-      MONGO = Mongo::Client.new(ENV['MONGO_URL'])
+      MONGO = Mongo::Client.new(ENV['MONGODB_URL'])
 
       def self.mongo
         MONGO
