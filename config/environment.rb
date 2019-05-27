@@ -29,12 +29,12 @@ module CodePraise
 
     configure :development, :test, :app_test do
       ENV['DATABASE_URL'] = 'sqlite://' + config.DB_FILENAME
-      ENV['MONGODB_URL'] = 'mongodb://' + config.MONGO_URL
+      ENV['MONGODB_URI'] = 'mongodb://' + config.MONGO_URL
     end
 
     configure :container do
       ENV['DATABASE_URL'] = 'postgres://' + config.DB_URL
-      ENV['MONGODB_URL'] = 'mongodb://' + config.MONGO_URL
+      ENV['MONGODB_URI'] = 'mongodb://' + config.MONGO_URL
     end
 
     configure :development do
@@ -50,8 +50,8 @@ module CodePraise
 
       use Rack::Cache,
           verbose: true,
-          metastore: ENV['REDIS_URL'] + '/0/metastore',
-          entitystore: ENV['REDIS_URL'] + '/0/entitystore'
+          metastore: config.REDISCLOUD_URL + '/0/metastore',
+          entitystore: config.REDISCLOUD_URL + '/0/entitystore'
     end
 
     configure :app_test do
@@ -69,7 +69,7 @@ module CodePraise
       end
 
       require 'mongo'
-      MONGO = Mongo::Client.new(ENV['MONGODB_URL'])
+      MONGO = Mongo::Client.new(ENV['MONGODB_URI'])
 
       def self.mongo
         MONGO
