@@ -10,7 +10,6 @@ module CodePraise
 
       step :find_project_details
       step :check_appraisal_in_mongo
-      step :check_project_eligibility
       step :request_appraise_worker
 
       private
@@ -37,13 +36,14 @@ module CodePraise
       def check_appraisal_in_mongo(input)
         owner_name = input[:requested].owner_name
         project_name = input[:requested].project_name
-        appraisal = Repository::Appraisal.find(owner_name, project_name)
-        if appraisal.nil? || input[:update] == 'true'
-          Success(input)
-        else
+        appraisal = Repository::Appraisal.find_by(owner_name: owner_name,
+                                                  project_name: project_name)
+        if !appraisal.nil? && appraisal.appraised?
+          # appraisal.set_content(input[:requested].folder_name)
           Failure(Value::Result.new(status: :ok,
-                                    message: appraisal
-                                      .content(input[:requested].folder_name)))
+                                    message: appraisal))
+        else
+          Success(input)
         end
       end
 
@@ -76,7 +76,7 @@ module CodePraise
       end
 
       def notify_workers(input)
-        queues = [Api.config.CLONE_QUEUE_URL, Api.config.REPORT_QUEUE_URL]
+        queues = [Api.config.CLONE_QUEUE_URL]
 
         queues.each do |queue_url|
           Concurrent::Promise.execute do

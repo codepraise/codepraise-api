@@ -8,7 +8,7 @@ module CodePraise
   module Entity
     # Entity for a single line of code contributed by a team-member
     class Commit < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       DOT = '\.'
       LINE_END = '$'
@@ -17,7 +17,7 @@ module CodePraise
 
       attribute :committer,     Contributor
       attribute :sha,           Strict::String
-      attribute :date,          Params::DateTime
+      attribute :date,          Strict::Time
       attribute :size,          Strict::Integer
       attribute :message,       Strict::String
       attribute :file_changes,  Strict::Array.of(FileChange)

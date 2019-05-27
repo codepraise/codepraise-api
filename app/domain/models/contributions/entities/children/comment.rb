@@ -7,7 +7,7 @@ module CodePraise
   module Entity
     class Comment < Dry::Struct
       MULTILINE = 2
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :lines, Strict::Array.of(Entity::LineContribution)
       attribute :is_documentation, Strict::Bool

@@ -8,7 +8,7 @@ module CodePraise
   module Entity
     # Complexity for file and methods of this file
     class Complexity < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :average, Coercible::Float
       attribute :method_complexities, Strict::Array.of(Entity::MethodComplexity).optional

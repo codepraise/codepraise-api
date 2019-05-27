@@ -11,8 +11,21 @@ module CodePraise
           {
             message: test_message(test_case),
             first_line: test_case.loc.first_line,
-            last_line: test_case.loc.last_line
+            last_line: test_case.loc.last_line,
+            top_describe: find_describe(ast).scan(/'([\w ]*)'|"([\w ]*)"|describe (\w+)/).flatten.reject(&:nil?).first
           }
+        end
+      end
+
+      def self.find_describe(ast)
+        return unless ast.is_a?(Parser::AST::Node)
+
+        if ast.type == :block && ast.children[0].to_a[1] == :describe
+          return ast.children[0].loc.expression.source_line
+        else
+          ast.children.map do |child|
+            find_describe(child)
+          end.flatten.reject(&:nil?).first
         end
       end
 

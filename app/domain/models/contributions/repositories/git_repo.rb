@@ -12,13 +12,23 @@ module CodePraise
     end
 
     def initialize(project, config)
-      remote = Git::RemoteGitRepo.new(project.http_url)
-      @local = Git::LocalGitRepo.new(remote, config.REPOSTORE_PATH)
+      @remote = Git::RemoteGitRepo.new(project.http_url)
+      @local = Git::LocalGitRepo.new(@remote, config.REPOSTORE_PATH)
       @size = project.size
     end
 
+    def id
+      @remote.unique_id
+    end
+
     def local
-      exists_locally? ? @local : raise(Errors::NoGitRepoFound)
+      if exists_locally?
+        @local
+      else
+        puts "error: #{@local.git_repo_path} / #{Dir.pwd}"
+        raise(Errors::NoGitRepoFound)
+      end
+      # exists_locally? ? @local : raise(Errors::NoGitRepoFound)
     end
 
     def delete

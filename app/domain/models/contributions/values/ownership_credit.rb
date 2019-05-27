@@ -29,7 +29,7 @@ module CodePraise
           end + [contributors_credit(folder.base_files, folder.contributors)]
           sum_array_hash(subfolders_credits)
         else
-          contributors_credit(folder.files, folder.contributors)
+          contributors_credit(folder.base_files, folder.contributors)
         end
       end
 

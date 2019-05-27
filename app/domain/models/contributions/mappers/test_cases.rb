@@ -13,7 +13,8 @@ module CodePraise
         test_cases.map do |test_case|
           Entity::TestCase.new(
             message: test_case[:message],
-            lines: lines(test_case[:first_line], test_case[:last_line])
+            lines: lines(test_case[:first_line], test_case[:last_line]),
+            top_describe: test_case[:top_describe]
           )
         end
       end

@@ -94,6 +94,10 @@ namespace :worker do
     task :production => :config do
       sh 'RACK_ENV=production bundle exec shoryuken -r ./workers/appraisal_worker.rb -C ./workers/shoryuken.yml'
     end
+
+    task :container => :config do
+      sh 'RACK_ENV=container bundle exec shoryuken -r ./workers/appraisal_worker.rb -C ./workers/shoryuken_dev.yml'
+    end
   end
 end
 
@@ -172,8 +176,7 @@ namespace :db do
 
   namespace :mongo do
     task :drop => :config do
-      client = Mongo::Client.new(@api.config.MONGODB_URL)
-      client.database.drop
+      @api.mongo.database.drop
     end
   end
 end

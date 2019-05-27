@@ -4,7 +4,7 @@ development:
   # Infrastructure
   DB_FILENAME: app/infrastructure/database/local/dev.db
   REPOSTORE_PATH: app/infrastructure/git/repostore
-  MONGODB_URL: 'mongodb://127.0.0.1:27017/dev'
+  MONGO_URL: '127.0.0.1:27017/dev'
 
 test:
   API_HOST: http://localhost:9090
@@ -12,7 +12,13 @@ test:
   DB_FILENAME:    app/infrastructure/database/local/test.db
   REPOSTORE_PATH: app/infrastructure/git/repostore
   MONGODB: '127.0.0.1:27017'
-  MONGODB_URL: 'mongodb://127.0.0.1:27017/test'
+  MONGO_URL: '127.0.0.1:27017/test'
+
+container:
+  API_HOST: http://app:9090
+  MONGO_URL: mongo/app
+  DB_URL: postgres@pg
+  REPOSTORE_PATH: app/infrastructure/git/repostore
 
 app_test:
   API_HOST: http://localhost:9090

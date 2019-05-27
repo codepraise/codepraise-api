@@ -18,7 +18,7 @@ module CodePraise
       end
 
       def unique_id
-        Base64.urlsafe_encode64(Digest::SHA256.digest(@git_url))
+        @unique_id ||= Base64.urlsafe_encode64(Digest::SHA256.digest(@git_url))
       end
 
       def local_clone(path)

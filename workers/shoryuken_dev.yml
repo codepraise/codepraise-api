@@ -1,2 +1,2 @@
 queues:
-  - https://sqs.us-east-2.amazonaws.com/700371359912/codepraise-clone-development
+  - https://sqs.us-east-2.amazonaws.com/700371359912/codepraise_clone_development.fifo

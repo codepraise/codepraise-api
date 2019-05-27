@@ -11,7 +11,6 @@ module CodePraise
           .target(target)
           .except('Metrics')
           .format('json')
-          .with_stderr_output
       end
 
       def report
@@ -23,9 +22,7 @@ module CodePraise
       private
 
       def call
-        in_repo do
-          `#{@command.full_command}`
-        end
+        in_repo { `#{@command.full_command}` }
       end
 
       def in_repo(&block)

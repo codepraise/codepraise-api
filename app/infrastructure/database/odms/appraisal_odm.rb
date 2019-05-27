@@ -53,7 +53,7 @@ module CodePraise
       end
 
       def self.find(document)
-        return nil if COLLECTION.find(document).first.nil?
+        return [] if COLLECTION.find(document).first.nil?
 
         COLLECTION.find(document).map do |doc|
           build_object(doc)

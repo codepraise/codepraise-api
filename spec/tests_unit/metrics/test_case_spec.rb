@@ -6,13 +6,14 @@ require_relative '../../helpers/database_helper'
 
 describe CodePraise::Entity::TestCase do
   DatabaseHelper.setup_database_cleaner
+  DatabaseHelper.wipe_database
 
   before do
     @measurement_helper = MeasurementHelper.setup
     @test_cases = CodePraise::Mapper::TestCases
       .new(@measurement_helper.test_files[1].lines)
       .build_entities
-    binding.pry
+
   end
 
   after do
@@ -22,10 +23,7 @@ describe CodePraise::Entity::TestCase do
   describe '#message' do
     it 'show the message of this test' do
       _(@test_cases[0].message).must_be_kind_of String
+      binding.pry
     end
-  end
-
-  describe '#is_functionality' do
-    it { _([true, false]).must_include @test_cases[0].is_functionality }
   end
 end

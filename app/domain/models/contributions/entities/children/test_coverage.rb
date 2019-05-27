@@ -6,7 +6,7 @@ require 'dry-struct'
 module CodePraise
   module Entity
     class TestCoverage < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :coverage, Coercible::Float.optional
       attribute :time, Strict::Time.optional

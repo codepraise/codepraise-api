@@ -5,69 +5,61 @@ require 'base64'
 module CodePraise
   module Repository
     class Appraisal
-      def self.find(project_owner, project_name)
-        key = document_key(project_owner + project_name)
-        db_record = Database::AppraisalOdm
-          .find("#{key}": { '$exists': 1 })&.first
+      def self.find_by(data)
+        appraisal_odm = Database::AppraisalOdm.find(data).first
 
-        return nil if db_record.nil?
+        return appraisal_odm unless appraisal_odm
 
-        build_entity(db_record, key)
+        build_entity(appraisal_odm)
       end
 
-      def self.create(project_contributions)
-        key = find_key(project_contributions)
-        db_record = Database::AppraisalOdm
-          .create("#{key}": project_contributions)
+      def self.find_id(id)
+        appraisal_odm = Database::AppraisalOdm.find(_id: BSON::ObjectId(id)).first
 
-        return nil unless db_record
+        return appraisal_odm unless appraisal_odm
 
-        build_entity(db_record, key)
+        build_entity(appraisal_odm)
       end
 
-      def self.find_or_create(project_contributions)
-        key = find_key(project_contributions)
-        db_record = Database::AppraisalOdm
-          .create("#{key}": project_contributions)
+      def self.find_or_create_by(data)
+        appraisal = find_by(project_name: data[:project_name],
+                            owner_name: data[:owner_name])
 
-        db_record = create(project_contributions) if db_record.nil?
+        return appraisal if appraisal
 
-        build_entity(db_record, key)
+        data[:created_at] = Time.now
+        data[:updated_at] = Time.now
+        data[:state] = 'init'
+        appraisal = Database::AppraisalOdm.create(data)
+        build_entity(appraisal)
       end
 
-      def self.update(project_contributions)
-        key = find_key(project_contributions)
-        db_record = Database::AppraisalOdm
-          .find("#{key}": { '$exists': 1 })&.first
+      def self.update(id:, data:)
+        appraisal_odm = Database::AppraisalOdm.find(_id: BSON::ObjectId(id)).first
 
-        return nil if db_record.nil?
+        return appraisal_odm unless appraisal_odm
 
-        db_record.update_attributes(project_contributions)
+        data[:updated_at] = Time.now
+        appraisal_odm.update_attributes(data)
+        return nil unless appraisal_odm.save
 
-        build_entity(db_record, key) if db_record.save
+        find_id(appraisal_odm.id)
       end
 
-      private
+      def self.build_entity(odm)
+        return nil unless odm
 
-      def self.find_key(project_contributions)
-        project_owner = project_contributions['project']['owner']['username']
-        project_name = project_contributions['project']['name']
-        document_key(project_owner + project_name)
-      end
-
-      def self.build_entity(db_record, key)
         Entity::Appraisal.new(
-          id: db_record.id,
-          key: key,
-          document: db_record.document
+          id: odm.id,
+          project_name: odm.document['project_name'],
+          owner_name: odm.document['owner_name'],
+          appraisal: odm.document['appraisal'],
+          state: odm.document['state'],
+          request_id: odm.document['request_id'],
+          created_at: odm.document['created_at'],
+          updated_at: odm.document['updated_at']
         )
       end
-
-      def self.document_key(project_info)
-        Base64.urlsafe_encode64(Digest::SHA256.digest(project_info))
-      end
-
-      private_class_method :document_key, :build_entity, :find_key
     end
   end
 end

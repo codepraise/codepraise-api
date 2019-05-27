@@ -15,7 +15,7 @@ module CodePraise
       NO_CREDIT = 0
       FULL_CREDIT = 1
 
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :contributor,  Contributor
       attribute :code,         Strict::String

@@ -60,7 +60,7 @@ module CodePraise
 
       def none_contributors(none)
         none.each_with_object(Hash.new(0)) do |line, hash|
-          hash[line.contributor.username] += 1
+          hash[line.contributor.email_id] += 1
         end
       end
 

@@ -2,11 +2,11 @@
 
 source 'https://rubygems.org'
 # source 'http://mirror.ops.rhcloud.com/mirror/ruby/'
-ruby '2.5.3'
+ruby '2.5.5'
 
 # PRESENTATION LAYER
-gem 'multi_json'
-gem 'roar'
+gem 'multi_json', '~> 1.13', '>= 1.13.1'
+gem 'roar', '~> 1.1'
 
 # APPLICATION LAYER
 # Web application related
@@ -18,13 +18,13 @@ gem 'redis-rack-cache', '~> 2.0'
 gem 'roda', '~> 3.8'
 
 # Controllers and services
-gem 'dry-monads'
-gem 'dry-transaction'
-gem 'dry-validation'
+gem 'dry-monads', '~> 1.1'
+gem 'dry-transaction', '~> 0.13.0'
+# gem 'dry-validation', '~> 0.13.3'
 
 # DOMAIN LAYER
-gem 'dry-struct', '~> 0.5'
-gem 'dry-types', '~> 0.5'
+gem 'dry-struct', '~> 1.0'
+gem 'dry-types', '~> 1.0'
 
 # INFRASTRUCTURE LAYER
 # Networking
@@ -38,7 +38,7 @@ gem 'hirb', '~> 0.7'
 gem 'sequel', '~> 5.13'
 
 # Ruby AST unparser
-gem 'unparser'
+gem 'unparser', '~> 0.4.5'
 
 # Git Operation by using git object
 gem 'git', '~> 1.5'
@@ -46,10 +46,16 @@ gem 'git', '~> 1.5'
 # MongoDB Driver
 gem 'mongo', '~> 2.8'
 
+
+# QUALITY
+gem 'flog', '~> 4.6', '>= 4.6.2'
+gem 'rubocop', '~> 0.70.0'
+
 group :development, :test do
-  gem 'database_cleaner'
-  gem 'sqlite3'
+  gem 'database_cleaner', '~> 1.7'
+  gem 'sqlite3', '~> 1.4', '>= 1.4.1'
   gem 'factory_bot', '~> 5.0', '>= 5.0.2'
+  gem 'reek'
 end
 
 group :production do
@@ -76,14 +82,8 @@ group :test do
   gem 'webmock', '~> 3.4'
 end
 
-gem 'rack-test' # can also be used to diagnose production
+gem 'rack-test', '~> 1.1' # can also be used to diagnose production
 
-# QUALITY
-group :development, :test, :production do
-  gem 'flog', '~> 4.6', '>= 4.6.2'
-  gem 'reek'
-  gem 'rubocop'
-end
 
 # UTILITIES
 gem 'pry'

@@ -18,9 +18,6 @@ module CodePraise
       property :path
       property :any_subfolders?
       property :any_base_files?
-      collection :base_files, extend: Representer::FileContributions, class: OpenStruct
-      collection :subfolders, extend: Representer::FolderContributions, class: OpenStruct
-      collection :contributors, extend: Representer::Contributor, class: OpenStruct
       # size information
       property :total_line_credits
       property :total_method_credits
@@ -35,6 +32,10 @@ module CodePraise
       property :ownership_level
       # indivdiual contribution
       property :credit_share, extend: Representer::CreditShare, class: OpenStruct
+
+      collection :base_files, extend: Representer::FileContributions, class: OpenStruct
+      collection :subfolders, extend: Representer::FolderContributions, class: OpenStruct
+      collection :contributors, extend: Representer::Contributor, class: OpenStruct
     end
   end
 end

@@ -7,7 +7,7 @@ module CodePraise
   module Entity
     # Contributor to a Git-based Project
     class Contributor < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :username,  Strict::String
       attribute :email,     Strict::String

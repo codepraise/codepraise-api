@@ -4,14 +4,15 @@ module Appraisal
   # Infrastructure to clone while yielding progress
   module CloneMonitor
     CLONE_PROGRESS = {
-      'STARTED'   => 15,
-      'Cloning'   => 30,
-      'remote'    => 60,
-      'Receiving' => 70,
-      'Resolving' => 80,
-      'Checking'  => 90,
-      'Appraised' => 95,
-      'FINISHED'  => 100
+      'STARTED'    => 15,
+      'Cloning'    => 30,
+      'remote'     => 60,
+      'Receiving'  => 70,
+      'Resolving'  => 80,
+      'Checking'   => 90,
+      'Appraising' => 92,
+      'Appraised'  => 97,
+      'FINISHED'   => 100
     }.freeze
 
     def self.starting_percent

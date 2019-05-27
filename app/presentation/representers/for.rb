@@ -9,26 +9,20 @@ module CodePraise
   module Representer
     class For
       REP_KLASS = {
-        Value::ProjectsList => ProjectsList,
+        Value::ProjectsList               => ProjectsList,
         Value::ProjectFolderContributions => ProjectFolderContributions,
-        Entity::Project => Project,
-        Entity::Appraisal => nil,
-        String => HttpResponse
+        Entity::Project                   => Project,
+        Entity::Appraisal                 => Appraisal,
+        String                            => HttpResponse
       }.freeze
 
       attr_reader :status_rep, :body_rep
 
       def initialize(result)
-        if result.failure?
-          value = result.failure
-          @status_rep = Representer::HttpResponse.new(value)
-          @body_rep = value.status == :ok ? value.message : @status_rep
-        else
-          value = result.value!
-          @status_rep = Representer::HttpResponse.new(value)
-          @body_rep = REP_KLASS[value.message.class]&.new(value.message)
-          @body_rep ||= value.message
-        end
+        value = result.failure? ? result.failure : result.value!
+        @status_rep = HttpResponse.new(value)
+        representer = REP_KLASS[value.message.class]
+        @body_rep = representer.nil? ? value.message : representer.new(value.message)
       end
 
       def http_status_code

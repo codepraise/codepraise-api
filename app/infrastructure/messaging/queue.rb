@@ -24,7 +24,14 @@ module CodePraise
       #   q = Messaging::Queue.new(Api.config.CLONE_QUEUE_URL)
       #   q.send({data: "hello"}.to_json)
       def send(message)
-        @queue.send_message(message_body: message)
+        data = {
+          message_body: message
+        }
+        if fifo?
+          data[:message_group_id] = Time.now.to_f.hash.to_s
+          data[:message_deduplication_id] = Time.now.to_f.hash.to_s
+        end
+        @queue.send_message(data)
       end
 
       ## Polls queue, yielding each messge
@@ -36,6 +43,12 @@ module CodePraise
         poller.poll(idle_timeout: IDLE_TIMEOUT) do |msg|
           yield msg.body if block_given?
         end
+      end
+
+      private
+
+      def fifo?
+        (@queue_url =~ /fifo/)
       end
     end
   end

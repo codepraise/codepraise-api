@@ -6,11 +6,11 @@ require_relative '../../helpers/database_helper'
 
 describe CodePraise::Value::OwnershipCredit do
   DatabaseHelper.setup_database_cleaner
-
+  DatabaseHelper.wipe_database
   before(:all) do
     @measurement_helper = MeasurementHelper.setup
-    @folder = @measurement_helper.folder_contributions
-    @ownership_credits = CodePraise::Value::OwnershipCredit.new(@folder).ownership_credits
+    # @folder = @measurement_helper.folder_contributions
+    # @ownership_credits = CodePraise::Value::OwnershipCredit.new(@folder).ownership_credits
     binding.pry
   end
 

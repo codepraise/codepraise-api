@@ -8,7 +8,7 @@ module CodePraise
   module Entity
     # Entity for a single method contributed by a team-member
     class MethodContribution < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :name, Coercible::String
       attribute :lines, Array.of(LineContribution)

@@ -50,8 +50,8 @@ module CodePraise
 
       def self.add_complexity_credits(obj, complexity)
         complexity.method_complexities.each do |method_complexity|
-          method_complexity.contributors.each do |name, percentage|
-            obj[:complexity_credits][name] += LEVEL_SCORE[method_complexity.level] *
+          method_complexity.contributors.each do |email_id, percentage|
+            obj[:complexity_credits][email_id] += LEVEL_SCORE[method_complexity.level] *
                                               (percentage.to_f / 100)
           end
         end
@@ -59,25 +59,25 @@ module CodePraise
 
       def self.add_idiomaticity_credits(obj, idiomaticity)
         idiomaticity.offenses.each do |offense|
-          offense.contributors.each do |name, line_count|
-            obj[:idiomaticity_credits][name] += -1 * line_count
+          offense.contributors.each do |email_id, line_count|
+            obj[:idiomaticity_credits][email_id] += -1 * line_count
           end
         end
       end
 
       def self.add_documentation_credits(obj, comments)
         comments.each do |comment|
-          comment.contributors.each do |name, line_count|
+          comment.contributors.each do |email_id, line_count|
             credit = comment.is_documentation ? 1 : 0
-            obj[:documentation_credits][name] += credit * line_count
+            obj[:documentation_credits][email_id] += credit * line_count
           end
         end
       end
 
       def self.add_test_credits(obj, test_cases)
         test_cases.each do |test_case|
-          test_case.contributors.each do |name, line_count|
-            obj[:test_credits][name] += line_count
+          test_case.contributors.each do |email_id, line_count|
+            obj[:test_credits][email_id] += line_count
           end
         end
       end

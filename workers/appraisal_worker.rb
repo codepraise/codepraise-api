@@ -1,19 +1,14 @@
 # frozen_string_literal: true
 
-# require_relative '../app/infrastructure/rubocop/init.rb'
-# require_relative '../app/infrastructure/database/odms/init.rb'
-# require_relative '../app/infrastructure/flog/init.rb'
-# require_relative '../app/domain/init.rb'
-# require_relative '../app/application/values/init.rb'
-# require_relative '../app/presentation/representers/init.rb'
-
 require_relative '../init.rb'
-
 require_relative 'progress_reporter.rb'
 require_relative 'project_clone.rb'
-
+require_relative 'cache_state.rb'
+require_relative 'appraisal_service'
 require 'econfig'
 require 'shoryuken'
+
+MUTEX = Mutex.new
 
 module Appraisal
   # Shoryuken worker class to clone repos in parallel
@@ -29,67 +24,59 @@ module Appraisal
     )
 
     include Shoryuken::Worker
-    Shoryuken.sqs_client_receive_message_opts = { wait_time_seconds: 20 }
-    shoryuken_options queue: config.CLONE_QUEUE_URL, auto_delete: true
+    # Shoryuken.sqs_client_receive_message_opts = { max_number_of_messages: 1 }
+    shoryuken_options queue: config.CLONE_QUEUE_URL, auto_visibility_timeout: true
 
-    def perform(_sqs_msg, request)
-      project, reporter = setup_job(request)
-
-      reporter.publish(CloneMonitor.starting_percent)
-
+    def perform(sqs_msg, request)
+      project, reporter, request_id = setup_job(request)
       gitrepo = CodePraise::GitRepo.new(project, Worker.config)
 
-      unless gitrepo.exists_locally?
-        gitrepo.clone_locally do |line|
-          reporter.publish CloneMonitor.progress(line)
-        end
+      service = Service.new(project, reporter, gitrepo, request_id)
+      cache = service.find_or_init_cache(project.name, project.owner.username)
+
+      service.setup_channel_id(request_id.to_s) unless cache.request_id
+
+      cache_state = CacheState.new(cache)
+
+      if cache_state.cloning?
+        service.switch_channel(cache.request_id)
+      else
+        cache_state.update_state('cloning')
+        service.clone_project
+        cache_state.update_state('cloned')
       end
 
-      appraise_and_store(gitrepo, project)
-      reporter.publish(CloneMonitor.progress('Appraised'))
-      gitrepo.delete
-      # Keep sending finished status to any latecoming subscribers
-      each_second(5) { reporter.publish(CloneMonitor.finished_percent) }
-    rescue CodePraise::GitRepo::Errors::CannotOverwriteLocalGitRepo
-      # only catch errors you absolutely expect!
-      puts 'CLONE EXISTS -- ignoring request'
+      if cache_state.cloned? && !cache_state.appraising?
+        MUTEX.synchronize do
+          puts "appraise #{request_id}"
+          cache_state.update_state('appraising')
+          service.appraise_project
+          cache_state.update_state('appraised')
+          puts "done #{request_id}"
+        end
+      else
+        service.switch_channel(cache.request_id)
+      end
+
+      if cache_state.appraised? && !cache_state.stored?
+        service.store_appraisal_cache
+        cache_state.update_state('stored')
+      else
+        service.switch_channel(cache.request_id)
+      end
+
+      sqs_msg.delete
     end
 
     private
-
-    def appraise_and_store(gitrepo, project)
-      contributions = CodePraise::Mapper::Contributions.new(gitrepo)
-      folder_contributions = contributions.for_folder('')
-      commit_contributions = contributions.commits
-      appraisal = CodePraise::Value::ProjectFolderContributions
-        .new(project, folder_contributions, commit_contributions)
-      store_appraisal(appraisal)
-    end
-
-    def store_appraisal(appraisal)
-      CodePraise::Repository::Appraisal.find_or_create(appraisal_hash(appraisal))
-    end
-
-    def appraisal_hash(appraisal)
-      CodePraise::Representer::ProjectFolderContributions
-        .new(appraisal).yield_self do |appraisal_representer|
-          JSON.parse(appraisal_representer.to_json)
-        end
-    end
 
     def setup_job(request)
       clone_request = CodePraise::Representer::CloneRequest
         .new(OpenStruct.new).from_json(request)
 
       [clone_request.project,
-       ProgressReporter.new(Worker.config, clone_request.id),]
-    end
-
-    def each_second(seconds)
-      seconds.times do
-        sleep(1)
-        yield if block_given?
-      end
+       ProgressReporter.new(Worker.config, clone_request.id),
+       clone_request.id]
     end
   end
 end

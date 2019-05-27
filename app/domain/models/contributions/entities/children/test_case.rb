@@ -7,11 +7,11 @@ require 'dry-struct'
 module CodePraise
   module Entity
     class TestCase < Dry::Struct
-      KEY_WORD = 'Security'
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :message, Strict::String
       attribute :lines, Array.of(LineContribution)
+      attribute :top_describe, Strict::String.optional
 
       def expectation_count
         lines.select do |line|
@@ -26,14 +26,19 @@ module CodePraise
         end
       end
 
-      def is_functionality
-        !(message =~ /#{KEY_WORD}/).nil?
+      def key_words
+        keywords = message.scan(/([A-Z].+)\:/)
+        if keywords.empty?
+          ['None']
+        else
+          keywords[0][0].gsub(/\)|\(/, '').split(' ')
+        end
       end
 
       private
 
       def expectation?(code)
-        !(code =~ /\.must|\.wont|\.to/).nil?
+        !(code =~ /\.must|\.wont|\.to|\.not_to/).nil?
       end
     end
   end

@@ -15,6 +15,8 @@ module CodePraise
                    left_key: :project_id, right_key: :member_id
 
       plugin :timestamps, update_on_create: true
+      plugin :association_dependencies
+      add_association_dependencies owner: :delete, contributors: :nullify
 
       def fullname
         "#{owner.username}/#{name}"

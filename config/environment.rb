@@ -4,6 +4,8 @@ require 'rack/cache'
 require 'redis-rack-cache'
 require 'roda'
 require 'econfig'
+require 'mongo'
+require 'shoryuken'
 
 module CodePraise
   # Environment-specific configuration
@@ -14,9 +16,11 @@ module CodePraise
     Econfig.env = environment.to_s
     Econfig.root = '.'
 
-    configure :development, :test do
+    configure :development, :test, :container do
       require 'pry'
 
+      Mongo::Logger.logger.level = Logger::FATAL
+      # Shoryuken.logger.level = Logger::FATAL
       # Allows running reload! in pry to restart entire app
       def self.reload!
         exec 'pry -r ./init.rb'
@@ -25,6 +29,12 @@ module CodePraise
 
     configure :development, :test, :app_test do
       ENV['DATABASE_URL'] = 'sqlite://' + config.DB_FILENAME
+      ENV['MONGO_URL'] = 'mongodb://' + config.MONGO_URL
+    end
+
+    configure :container do
+      ENV['DATABASE_URL'] = 'postgres://' + config.DB_URL
+      ENV['MONGO_URL'] = 'mongodb://' + config.MONGO_URL
     end
 
     configure :development do
@@ -36,7 +46,6 @@ module CodePraise
 
     configure :production do
       # Use deployment platform's DATABASE_URL environment variable
-
       puts 'RUNNING IN PRODUCTION MODE'
 
       use Rack::Cache,
@@ -60,7 +69,7 @@ module CodePraise
       end
 
       require 'mongo'
-      MONGO = Mongo::Client.new(config.MONGODB_URL)
+      MONGO = Mongo::Client.new(ENV['MONGO_URL'])
 
       def self.mongo
         MONGO

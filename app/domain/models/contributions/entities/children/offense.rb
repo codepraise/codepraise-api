@@ -6,7 +6,7 @@ require 'dry-struct'
 module CodePraise
   module Entity
     class Offense < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :type,         Strict::String
       attribute :message,      Strict::String

@@ -2,29 +2,24 @@
 
 module CodePraise
   module Entity
-    class Appraisal
-      def initialize(id:, key:, document:)
-        @id = id
-        @key = key
-        @document = document
+    class Appraisal < Dry::Struct
+      include Dry.Types
+
+      attribute :id,           Strict::String
+      attribute :project_name, Strict::String
+      attribute :owner_name,   Strict::String
+      attribute :appraisal,    Strict::Hash.optional
+      attribute :state,        Strict::String.optional
+      attribute :request_id,   Coercible::String.optional
+      attribute :created_at,   Strict::Time
+      attribute :updated_at,   Strict::Time
+
+      def appraised?
+        appraisal
       end
 
-      def content(folder)
-        result = @document[@key]
-        result['folder'] = folder_content(folder, result['folder'])
-        result
-      end
-
-      private
-
-      def folder_content(folder, content)
-        folders = folder.split('/')
-        folders.each do |folder_name|
-          content = content['subfolders'].select do |folder_hash|
-            folder_hash['path'].split('/').last == folder_name
-          end.first
-        end
-        content
+      def content
+        appraisal
       end
     end
   end

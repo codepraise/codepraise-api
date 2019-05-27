@@ -7,7 +7,7 @@ module CodePraise
   module Entity
     # Entity for a single method complexity by a team-member
     class MethodComplexity < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :name,         Strict::String
       attribute :complexity,   Coercible::Float

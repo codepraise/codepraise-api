@@ -7,7 +7,7 @@ require_relative 'offense'
 module CodePraise
   module Entity
     class Idiomaticity < Dry::Struct
-      include Dry::Types.module
+      include Dry.Types
 
       attribute :offenses, Strict::Array.of(Entity::Offense).optional
       attribute :offense_ratio, Strict::Float
