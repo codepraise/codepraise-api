@@ -60,7 +60,7 @@ module CodePraise
         notify_workers(input)
         Success(
           Value::Result.new(status: :processing,
-                            message: { message: { request_id: input[:request_id] } })
+                            message: { request_id: input[:request_id] })
         )
       rescue StandardError => error
         puts [error.inspect, error.backtrace].flatten.join("\n")

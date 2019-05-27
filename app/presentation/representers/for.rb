@@ -14,7 +14,8 @@ module CodePraise
         Value::ProjectFolderContributions => ProjectFolderContributions,
         Entity::Project                   => Project,
         Entity::Appraisal                 => Appraisal,
-        String                            => HttpResponse
+        String                            => HttpResponse,
+        Hash                              => HttpResponse
       }.freeze
 
       attr_reader :status_rep, :body_rep
@@ -23,7 +24,7 @@ module CodePraise
         value = result.failure? ? result.failure : result.value!
         @status_rep = HttpResponse.new(value)
         representer = REP_KLASS[value.message.class]
-        @body_rep = representer.nil? ? value.message : representer.new(value.message)
+        @body_rep =representer == HttpResponse ? representer.new(value) : representer.new(value.message)
       end
 
       def http_status_code
