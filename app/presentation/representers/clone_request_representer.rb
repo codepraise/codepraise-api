@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'roar/decorator'
+require 'roar/json'
+
 require_relative 'project_representer'
 
 # Represents essential Repo information for API output

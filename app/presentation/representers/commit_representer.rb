@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'roar/decorator'
+require 'roar/json'
+
 require_relative 'contributor_representer'
 require_relative 'file_change_representer'
 
