@@ -4,7 +4,7 @@ require 'date'
 
 module CodePraise
   module SimpleCov
-    # Report the test coverage by a file
+    # Read the coverage file and deserialize the result to Hash
     class TestCoverage
       COVERAGE_PATH = '/coverage/.resultset.json'
 
@@ -53,6 +53,7 @@ module CodePraise
         calculate_test_coverage(test_array(file_path))
       end
 
+      # remove the project path and remain only the folder path
       def longest_repeating_substring(string_array)
         result = ''
         char_len = string_array[0].length

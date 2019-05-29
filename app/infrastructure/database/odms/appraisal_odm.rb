@@ -4,6 +4,7 @@ require 'mongo'
 
 module CodePraise
   module Database
+    # Appraisal Cache Object to connect MongoDB
     class AppraisalOdm
       COLLECTION = CodePraise::Api.mongo['appraisals']
 

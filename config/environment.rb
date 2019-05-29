@@ -47,6 +47,7 @@ module CodePraise
     configure :production do
       # Use deployment platform's DATABASE_URL environment variable
       puts 'RUNNING IN PRODUCTION MODE'
+      Mongo::Logger.logger.level = Logger::FATAL
 
       use Rack::Cache,
           verbose: true,

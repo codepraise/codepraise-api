@@ -21,6 +21,7 @@ module CodePraise
         }
       end
 
+      # get flog score from pure ruby code
       def self.flog_code(code)
         flog = Flog.new(continue: true)
         flog.flog_ruby(code)

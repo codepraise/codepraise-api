@@ -3,8 +3,9 @@
 require 'git'
 
 module GitCommit
+  # This Object Use Git gem to get all commits
   class CommitReporter
-    EMPTY_SHA = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'.freeze
+    EMPTY_SHA = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
 
     def initialize(gitrepo)
       @local = gitrepo.local

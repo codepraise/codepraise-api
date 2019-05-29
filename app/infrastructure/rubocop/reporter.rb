@@ -4,6 +4,8 @@ require_relative 'command'
 
 module CodePraise
   module Rubocop
+    # Implement the rubocop command
+    # Deserialize the rubocop result to Hash
     class Reporter
       def initialize(git_repo_path, target = '')
         @git_repo_path = git_repo_path

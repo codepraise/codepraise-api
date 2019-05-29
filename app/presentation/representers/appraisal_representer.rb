@@ -5,6 +5,7 @@ require 'roar/json'
 
 module CodePraise
   module Representer
+    # Representer for Appraisal Cache
     class Appraisal < Roar::Decorator
       include Roar::JSON
 

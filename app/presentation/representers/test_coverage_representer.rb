@@ -5,6 +5,7 @@ require 'roar/json'
 
 module CodePraise
   module Representer
+    # Represent Test Coverage Output
     class TestCoverage < Roar::Decorator
       include Roar::JSON
 
