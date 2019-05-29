@@ -50,6 +50,7 @@ gem 'mongo', '~> 2.8'
 # QUALITY
 gem 'flog', '~> 4.6', '>= 4.6.2'
 gem 'rubocop', '~> 0.70.0'
+gem 'rubocop-performance', '~> 1.3'
 
 group :development, :test do
   gem 'database_cleaner', '~> 1.7'
