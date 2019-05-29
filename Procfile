@@ -1,1 +1,1 @@
-web: rake worker:run:production
+worker: rake worker:run:production
