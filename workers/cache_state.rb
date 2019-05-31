@@ -4,6 +4,11 @@ require_relative '../init.rb'
 
 module Appraisal
   class CacheState
+    BACK = {
+      'cloning'    => 'init',
+      'appraising' => 'cloned'
+    }.freeze
+
     def initialize(cache)
       @cache = cache
     end
@@ -26,6 +31,14 @@ module Appraisal
 
     def stored?
       @cache.state == 'stored'
+    end
+
+    def back(gitrepo)
+      if gitrepo.exists_locally?
+        update_state('cloned')
+      else
+        update_state('init')
+      end
     end
 
     def update_state(state)

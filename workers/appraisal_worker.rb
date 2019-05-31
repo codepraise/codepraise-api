@@ -28,15 +28,15 @@ module Appraisal
     shoryuken_options queue: config.CLONE_QUEUE_URL, auto_visibility_timeout: true
 
     def perform(sqs_msg, request)
-      project, reporter, request_id = setup_job(request)
+      project, reporter, request_id, update = setup_job(request)
       gitrepo = CodePraise::GitRepo.new(project, Worker.config)
-
       service = Service.new(project, reporter, gitrepo, request_id)
       cache = service.find_or_init_cache(project.name, project.owner.username)
 
       service.setup_channel_id(request_id.to_s) unless cache.request_id
 
       cache_state = CacheState.new(cache)
+      cache_state.update_state('init') if update
 
       if cache_state.cloning?
         service.switch_channel(cache.request_id)
@@ -48,11 +48,11 @@ module Appraisal
 
       if cache_state.cloned? && !cache_state.appraising?
         MUTEX.synchronize do
-          puts "appraise #{request_id}"
+          puts "appraise #{gitrepo.id}"
           cache_state.update_state('appraising')
           service.appraise_project
           cache_state.update_state('appraised')
-          puts "done #{request_id}"
+          puts "done #{gitrepo.id}}"
         end
       else
         service.switch_channel(cache.request_id)
@@ -66,6 +66,9 @@ module Appraisal
       end
 
       sqs_msg.delete
+    rescue => e
+      puts e
+      cache_state.back(gitrepo)
     end
 
     private
@@ -76,7 +79,7 @@ module Appraisal
 
       [clone_request.project,
        ProgressReporter.new(Worker.config, clone_request.id),
-       clone_request.id]
+       clone_request.id, clone_request.update]
     end
   end
 end

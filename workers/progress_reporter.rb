@@ -11,14 +11,14 @@ module Appraisal
     end
 
     def publish(message, state, channel_id = '')
-      print "Progress: #{message} "
-      print "[post: #{@config.API_HOST}/faye] "
+      # print "Progress: #{message} "
+      # print "[post: #{@config.API_HOST}/faye] "
       response = HTTP.headers(content_type: 'application/json')
         .post(
           "#{@config.API_HOST}/faye",
           body: message_body(message, state, channel_id)
         )
-      puts "(#{response.status})"
+      # puts "(#{response.status})"
     rescue HTTP::ConnectionError
       # puts '(Faye server not found - progress not sent)'
     end

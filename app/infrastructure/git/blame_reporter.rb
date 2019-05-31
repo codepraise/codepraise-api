@@ -18,7 +18,7 @@ module CodePraise
 
         @local
           .files
-          .select { |file| file.start_with? folder_name }
+          .select { |file| file.start_with?(folder_name) && File.extname(file) != '.yml' }
           .yield_self do |fnames|
             @local.in_repo { analyze_files_concurrently(fnames) }
           end

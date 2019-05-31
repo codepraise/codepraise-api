@@ -27,12 +27,17 @@ module CodePraise
       end
 
       def key_words
-        keywords = message.scan(/([A-Z].+)\:/)
+        keywords = message.scan(/([A-Z].+)\:|\(([A-Z].+)\)/).flatten.join(' ')
+
         if keywords.empty?
           ['None']
         else
-          keywords[0][0].gsub(/\)|\(/, '').split(' ')
+          remove_symbol(keywords).split(' ')
         end
+      end
+
+      def remove_symbol(keywords)
+        keywords.gsub(/\)|\(|\]|\[/, '')
       end
 
       private

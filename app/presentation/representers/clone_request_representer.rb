@@ -14,6 +14,7 @@ module CodePraise
 
       property :project, extend: Project, class: OpenStruct
       property :id
+      property :update
     end
   end
 end

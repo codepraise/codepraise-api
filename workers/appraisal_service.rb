@@ -30,6 +30,7 @@ module Appraisal
     end
 
     def clone_project
+      puts "clone: #{@gitrepo.id}"
       @gitrepo.clone_locally do |line|
         @reporter.publish(CloneMonitor.progress(line), 'cloning', @request_id)
       end
@@ -52,7 +53,7 @@ module Appraisal
       data = { appraisal: folder_contributions_hash }
       CodePraise::Repository::Appraisal
         .update(id: @cache.id, data: data)
-      each_second(5) do
+      each_second(15) do
         @reporter.publish(CloneMonitor.finished_percent, 'stored', @request_id)
       end
     end

@@ -2,6 +2,6 @@
 
 module CodePraise
   module Value
-    CloneRequest = Struct.new :project, :id
+    CloneRequest = Struct.new :project, :id, :update
   end
 end

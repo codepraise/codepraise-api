@@ -20,7 +20,7 @@ module CodePraise
       require 'pry'
 
       Mongo::Logger.logger.level = Logger::FATAL
-      # Shoryuken.logger.level = Logger::FATAL
+        Shoryuken.logger.level = Logger::FATAL
       # Allows running reload! in pry to restart entire app
       def self.reload!
         exec 'pry -r ./init.rb'

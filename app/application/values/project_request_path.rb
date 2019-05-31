@@ -17,6 +17,10 @@ module CodePraise
         @folder_name ||= @path.empty? ? '' : @path[1..-1]
       end
 
+      def update?
+        @request.request_method == 'PUT'
+      end
+
       def project_fullname
         @request.captures.join '/'
       end

@@ -41,9 +41,7 @@ module CodePraise
                 owner_name, project_name, request
               )
 
-              service = routing.params['update'] == 'true' ? Service::UpdateAppraisal : Service::AppraiseProject
-
-              result = service.new.call(
+              result = Service::AppraiseProject.new.call(
                 requested: path_request,
                 request_id: request_id,
                 config: Api.config
@@ -56,6 +54,22 @@ module CodePraise
             routing.post do
               result = Service::AddProject.new.call(
                 owner_name: owner_name, project_name: project_name
+              )
+
+              Representer::For.new(result).status_and_body(response)
+            end
+
+            routing.put do
+              request_id = [request.env, request.path, Time.now.to_f].hash
+
+              path_request = ProjectRequestPath.new(
+                owner_name, project_name, request
+              )
+
+              result = Service::AppraiseProject.new.call(
+                requested: path_request,
+                request_id: request_id,
+                config: Api.config
               )
 
               Representer::For.new(result).status_and_body(response)

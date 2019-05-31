@@ -10,6 +10,7 @@ module CodePraise
 
       step :find_project_details
       step :check_appraisal_in_mongo
+      step :check_project_eligibility
       step :request_appraise_worker
 
       private
@@ -38,8 +39,7 @@ module CodePraise
         project_name = input[:requested].project_name
         appraisal = Repository::Appraisal.find_by(owner_name: owner_name,
                                                   project_name: project_name)
-        if !appraisal.nil? && appraisal.appraised?
-          # appraisal.set_content(input[:requested].folder_name)
+        if !appraisal.nil? && appraisal.appraised? && !input[:requested].update?
           Failure(Value::Result.new(status: :ok,
                                     message: appraisal))
         else
@@ -62,15 +62,16 @@ module CodePraise
           Value::Result.new(status: :processing,
                             message: { request_id: input[:request_id] })
         )
-      rescue StandardError => error
-        puts [error.inspect, error.backtrace].flatten.join("\n")
+      rescue StandardError => e
+        puts [e.inspect, e.backtrace].flatten.join("\n")
         Failure(Value::Result.new(status: :internal_error, message: CLONE_ERR))
       end
 
       # Utility functions
 
       def clone_request_json(input)
-        Value::CloneRequest.new(input[:project], input[:request_id])
+        Value::CloneRequest
+          .new(input[:project], input[:request_id], input[:requested].update?)
           .yield_self { |request| Representer::CloneRequest.new(request) }
           .yield_self(&:to_json)
       end
