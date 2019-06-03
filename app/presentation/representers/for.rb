@@ -24,7 +24,7 @@ module CodePraise
         value = result.failure? ? result.failure : result.value!
         @status_rep = HttpResponse.new(value)
         representer = REP_KLASS[value.message.class]
-        @body_rep =representer == HttpResponse ? representer.new(value) : representer.new(value.message)
+        @body_rep = representer == HttpResponse ? representer.new(value) : representer.new(value.message)
       end
 
       def http_status_code

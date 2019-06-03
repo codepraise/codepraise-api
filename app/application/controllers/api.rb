@@ -33,7 +33,7 @@ module CodePraise
           routing.on String, String do |owner_name, project_name|
             # GET /projects/{owner_name}/{project_name}[/folder_namepath/]
             routing.get do
-              Cache::Control.new(response).turn_on if Env.new(Api).production?
+              # Cache::Control.new(response).turn_on if Env.new(Api).production?
 
               request_id = [request.env, request.path, Time.now.to_f].hash
 
