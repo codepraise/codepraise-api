@@ -5,7 +5,7 @@ require 'roar/json'
 
 module CodePraise
   module Representer
-    # Represents folder summary about repo's folder
+    # Represents complexity for method
     class MethodComplexity < Roar::Decorator
       include Roar::JSON
 

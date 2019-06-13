@@ -4,6 +4,7 @@ require_relative 'test_case_parser'
 
 module CodePraise
   module Mapper
+    # Parse the test case and find its LineContributions entities
     class TestCases
       def initialize(line_entities)
         @line_entities = line_entities

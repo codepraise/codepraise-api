@@ -4,7 +4,7 @@ require 'flog'
 
 module CodePraise
   module Complexity
-    # ABC Metric calculation class
+    # Call the flog API and calculate flog score
     class FlogReporter
       def initialize(file_path)
         @file_path = file_path

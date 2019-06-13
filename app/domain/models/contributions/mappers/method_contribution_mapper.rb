@@ -2,6 +2,7 @@
 
 module CodePraise
   module Mapper
+    # Parse the method and get the flog score for this method
     class MethodContributions
       attr_reader :file_contributions
 

@@ -6,6 +6,7 @@ require 'roar/json'
 # Represents essential Repo information for API output
 module CodePraise
   module Representer
+    # Representer for comment
     class Comment < Roar::Decorator
       include Roar::JSON
 

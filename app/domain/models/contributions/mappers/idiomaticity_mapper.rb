@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module CodePraise
   module Mapper
+    # Parse the code style offense and calcualte the offense ratio for the file
     class Idiomaticity
       def initialize(git_repo_path)
         @rubocop_reporter = CodePraise::Rubocop::Reporter.new(git_repo_path)

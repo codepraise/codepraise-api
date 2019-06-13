@@ -8,6 +8,7 @@ require_relative 'file_change_representer'
 
 module CodePraise
   module Representer
+    # Representer for commit entity
     class Commit < Roar::Decorator
       include Roar::JSON
 

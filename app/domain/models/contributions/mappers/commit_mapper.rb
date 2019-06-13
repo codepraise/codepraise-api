@@ -4,8 +4,8 @@ require_relative 'commit_diff'
 
 module CodePraise
   module Mapper
+    # Parge the file change and create commit entity
     class Commit
-
       def initialize(commit, empty_commit)
         @commit = commit
         @empty_commit = empty_commit
@@ -27,12 +27,12 @@ module CodePraise
       def committer
         Entity::Contributor.new(
           username: @commit.author.name,
-          email:  @commit.author.email
+          email: @commit.author.email
         )
       end
 
       def file_changes
-        file_change_array = CommitDiff.parser(get_diff)
+        file_change_array = CommitDiff.parser(commit_diff)
         file_change_array.each do |file_change|
           Entity::FileChange.new(
             path: file_change[:path],
@@ -44,15 +44,13 @@ module CodePraise
         end
       end
 
-      def get_diff
+      def commit_diff
         if @commit.parent.nil?
           @empty_commit.diff(@commit)
         else
           @commit.parent.diff(@commit)
         end
       end
-
-
     end
   end
 end

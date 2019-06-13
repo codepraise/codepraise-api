@@ -2,6 +2,7 @@
 
 module CodePraise
   module Mapper
+    # Parse the file changes from git diff information
     module CommitDiff
       def self.parser(diff)
         diff_files = diff.stats[:files]

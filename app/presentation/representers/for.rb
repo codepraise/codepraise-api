@@ -8,6 +8,7 @@ require_relative 'appraisal_representer'
 
 module CodePraise
   module Representer
+    # Representer Generator is used for creating representer dynamically
     class For
       REP_KLASS = {
         Value::ProjectsList               => ProjectsList,

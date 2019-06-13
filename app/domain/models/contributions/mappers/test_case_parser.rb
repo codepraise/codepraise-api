@@ -2,6 +2,7 @@
 
 module CodePraise
   module Mapper
+    # Find the testcase in test file by using AST (ruby-parser gem)
     module TestCaseParser
       def self.parse(code)
         ast = Parser::CurrentRuby.parse(code)

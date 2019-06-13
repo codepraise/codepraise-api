@@ -2,6 +2,7 @@
 
 module CodePraise
   module Representer
+    # Representer fo file change in the commit
     class FileChange < Roar::Decorator
       include Roar::JSON
 

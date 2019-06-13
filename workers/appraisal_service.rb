@@ -4,6 +4,7 @@ require_relative '../init.rb'
 require_relative 'project_clone'
 
 module Appraisal
+  # Encapuslate all useful method for appraisal worker
   class Service
     attr_reader :cache
 

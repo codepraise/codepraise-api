@@ -3,6 +3,7 @@
 require_relative '../init.rb'
 
 module Appraisal
+  # Using the class to manage the cache state and change the state
   class CacheState
     BACK = {
       'cloning'    => 'init',

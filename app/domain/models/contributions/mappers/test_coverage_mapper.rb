@@ -2,6 +2,8 @@
 
 module CodePraise
   module Mapper
+    # Initialize the class and read the coverage file
+    # Create TestCoverage entity for file
     class TestCoverage
       def initialize(repo_path)
         @repo_path = repo_path

@@ -51,8 +51,8 @@ module CodePraise
       def self.add_complexity_credits(obj, complexity)
         complexity.method_complexities.each do |method_complexity|
           method_complexity.contributors.each do |email_id, percentage|
-            obj[:complexity_credits][email_id] += LEVEL_SCORE[method_complexity.level] *
-                                              (percentage.to_f / 100)
+            obj[:complexity_credits][email_id] += method_complexity.complexity *
+                                                  (percentage.to_f / 100)
           end
         end
       end

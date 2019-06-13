@@ -5,6 +5,7 @@ require 'roar/json'
 
 module CodePraise
   module Representer
+    # Represent test case in the project
     class TestCase < Roar::Decorator
       include Roar::JSON
 

@@ -8,7 +8,7 @@ require_relative 'credit_share_representer'
 
 module CodePraise
   module Representer
-    # Represents folder summary about repo's folder
+    # Represents method in a file
     class MethodContributions < Roar::Decorator
       include Roar::JSON
 
