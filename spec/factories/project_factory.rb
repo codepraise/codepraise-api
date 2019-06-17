@@ -6,7 +6,7 @@ FactoryBot.define do
     name {'codepraise-api'}
     size { 551 }
     ssh_url { 'git://github.com/XuVic/YPBT-app.git' }
-    http_url { 'https://github.com/RubyStarts3/YPBT-api' }
+    http_url { 'https://github.com/XuVic/YPBT-app' }
     association :owner, factory: :member
     initialize_with { CodePraise::Database::ProjectOrm.find(origin_id: 184028231) || CodePraise::Database::ProjectOrm.create(attributes) }
   end
