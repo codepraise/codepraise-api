@@ -7,10 +7,9 @@ module CodePraise
     # Implement the rubocop command
     # Deserialize the rubocop result to Hash
     class Reporter
-      def initialize(git_repo_path, target = '')
-        @git_repo_path = git_repo_path
+      def initialize(git_repo_path)
         @command = Command.new
-          .target(target)
+          .target(git_repo_path)
           .except('Metrics')
           .format('json')
       end
@@ -24,11 +23,7 @@ module CodePraise
       private
 
       def call
-        in_repo { `#{@command.full_command}` }
-      end
-
-      def in_repo(&block)
-        Dir.chdir(@git_repo_path) { yield block }
+        @call ||= `#{@command.full_command}`
       end
     end
   end

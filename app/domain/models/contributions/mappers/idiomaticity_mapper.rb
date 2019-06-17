@@ -5,6 +5,7 @@ module CodePraise
     # Parse the code style offense and calcualte the offense ratio for the file
     class Idiomaticity
       def initialize(git_repo_path)
+        @git_repo_path = git_repo_path
         @rubocop_reporter = CodePraise::Rubocop::Reporter.new(git_repo_path)
       end
 
@@ -20,7 +21,7 @@ module CodePraise
       private
 
       def offenses(file_path, file_contributions)
-        idiomaticity_result = @rubocop_reporter.report[file_path]
+        idiomaticity_result = @rubocop_reporter.report["#{@git_repo_path}/#{file_path}"]
 
         return [] if idiomaticity_result.nil?
 
