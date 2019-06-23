@@ -37,8 +37,10 @@ module CodePraise
 
         covered_line_count = coverage_array.map(&:covered_line_count).sum
         missed_line_count = coverage_array.map(&:missed_line_count).sum
+
         return 0 if (covered_line_count + missed_line_count).zero?
-        covered_line_count.to_f / (covered_line_count + missed_line_count)
+
+        (covered_line_count.to_f / (covered_line_count + missed_line_count)).round(2)
       end
 
       def average_complexity

@@ -31,6 +31,7 @@ module CodePraise
       private
 
       def covered_line_count(file_path)
+        return 0 unless @coverage_hash
         return 0 if test_array(file_path).nil? || test_array(file_path).empty?
 
         total_lines = test_array(file_path).reject(&:nil?)
@@ -39,6 +40,7 @@ module CodePraise
       end
 
       def missed_line_count(file_path)
+        return 0 unless @coverage_hash
         return 0 if test_array(file_path).nil? || test_array(file_path).empty?
 
         total_lines = test_array(file_path).reject(&:nil?)
