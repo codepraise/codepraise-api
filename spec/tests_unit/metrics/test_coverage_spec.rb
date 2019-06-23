@@ -8,10 +8,9 @@ describe CodePraise::Entity::TestCase do
   DatabaseHelper.setup_database_cleaner
   DatabaseHelper.wipe_database
   before do
-    project = CodePraise::Database::ProjectOrm.all.last
-    @measurement_helper = MeasurementHelper.new(project)
-    # path = @measurement_helper.git_repo.local.git_repo_path
-    # @coverage = CodePraise::SimpleCov::TestCoverage.new(path)
+    @measurement_helper = MeasurementHelper.setup
+    path = @measurement_helper.git_repo.local.git_repo_path
+    @coverage = CodePraise::SimpleCov::TestCoverage.new(path)
   end
 
   after do

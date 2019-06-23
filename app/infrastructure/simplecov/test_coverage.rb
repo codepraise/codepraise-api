@@ -16,7 +16,9 @@ module CodePraise
       def coverage_report(file_path)
         {
           coverage: test_coverage(file_path),
-          time: time
+          time: time,
+          covered_line_count: covered_line_count(file_path),
+          missed_line_count: missed_line_count(file_path)
         }
       end
 
@@ -27,6 +29,22 @@ module CodePraise
       end
 
       private
+
+      def covered_line_count(file_path)
+        return 0 if test_array(file_path).nil? || test_array(file_path).empty?
+
+        total_lines = test_array(file_path).reject(&:nil?)
+
+        total_lines.reject(&:zero?).count
+      end
+
+      def missed_line_count(file_path)
+        return 0 if test_array(file_path).nil? || test_array(file_path).empty?
+
+        total_lines = test_array(file_path).reject(&:nil?)
+
+        total_lines.select(&:zero?).count
+      end
 
       def time
         return nil unless @coverage_hash

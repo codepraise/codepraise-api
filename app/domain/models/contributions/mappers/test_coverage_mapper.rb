@@ -16,7 +16,9 @@ module CodePraise
 
         Entity::TestCoverage.new(
           coverage: coverage_hash[:coverage],
-          time: coverage_hash[:time]
+          time: coverage_hash[:time],
+          covered_line_count: coverage_hash[:covered_line_count],
+          missed_line_count: coverage_hash[:missed_line_count]
         )
       end
 

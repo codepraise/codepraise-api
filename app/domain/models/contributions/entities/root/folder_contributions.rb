@@ -34,10 +34,11 @@ module CodePraise
         coverage_array = files.map(&:test_coverage).reject(&:nil?)
 
         return coverage_array[0].message if coverage_array[0]&.message
-        return 0 if coverage_array.map(&:coverage).empty?
 
-        coverage_array.map!(&:coverage)
-        coverage_array.sum / coverage_array.length
+        covered_line_count = coverage_array.map(&:covered_line_count).sum
+        missed_line_count = coverage_array.map(&:missed_line_count).sum
+        return 0 if (covered_line_count + missed_line_count).zero?
+        covered_line_count.to_f / (covered_line_count + missed_line_count)
       end
 
       def average_complexity
