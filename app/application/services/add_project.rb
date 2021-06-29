@@ -24,21 +24,20 @@ module CodePraise
           input[:remote_project] = project_from_github(input)
         end
         Success(input)
-      rescue StandardError => error
-        Failure(Value::Result.new(status: :not_found,
-                                  message: error.to_s))
+      rescue StandardError => e
+        Failure(Value::Result.new(status: :not_found, message: e.to_s))
       end
 
       def store_project(input)
-        if (new_proj = input[:remote_project])
-          Repository::For.entity(new_proj).create(new_proj)
-        else
-          input[:local_project]
-        end.yield_self do |project|
-          Success(Value::Result.new(status: :created, message: project))
-        end
-      rescue StandardError => error
-        puts error.backtrace.join("\n")
+        project =
+          if (new_proj = input[:remote_project])
+            Repository::For.entity(new_proj).create(new_proj)
+          else
+            input[:local_project]
+          end
+        Success(Value::Result.new(status: :created, message: project))
+      rescue StandardError => e
+        puts e.backtrace.join("\n")
         Failure(Value::Result.new(status: :internal_error, message: DB_ERR_MSG))
       end
 

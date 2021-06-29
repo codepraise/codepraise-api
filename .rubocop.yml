@@ -38,6 +38,6 @@ Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: true
   EnforcedHashRocketStyle: table
