@@ -1,6 +1,8 @@
 ---
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
+  NewCops: enable         # enable new upcoming cops for rubocop
+  
   Include:
     - 'Gemfile'
     - 'Rakefile'
@@ -34,10 +36,10 @@ Style/SymbolArray:
     - Rakefile
     - app/infrastructure/database/migrations/*.rb
 
-Layout/MultilineMethodCallIndentation:
-  Enabled: true
-  EnforcedStyle: indented
+# Layout/MultilineMethodCallIndentation:
+#   Enabled: true
+#   EnforcedStyle: indented
 
-Layout/HashAlignment:
-  Enabled: true
-  EnforcedHashRocketStyle: table
+# Layout/HashAlignment:
+#   Enabled: true
+#   EnforcedHashRocketStyle: table

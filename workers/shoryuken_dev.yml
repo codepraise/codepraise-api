@@ -1,2 +1,2 @@
 queues:
-  - https://sqs.us-east-2.amazonaws.com/700371359912/codepraise-clone-development
+  - https://sqs.ap-northeast-1.amazonaws.com/799429637113/project-use-development
