@@ -64,7 +64,9 @@ module CodePraise
 
       def test_array(file_path)
         path = project_path + file_path
-        coverage_hash[path]
+        return nil unless coverage_hash[path]
+
+        coverage_hash[path]['lines']
       end
 
       def test_coverage(file_path)

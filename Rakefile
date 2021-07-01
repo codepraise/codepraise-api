@@ -70,7 +70,8 @@ namespace :queues do
 
   desc 'Purge messages in SQS queue for Shoryuken'
   task :purge => :config do
-    q_url = @sqs.get_queue_url(queue_name: @api.config.CLONE_QUEUE).queue_url
+    queue_name = @api.config.CLONE_QUEUE
+    q_url = @sqs.get_queue_url(queue_name: queue_name).queue_url
     @sqs.purge_queue(queue_url: q_url)
     puts "Queue #{queue_name} purged"
   rescue StandardError => error
