@@ -5,90 +5,93 @@ source 'https://rubygems.org'
 ruby '2.7.3'
 
 # PRESENTATION LAYER
-gem 'multi_json'
-gem 'roar'
+gem 'multi_json', '~> 1.13'
+gem 'roar', '~> 1.1'
 
 # APPLICATION LAYER
 # Web application related
-gem 'econfig'
-gem 'puma'
-gem 'rack-cache'
-gem 'redis'
-gem 'redis-rack-cache'
-gem 'roda'
+gem 'econfig', '~> 2.1'
+gem 'puma', '~> 5.5'
+gem 'rack-cache', '~> 1.13'
+gem 'redis', '~> 4.5'
+gem 'redis-rack-cache', '~> 2.2'
+gem 'roda', '~> 3.50'
 
 # Controllers and services
-gem 'dry-monads'
-gem 'dry-transaction'
+gem 'dry-monads', '~> 1.4'
+gem 'dry-transaction', '~> 0.13'
 # gem 'dry-validation', '~> 0.13.3'
 
 # DOMAIN LAYER
-gem 'dry-struct'
-gem 'dry-types'
+gem 'dry-struct', '~> 1.4'
+gem 'dry-types', '~> 1.5'
 
 # INFRASTRUCTURE LAYER
 # Networking
-gem 'http'
+gem 'http', '~> 5.0'
 
 # Queues
-gem 'aws-sdk-sqs'
+gem 'aws-sdk-sqs', '~> 1.46'
 
 # Database
-gem 'hirb'
-gem 'sequel'
+gem 'hirb', '~> 0.7'
+gem 'sequel', '~> 5.50'
 
 # Ruby AST unparser
-gem 'unparser'
+gem 'unparser', '~> 0.6'
 
 # Git Operation by using git object
-gem 'git'
+gem 'git', '~> 1.9'
 
 # MongoDB Driver
-gem 'mongo'
+gem 'mongo', '~> 2.17'
 
 # QUALITY
-gem 'flog'
-gem 'rubocop'
-gem 'rubocop-performance'
+gem 'flog', '~> 4.6'
+gem 'rubocop', '~> 1.23'
+gem 'rubocop-performance', '~> 1.12'
+
+# Switcher
+gem 'flipper-mongo'
 
 group :development, :test do
-  gem 'database_cleaner'
-  gem 'factory_bot'
-  gem 'reek'
-  gem 'sqlite3'
+  gem 'database_cleaner', '~> 2.0'
+  gem 'factory_bot', '~> 6.2'
+  gem 'reek', '~> 6.0'
+  gem 'sqlite3', '~> 1.4'
 end
 
 group :production do
-  gem 'pg'
+  gem 'pg', '~> 1.2'
 end
 
 # WORKERS
-gem 'faye'
-gem 'shoryuken'
+gem 'faye', '~> 1.4'
+gem 'shoryuken', '~> 5.3'
 
 # DEBUGGING
 group :development, :test do
-  gem 'pry-rescue'
-  gem 'pry-stack_explorer'
+  gem 'pry-rescue', '~> 1.5'
+  gem 'pry-stack_explorer', '~> 0.6'
 end
 
 # TESTING
 group :test do
-  gem 'minitest'
-  gem 'minitest-hooks'
-  gem 'minitest-rg'
-  gem 'simplecov'
-  gem 'vcr'
-  gem 'webmock'
+  gem 'minitest', '~> 5.14'
+  gem 'minitest-hooks', '~> 1.5'
+  gem 'minitest-rg', '~> 5.2'
+  gem 'simplecov', '~> 0.21'
+  gem 'vcr', '~> 6.0'
+  gem 'webmock', '~> 3.13'
 end
 
 gem 'rack-test' # can also be used to diagnose production
 
 # UTILITIES
-gem 'pry'
-gem 'rake'
-gem 'travis'
+gem 'pry', '~> 0.14'
+gem 'rake', '~> 13.0'
+gem 'travis', '~> 1.10'
 
 group :development, :test do
-  gem 'rerun'
+  gem 'rerun', '~> 0.13'
 end

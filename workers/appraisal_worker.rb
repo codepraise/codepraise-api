@@ -67,7 +67,7 @@ module Appraisal
 
       sqs_msg.delete
     rescue => e
-      puts e
+      puts e.full_message
       cache_state.back(gitrepo)
     end
 

@@ -75,6 +75,13 @@ module CodePraise
       def self.mongo
         MONGO
       end
+
+      require 'flipper-mongo'
+      def self.flipper
+        collection = mongo['flipper']
+        adapter = Flipper::Adapters::Mongo.new(collection)
+        Flipper.new(adapter)
+      end
     end
   end
 end
