@@ -57,6 +57,8 @@ module CodePraise
               )
 
               Representer::For.new(result).status_and_body(response)
+            rescue StandardError => e
+              puts e.full_message
             end
 
             routing.put do

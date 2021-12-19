@@ -1,2 +1,2 @@
 queues:
-  - https://sqs.us-east-2.amazonaws.com/700371359912/codepraise-clone-production
+  - https://sqs.ap-northeast-1.amazonaws.com/105441826549/codepraise-api-production
