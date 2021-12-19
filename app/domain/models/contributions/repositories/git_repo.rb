@@ -36,6 +36,8 @@ module CodePraise
     end
 
     def too_large?
+      return false unless CodePraise::Api.flipper[:clone_size_check].enabled?
+
       @size > MAX_SIZE
     end
 
