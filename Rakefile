@@ -136,7 +136,7 @@ namespace :cache do
       if STDIN.gets.chomp.downcase == 'y'
         puts 'Deleting production cache'
         wiped = CodePraise::Cache::Client.new(@api.config).wipe
-        wiped.keys.each { |key| puts "Wiped: #{key}" }
+        wiped.each { |key| puts "Wiped: #{key}" }
       end
     end
   end
