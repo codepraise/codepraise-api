@@ -83,7 +83,6 @@ GEM
       dry-core (~> 0.5, >= 0.5)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
-    econfig (2.1.0)
     em-http-request (1.1.7)
       addressable (>= 2.3.4)
       cookiejar (!= 0.3.1)
@@ -131,6 +130,8 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+    figaro (1.2.0)
+      thor (>= 0.14.0, < 2)
     flipper (0.22.2)
     flipper-mongo (0.22.2)
       flipper (~> 0.22.2)
@@ -315,9 +316,9 @@ DEPENDENCIES
   dry-struct (~> 1.4)
   dry-transaction (~> 0.13)
   dry-types (~> 1.5)
-  econfig (~> 2.1)
   factory_bot (~> 6.2)
   faye (~> 1.4)
+  figaro (~> 1.2)
   flipper-mongo
   flog (~> 4.6)
   git (~> 1.9)
@@ -354,7 +355,7 @@ DEPENDENCIES
   webmock (~> 3.13)
 
 RUBY VERSION
-   ruby 2.7.3p183
+   ruby 3.1.1p18
 
 BUNDLED WITH
-   2.1.4
+   2.3.7
