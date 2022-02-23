@@ -5,7 +5,7 @@ require_relative 'progress_reporter.rb'
 require_relative 'project_clone.rb'
 require_relative 'cache_state.rb'
 require_relative 'appraisal_service'
-require 'econfig'
+require 'figaro'
 require 'shoryuken'
 
 MUTEX = Mutex.new
@@ -13,9 +13,15 @@ MUTEX = Mutex.new
 module Appraisal
   # Shoryuken worker class to clone repos in parallel
   class Worker
-    extend Econfig::Shortcut
-    Econfig.env = ENV['RACK_ENV'] || 'development'
-    Econfig.root = File.expand_path('..', File.dirname(__FILE__))
+    Figaro.application = Figaro::Application.new(
+      environment: ENV['RACK_ENV'] || 'development',
+      path: File.expand_path('config/secrets.yml')
+    )
+    Figaro.load
+
+    def self.config
+      Figaro.env
+    end
 
     Shoryuken.sqs_client = Aws::SQS::Client.new(
       access_key_id: config.AWS_ACCESS_KEY_ID,

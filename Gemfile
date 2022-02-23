@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 # source 'http://mirror.ops.rhcloud.com/mirror/ruby/'
-ruby '2.7.3'
+ruby '3.1.1'
 
 # PRESENTATION LAYER
 gem 'multi_json', '~> 1.13'
@@ -10,7 +10,7 @@ gem 'roar', '~> 1.1'
 
 # APPLICATION LAYER
 # Web application related
-gem 'econfig', '~> 2.1'
+gem 'figaro', '~> 1.2'
 gem 'puma', '~> 5.5'
 gem 'rack-cache', '~> 1.13'
 gem 'redis', '~> 4.5'

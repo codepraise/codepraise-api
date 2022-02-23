@@ -3,7 +3,7 @@
 require 'rack/cache'
 require 'redis-rack-cache'
 require 'roda'
-require 'econfig'
+require 'figaro'
 require 'mongo'
 require 'shoryuken'
 
@@ -12,9 +12,17 @@ module CodePraise
   class Api < Roda
     plugin :environments
 
-    extend Econfig::Shortcut
-    Econfig.env = environment.to_s
-    Econfig.root = '.'
+    configure do
+      Figaro.application = Figaro::Application.new(
+        environment: environment.to_s,
+        path: File.expand_path('config/secrets.yml')
+      )
+      Figaro.load
+
+      def self.config
+        Figaro.env
+      end
+    end
 
     configure :development, :test, :container do
       require 'pry'
