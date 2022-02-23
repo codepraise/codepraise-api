@@ -5,7 +5,6 @@ require_relative 'progress_reporter.rb'
 require_relative 'project_clone.rb'
 require_relative 'cache_state.rb'
 require_relative 'appraisal_service'
-# require 'econfig'
 require 'figaro'
 require 'shoryuken'
 
