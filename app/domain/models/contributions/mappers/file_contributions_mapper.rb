@@ -55,11 +55,12 @@ module CodePraise
       end
 
       def methods
-        return [] unless CodePraise::Api.flipper[:methods].enabled?
-
         return [] unless ruby_file?
 
         MethodContributions.new(contributions).build_entity
+      rescue StandardError => e
+        puts "Parse Method Error: #{e.full_message}"
+        []
       end
 
       def comments
@@ -69,10 +70,12 @@ module CodePraise
       end
 
       def test_cases
-        return [] unless CodePraise::Api.flipper[:test_cases].enabled?
         return [] unless test_files? && ruby_file?
 
         TestCases.new(contributions).build_entities
+      rescue StandardError => e
+        puts "Parse Test Cases Error: #{e.full_message}"
+        []
       end
 
       def summarize_line_reports(line_reports)
