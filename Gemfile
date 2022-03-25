@@ -38,7 +38,7 @@ gem 'hirb', '~> 0.7'
 gem 'sequel', '~> 5.50'
 
 # Ruby AST unparser
-gem 'unparser', '~> 0.6'
+gem 'parser', '~> 3.1'
 
 # Git Operation by using git object
 gem 'git', '~> 1.9'

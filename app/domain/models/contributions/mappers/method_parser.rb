@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'parser/current'
-require 'unparser'
 
 module CodePraise
   module Mapper
