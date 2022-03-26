@@ -31,6 +31,9 @@ module Appraisal
 
     include Shoryuken::Worker
     # Shoryuken.sqs_client_receive_message_opts = { max_number_of_messages: 1 }
+
+    # Long polling
+    Shoryuken.sqs_client_receive_message_opts = { wait_time_seconds: 20 }
     shoryuken_options queue: config.CLONE_QUEUE_URL, auto_visibility_timeout: true
 
     def perform(sqs_msg, request)
