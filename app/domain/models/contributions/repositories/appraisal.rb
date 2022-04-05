@@ -56,8 +56,8 @@ module CodePraise
           appraisal: odm.document['appraisal'],
           state: odm.document['state'],
           request_id: odm.document['request_id'],
-          created_at: odm.document['created_at'],
-          updated_at: odm.document['updated_at']
+          created_at: odm.document['created_at'].localtime('+08:00'),
+          updated_at: odm.document['updated_at'].localtime('+08:00')
         )
       end
     end
