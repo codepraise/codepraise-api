@@ -52,6 +52,9 @@ namespace :queues do
       secret_access_key: @api.config.AWS_SECRET_ACCESS_KEY,
       region: @api.config.AWS_REGION
     )
+    @sqs.receive_message(wait_time_seconds: 20,
+                         visibility_timeout: 60,
+                         queue_url: @api.config.QUEUE_URL)
   end
 
   desc 'Create SQS queue for Shoryuken'
