@@ -50,7 +50,7 @@ module CodePraise
       end
 
       def offense_ratio(offenses, file_contributions)
-        return 0.0 if offenses.empty?
+        return 0.0 if offenses.empty? || file_contributions.empty?
 
         (offenses.map(&:line_count).reduce(&:+).to_f / file_contributions.size)
           .round(2)
