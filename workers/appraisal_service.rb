@@ -75,18 +75,6 @@ module Appraisal
           @representer = representer
           JSON.parse(representer.to_json)
         end
-    rescue JSON::GeneratorError => e
-      puts "JSON::GeneratorError => #{e.full_message}"
-
-      # TODO: find out the reason why this happens
-      # Remove app/services to avoid crashing
-      @project_folder_contribution.folder.subfolders[0].subfolders.pop
-
-      CodePraise::Representer::ProjectFolderContributions
-        .new(@project_folder_contribution).yield_self do |representer|
-          @representer = representer
-          JSON.parse(representer.to_json)
-        end
     rescue StandardError => e
       puts e.full_message
     end
