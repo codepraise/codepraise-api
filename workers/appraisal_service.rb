@@ -8,6 +8,8 @@ module Appraisal
   class Service
     attr_reader :cache
 
+    @representer
+
     def initialize(project, reporter, gitrepo, request_id)
       @project = project
       @reporter = reporter
@@ -46,6 +48,8 @@ module Appraisal
         .new(@project, folder_contributions, commit_contributions)
       @reporter.publish(CloneMonitor.progress('Appraised'), 'appraised', @request_id)
       @gitrepo.delete
+    rescue StandardError => e
+      puts e.full_message
     end
 
     def store_appraisal_cache
@@ -68,8 +72,23 @@ module Appraisal
     def folder_contributions_hash
       CodePraise::Representer::ProjectFolderContributions
         .new(@project_folder_contribution).yield_self do |representer|
+          @representer = representer
           JSON.parse(representer.to_json)
         end
+    rescue JSON::GeneratorError => e
+      puts "JSON::GeneratorError => #{e.full_message}"
+
+      # TODO: find out the reason why this happens
+      # Remove app/services to avoid crashing
+      @project_folder_contribution.folder.subfolders[0].subfolders.pop
+
+      CodePraise::Representer::ProjectFolderContributions
+        .new(@project_folder_contribution).yield_self do |representer|
+          @representer = representer
+          JSON.parse(representer.to_json)
+        end
+    rescue StandardError => e
+      puts e.full_message
     end
 
     def each_second(seconds)
