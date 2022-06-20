@@ -27,6 +27,8 @@ module CodePraise
         flog.flog_ruby(code)
         flog.calculate_total_scores
         flog
+      rescue StandardError
+        Flog.new(continue: true)
       end
 
       private
