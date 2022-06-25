@@ -8,3 +8,4 @@ coverage/.resultset.json.lock
 .bundle/
 _snippets/
 _cache/
+.idea/
