@@ -73,7 +73,7 @@ module CodePraise
                 request_id: request_id,
                 config: Api.config
               )
-
+              response.expires 0, public: true
               Representer::For.new(result).status_and_body(response)
             end
           end
