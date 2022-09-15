@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 # source 'http://mirror.ops.rhcloud.com/mirror/ruby/'
-ruby '3.1.1'
+ruby File.read('.ruby-version').strip
 
 # PRESENTATION LAYER
 gem 'multi_json', '~> 1.13'
