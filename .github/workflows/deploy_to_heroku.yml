@@ -6,17 +6,19 @@ on:
 
 jobs:
   Deploy-To-Heroku:
+    needs: [ Quality-Check ]
     runs-on: ubuntu-latest
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       DOCKER_DEFAULT_PLATFORM: linux/amd64 # heroku adopts x86_64, mac m1 chip need to set this env
-      steps:
-        - uses: actions/checkout@v2
-        - name: Login to Heroku
-          run: heroku container:login
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku
+        run: heroku container:login
 
-        - name: Push to Heroku Registry
-          run: heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
+      - name: Push to Heroku Registry
+        run: heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
 
-        - name: Release to Heroku
-          run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+      - name: Release to Heroku
+        run: |
+          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
