@@ -1,9 +1,10 @@
-FROM ruby:3.1.2-alpine
+FROM ruby:3.1.1-alpine
 
 RUN \
 apk update \
 && apk upgrade \
 && apk --no-cache add ruby ruby-dev ruby-bundler ruby-json ruby-irb ruby-rake ruby-bigdecimal postgresql-dev \
+&& apk --no-cache add bash git openssh \
 && apk --no-cache add make g++ \
 && rm -rf /var/cache/apk/*
 
