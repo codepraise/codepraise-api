@@ -2,11 +2,10 @@ name: Deploy-To-Heroku
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, feature/containerize ]
 
 jobs:
   Deploy-To-Heroku:
-    needs: [ Quality-Check ]
     runs-on: ubuntu-latest
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
