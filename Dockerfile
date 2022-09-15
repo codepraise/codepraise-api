@@ -4,6 +4,7 @@ RUN \
 apk update \
 && apk upgrade \
 && apk --no-cache add ruby ruby-dev ruby-bundler ruby-json ruby-irb ruby-rake ruby-bigdecimal postgresql-dev \
+&& apk --no-cache add bash git openssh \
 && apk --no-cache add make g++ \
 && rm -rf /var/cache/apk/*
 
