@@ -1,12 +1,16 @@
-FROM vicxu/rbenv:v1
+FROM ruby:3.1.2-alpine
 
-RUN apt-get update && apt-get install -y libpq-dev
-RUN rbenv install 2.5.5
+RUN \
+apk update \
+&& apk upgrade \
+&& apk --no-cache add ruby ruby-dev ruby-bundler ruby-json ruby-irb ruby-rake ruby-bigdecimal postgresql-dev \
+&& apk --no-cache add make g++ \
+&& rm -rf /var/cache/apk/*
 
-ENV WORK_PAH = codepraise-api
-RUN cd root && mkdir $WORK_PAH
-WORKDIR root/codepraise-api
-COPY . .
-RUN rbenv global 2.5.5 && gem install bundler:1.17.3 && bundle install && bundle install --with production
+WORKDIR /codepraise-api
 
-CMD 'bash'
+COPY / .
+
+RUN bundle install --without=test development
+
+CMD rake worker:run:production & bundle exec puma -t 5:5 -p ${PORT:-3000}
