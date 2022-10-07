@@ -16,5 +16,8 @@ services:
       - ..:/home/${USER}/workspace
       - ${HOME}${USERPROFILE}/.ssh:/home/${USER}/.ssh
       - ${HOME}${USERPROFILE}/.gitconfig:/home/${USER}/.gitconfig
+      - ${HOME}${USERPROFILE}/.gnupg:/home/${USER}/.gnupg
     working_dir: /home/${USER}/workspace
     command: sleep infinity
+    environment:
+      BUNDLE_PATH: vendor/bundle
