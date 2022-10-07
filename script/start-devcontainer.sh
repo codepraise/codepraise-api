@@ -1,8 +1,6 @@
 #!/bin/bash
 # Start the devcontainer
 
-export UID=$(id -u)
-export GID=$(id -g)
 if [ "${SHELL}" = "/bin/bash" ]; then
   source ~/.bashrc
 elif [ "${SHELL}" = "/bin/zsh" ]; then
