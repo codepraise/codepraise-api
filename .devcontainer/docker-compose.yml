@@ -1,0 +1,18 @@
+version: "3.2"
+services:
+  # The API service
+  api:
+    user: ${USER}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - USERNAME=${USER}
+    container_name: codepraise-api
+    ports:
+      - 9090:9090
+    volumes:
+      - ..:/workspace
+      - ${HOME}${USERPROFILE}/.ssh:/home/${USER}/.ssh
+    working_dir: /workspace
+    command: sleep infinity
