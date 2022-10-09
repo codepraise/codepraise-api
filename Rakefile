@@ -130,9 +130,13 @@ namespace :cache do
   end
 
   namespace :wipe do
-    task :dev do
-      puts 'Deleting development cache'
-      sh 'rm -rf _cache/*'
+    task :dev => :config do
+      print 'Are you sure you wish to wipe the dev cache? (y/n) '
+      if STDIN.gets.chomp.downcase == 'y'
+        puts 'Deleting dev cache'
+        wiped = CodePraise::Cache::Client.new(@api.config).wipe
+        wiped.each { |key| puts "Wiped: #{key}" }
+      end
     end
 
     task :production => :config do
@@ -177,6 +181,17 @@ namespace :db do
 
     FileUtils.rm(@api.config.DB_FILENAME)
     puts "Deleted #{@api.config.DB_FILENAME}"
+  end
+
+  desc 'Reset dev or test database'
+  task :reset => :config do
+    if @api.environment == :production
+      puts 'Cannot reset production database!'
+      return
+    end
+
+    require_relative 'spec/helpers/database_helper.rb'
+    DatabaseHelper.reset_database
   end
 
   namespace :mongo do

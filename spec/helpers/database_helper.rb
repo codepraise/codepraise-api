@@ -16,4 +16,12 @@ class DatabaseHelper
     CodePraise::Api.DB.run('PRAGMA foreign_keys = ON')
     CodePraise::Api.mongo[:appraisals].drop
   end
+
+  def self.reset_database
+    CodePraise::Api.DB.run("DROP SCHEMA public CASCADE;
+      CREATE SCHEMA public;
+      GRANT ALL ON SCHEMA public TO postgres;
+      GRANT ALL ON SCHEMA public TO public;
+      COMMENT ON SCHEMA public IS 'standard public schema';")
+  end
 end
