@@ -36,20 +36,17 @@ module CodePraise
     end
 
     configure :development, :test, :app_test do
-      ENV['DATABASE_URL'] = 'sqlite://' + config.DB_FILENAME
-      ENV['MONGODB_URI'] = 'mongodb://' + config.MONGO_URL
-    end
-
-    configure :container do
-      ENV['DATABASE_URL'] = 'postgres://' + config.DB_URL
       ENV['MONGODB_URI'] = 'mongodb://' + config.MONGO_URL
     end
 
     configure :development do
+      puts 'RUNNING IN DEVELOPMENT MODE'
+      Mongo::Logger.logger.level = Logger::FATAL
+
       use Rack::Cache,
           verbose: true,
-          metastore: 'file:_cache/rack/meta',
-          entitystore: 'file:_cache/rack/body'
+          metastore: config.REDISCLOUD_URL + '/0/metastore',
+          entitystore: config.REDISCLOUD_URL + '/0/entitystore'
     end
 
     configure :production do
