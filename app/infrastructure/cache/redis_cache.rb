@@ -14,6 +14,14 @@ module CodePraise
         @redis.keys
       end
 
+      def get(key)
+        @redis.get(key)
+      end
+
+      def set(key, value)
+        @redis.set(key, value)
+      end
+
       def wipe
         keys.each { |key| @redis.del(key) }
       end

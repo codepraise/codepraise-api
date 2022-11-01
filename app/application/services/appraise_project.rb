@@ -39,7 +39,9 @@ module CodePraise
         project_name = input[:requested].project_name
         appraisal = Repository::Appraisal.find_by(owner_name: owner_name,
                                                   project_name: project_name)
+        # binding.irb
         if !appraisal.nil? && appraisal.appraised? && !input[:requested].update?
+          # binding.irb
           Failure(Value::Result.new(status: :ok,
                                     message: appraisal))
         else

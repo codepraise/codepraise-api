@@ -155,7 +155,6 @@ namespace :db do
     require 'sequel'
     require 'mongo'
     require_relative 'config/environment.rb' # load config info
-    require_relative 'app/infrastructure/database/init'
     @api = CodePraise::Api
   end
 
