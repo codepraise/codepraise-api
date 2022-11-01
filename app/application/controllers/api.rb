@@ -8,6 +8,7 @@ module CodePraise
   class Api < Roda
     include RouteHelpers
 
+    plugin :request_headers
     plugin :halt
     plugin :all_verbs
     plugin :caching
@@ -34,6 +35,17 @@ module CodePraise
             # GET /projects/{owner_name}/{project_name}[/folder_namepath/]
             routing.get do
               Cache::Control.new(response).turn_on if Env.new(Api).production?
+
+              if_none_match = request.env['HTTP_IF_NONE_MATCH']
+              redis = CodePraise::Cache::Client.new(CodePraise::Api.config)
+              etag_key = "#{owner_name}_#{project_name}_etag"
+              etag_value = redis.get(etag_key)
+
+              if !if_none_match.nil? && !etag_value.nil? && if_none_match == etag_value
+                response.status = 304
+                return response.to_json
+              end
+
               request_id = [request.env, request.path, Time.now.to_f].hash
 
               path_request = ProjectRequestPath.new(
@@ -46,6 +58,12 @@ module CodePraise
                 config: Api.config
               )
 
+              # Never appraise
+              if etag_value.nil?
+                etag_value = Base64.encode64(request_id.to_s)
+                redis.set(etag_key, etag_value)
+              end
+              response['Etag'] = etag_value
               Representer::For.new(result).status_and_body(response)
             end
 
@@ -73,7 +91,11 @@ module CodePraise
                 request_id: request_id,
                 config: Api.config
               )
-              response.expires 0, public: true
+
+              redis = CodePraise::Cache::Client.new(CodePraise::Api.config)
+              etag_key = "#{owner_name}_#{project_name}_etag"
+              etag_value = Base64.encode64(request_id.to_s)
+              redis.set(etag_key, etag_value)
               Representer::For.new(result).status_and_body(response)
             end
           end

@@ -21,6 +21,8 @@ module CodePraise
         created: 201,
         processing: 202,
 
+        not_modified: 304,
+
         forbidden: 403,
         not_found: 404,
         bad_request: 400,
