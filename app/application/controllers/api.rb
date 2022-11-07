@@ -34,16 +34,18 @@ module CodePraise
           routing.on String, String do |owner_name, project_name|
             # GET /projects/{owner_name}/{project_name}[/folder_namepath/]
             routing.get do
-              Cache::Control.new(response).turn_on if Env.new(Api).production?
+              cache_control = Cache::Control.new(response)
+              cache_control.turn_on if Env.new(Api).production?
+              if cache_control.on?
+                if_none_match = request.env['HTTP_IF_NONE_MATCH']
+                redis = CodePraise::Cache::Client.new(CodePraise::Api.config)
+                etag_key = "#{owner_name}_#{project_name}_etag"
+                etag_value = redis.get(etag_key)
 
-              if_none_match = request.env['HTTP_IF_NONE_MATCH']
-              redis = CodePraise::Cache::Client.new(CodePraise::Api.config)
-              etag_key = "#{owner_name}_#{project_name}_etag"
-              etag_value = redis.get(etag_key)
-
-              if !if_none_match.nil? && !etag_value.nil? && if_none_match == etag_value
-                response.status = 304
-                return response.to_json
+                if !if_none_match.nil? && !etag_value.nil? && if_none_match == etag_value
+                  response.status = 304
+                  return response.to_json
+                end
               end
 
               request_id = [request.env, request.path, Time.now.to_f].hash
@@ -59,11 +61,13 @@ module CodePraise
               )
 
               # Never appraise
-              if etag_value.nil?
-                etag_value = Base64.encode64(request_id.to_s)
-                redis.set(etag_key, etag_value)
+              if cache_control.on?
+                if etag_value.nil?
+                  etag_value = Base64.encode64(request_id.to_s)
+                  redis.set(etag_key, etag_value)
+                end
+                response['Etag'] = etag_value
               end
-              response['Etag'] = etag_value
               Representer::For.new(result).status_and_body(response)
             end
 
