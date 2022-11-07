@@ -25,6 +25,10 @@ module CodePraise
       def wipe
         keys.each { |key| @redis.del(key) }
       end
+
+      def quit
+        @redis.quit
+      end
     end
   end
 end
