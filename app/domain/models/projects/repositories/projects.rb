@@ -50,7 +50,12 @@ module CodePraise
       end
 
       def self.create(entity)
-        raise 'Project already exists' if find(entity)
+        if find(entity) && !find_full_name(entity.owner.username, entity.name)
+          PersistProject.new(entity).update_project
+          entity = find(entity)
+        elsif find(entity)
+          raise 'Project already exists'
+        end
 
         db_project = PersistProject.new(entity).call
         rebuild_entity(db_project)
@@ -75,6 +80,13 @@ module CodePraise
 
         def create_project
           Database::ProjectOrm.create(@entity.to_attr_hash)
+        end
+
+        def update_project
+          Database::ProjectOrm.where(origin_id: @entity.origin_id)
+                              .update(name: @entity.name,
+                                      ssh_url: @entity.ssh_url,
+                                      http_url: @entity.http_url)
         end
 
         def call
