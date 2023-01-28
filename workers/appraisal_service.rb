@@ -48,8 +48,6 @@ module Appraisal
         .new(@project, folder_contributions, commit_contributions)
       @reporter.publish(CloneMonitor.progress('Appraised'), 'appraised', @request_id)
       @gitrepo.delete
-    rescue StandardError => e
-      puts e.full_message
     end
 
     def store_appraisal_cache
