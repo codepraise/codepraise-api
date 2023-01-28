@@ -47,7 +47,7 @@ module CodePraise
 
     def clone_locally
       raise Errors::TooLargeToClone if too_large?
-      raise Errors::CannotOverwriteLocalGitRepo if exists_locally?
+      @local.delete if exists_locally?
 
       @local.clone_remote { |line| yield line if block_given? }
     end
