@@ -48,7 +48,7 @@ gem 'mongo', '~> 2.17'
 
 # QUALITY
 gem 'flog', '~> 4.6'
-gem 'rubocop', '~> 1.23'
+gem 'rubocop', '~> 1.39'
 gem 'rubocop-performance', '~> 1.12'
 
 # Switcher
