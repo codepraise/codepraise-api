@@ -18,6 +18,8 @@ module CodePraise
       attribute :http_url,      Strict::String
       attribute :owner,         Member
       attribute :contributors,  Strict::Array.of(Member)
+      attribute :lifetime,      Strict::Integer
+      attribute :age,           Strict::Integer
 
       def fullname
         "#{owner.username}/#{name}"

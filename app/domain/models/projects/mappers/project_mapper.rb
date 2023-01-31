@@ -39,7 +39,9 @@ module CodePraise
             ssh_url: ssh_url,
             http_url: http_url,
             owner: owner,
-            contributors: contributors
+            contributors: contributors,
+            lifetime: lifetime,
+            age: age
           )
         end
 
@@ -69,6 +71,14 @@ module CodePraise
 
         def contributors
           @member_mapper.load_several(@data['contributors_url'])
+        end
+
+        def lifetime
+          (DateTime.parse(@data['updated_at']) - DateTime.parse(@data['created_at'])).to_i
+        end
+
+        def age
+          (DateTime.now - DateTime.parse(@data['created_at'])).to_i
         end
       end
     end

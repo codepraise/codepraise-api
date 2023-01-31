@@ -13,6 +13,8 @@ Sequel.migration do
       String      :ssh_url
       String      :http_url
       Integer     :size
+      Integer     :lifetime
+      Integer     :age
 
       DateTime :created_at
       DateTime :updated_at
