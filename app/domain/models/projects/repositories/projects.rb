@@ -61,6 +61,10 @@ module CodePraise
         rebuild_entity(db_project)
       end
 
+      def self.update(entity)
+        PersistProject.new(entity).update_project
+      end
+
       def self.rebuild_entity(db_record)
         return nil unless db_record
 
@@ -86,7 +90,13 @@ module CodePraise
           Database::ProjectOrm.where(origin_id: @entity.origin_id)
                               .update(name: @entity.name,
                                       ssh_url: @entity.ssh_url,
-                                      http_url: @entity.http_url)
+                                      http_url: @entity.http_url,
+                                      lifetime: @entity.lifetime,
+                                      contributors: @entity.contributors,
+                                      age: @entity.age,
+                                      issues: @entity.issues,
+                                      pulls: @entity.pulls,
+                                      downloads: @entity.downloads)
         end
 
         def call

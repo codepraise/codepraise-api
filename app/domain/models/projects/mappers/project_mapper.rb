@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'member_mapper.rb'
+require 'rubygems'
+require 'gems'
 
 module CodePraise
   module Github
@@ -58,7 +60,8 @@ module CodePraise
             lifetime: lifetime,
             age: age,
             issues: @issues[0],
-            pulls: @issues[1]
+            pulls: @issues[1],
+            downloads: downloads
           )
         end
 
@@ -96,6 +99,12 @@ module CodePraise
 
         def age
           (DateTime.now - DateTime.parse(@data['created_at'])).to_i
+        end
+
+        def downloads
+          return 0 if Gems.search(name).empty?
+
+          Gems.total_downloads(name)[:total_downloads]
         end
       end
     end

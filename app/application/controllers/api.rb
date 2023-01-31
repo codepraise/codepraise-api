@@ -92,6 +92,10 @@ module CodePraise
                 owner_name, project_name, request
               )
 
+              Service::UpdateProject.new.call(
+                owner_name: owner_name, project_name: project_name
+              )
+
               result = Service::AppraiseProject.new.call(
                 requested: path_request,
                 request_id: request_id,
