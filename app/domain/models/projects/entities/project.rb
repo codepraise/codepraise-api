@@ -22,6 +22,7 @@ module CodePraise
       attribute :age,           Strict::Integer
       attribute :issues,        Strict::Integer
       attribute :pulls,         Strict::Integer
+      attribute :downloads,     Strict::Integer
 
       def fullname
         "#{owner.username}/#{name}"

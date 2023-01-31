@@ -17,6 +17,7 @@ Sequel.migration do
       Integer     :age
       Integer     :issues
       Integer     :pulls
+      Integer     :downloads
 
       DateTime :created_at
       DateTime :updated_at

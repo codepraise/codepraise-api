@@ -91,6 +91,7 @@ gem 'rack-test' # can also be used to diagnose production
 gem 'pry', '~> 0.14'
 gem 'rake', '~> 13.0'
 gem 'travis', '~> 1.10'
+gem 'gems'
 
 group :development, :test do
   gem 'rerun', '~> 0.13'
