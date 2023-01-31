@@ -26,6 +26,10 @@ module CodePraise
         Request.new(@gh_token).commits(username, project_name).parse
       end
 
+      def git_repo_issues(username, project_name)
+        Request.new(@gh_token).issues(username, project_name).parse
+      end
+
       # Sends out HTTP requests to Github
       class Request
         ENDPOINT = 'https://api.github.com/'
@@ -44,6 +48,10 @@ module CodePraise
 
         def contributors(username, project_name)
           get(ENDPOINT + 'repos/' + [username, project_name].join('/') + '/contributors')
+        end
+
+        def issues(username, project_name)
+          get(ENDPOINT + 'repos/' + [username, project_name].join('/') + '/issues?state=all')
         end
 
         def get(url)

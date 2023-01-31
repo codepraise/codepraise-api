@@ -20,6 +20,8 @@ module CodePraise
       attribute :contributors,  Strict::Array.of(Member)
       attribute :lifetime,      Strict::Integer
       attribute :age,           Strict::Integer
+      attribute :issues,        Strict::Integer
+      attribute :pulls,         Strict::Integer
 
       def fullname
         "#{owner.username}/#{name}"

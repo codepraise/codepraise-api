@@ -15,6 +15,8 @@ Sequel.migration do
       Integer     :size
       Integer     :lifetime
       Integer     :age
+      Integer     :issues
+      Integer     :pulls
 
       DateTime :created_at
       DateTime :updated_at

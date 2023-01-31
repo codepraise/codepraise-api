@@ -14,20 +14,35 @@ module CodePraise
 
       def find(owner_name, project_name)
         data = @gateway.git_repo_data(owner_name, project_name)
-        build_entity(data)
+        issues = @gateway.git_repo_issues(owner_name, project_name)
+        build_entity(data, issues)
       end
 
-      def build_entity(data)
-        DataMapper.new(data, @token, @gateway_class).build_entity
+      def build_entity(data, issues)
+        DataMapper.new(data, issues, @token, @gateway_class).build_entity
       end
 
       # Extracts entity specific elements from data structure
       class DataMapper
-        def initialize(data, token, gateway_class)
+        def initialize(data, issues, token, gateway_class)
           @data = data
+          @issues = count_issues(issues)
           @member_mapper = MemberMapper.new(
             token, gateway_class
           )
+        end
+
+        def count_issues(issues)
+          @issue_count = 0
+          @pull_count = 0
+          issues.each do |issue|
+            if issue['node_id'].include? 'PR_'
+              @pull_count += 1
+            else
+              @issue_count += 1
+            end
+          end
+          [@issue_count, @pull_count]
         end
 
         def build_entity
@@ -41,7 +56,9 @@ module CodePraise
             owner: owner,
             contributors: contributors,
             lifetime: lifetime,
-            age: age
+            age: age,
+            issues: @issues[0],
+            pulls: @issues[1]
           )
         end
 
