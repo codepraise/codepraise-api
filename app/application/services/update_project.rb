@@ -25,7 +25,6 @@ module CodePraise
       end
 
       def update_project(input)
-        binding.irb
         project = Repository::For.entity(input[:project]).update(input[:project])
 
 

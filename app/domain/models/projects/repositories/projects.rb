@@ -87,16 +87,21 @@ module CodePraise
         end
 
         def update_project
-          Database::ProjectOrm.where(origin_id: @entity.origin_id)
-                              .update(name: @entity.name,
-                                      ssh_url: @entity.ssh_url,
-                                      http_url: @entity.http_url,
-                                      lifetime: @entity.lifetime,
-                                      contributors: @entity.contributors,
-                                      age: @entity.age,
-                                      issues: @entity.issues,
-                                      pulls: @entity.pulls,
-                                      downloads: @entity.downloads)
+          db_project = Database::ProjectOrm.where(origin_id: @entity.origin_id)
+          db_project.update(name: @entity.name,
+                            ssh_url: @entity.ssh_url,
+                            http_url: @entity.http_url,
+                            lifetime: @entity.lifetime,
+                            age: @entity.age,
+                            issues: @entity.issues,
+                            pulls: @entity.pulls,
+                            downloads: @entity.downloads)
+
+          @entity.contributors.each do |contributor|
+            unless Members.find_username(contributor.username)
+              db_project.add_contributor(Members.find_or_create(contributor))
+            end
+          end
         end
 
         def call

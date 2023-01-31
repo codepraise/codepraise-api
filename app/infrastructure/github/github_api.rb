@@ -27,7 +27,14 @@ module CodePraise
       end
 
       def git_repo_issues(username, project_name)
-        Request.new(@gh_token).issues(username, project_name).parse
+        request = Request.new(@gh_token).issues(username, project_name)
+        result = request.parse
+        pages = request['Link'].scan(/<(https?:\/\/[\S]+)>/)
+        pages.each do |page_url|
+          result += Request.new(@gh_token).get(page_url.first).parse
+        end
+        
+        result
       end
 
       # Sends out HTTP requests to Github
