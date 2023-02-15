@@ -9,3 +9,4 @@ coverage/.resultset.json.lock
 _snippets/
 _cache/
 .idea/
+log/*.log

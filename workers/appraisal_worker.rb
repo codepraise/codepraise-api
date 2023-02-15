@@ -7,6 +7,8 @@ require_relative 'cache_state.rb'
 require_relative 'appraisal_service'
 require 'figaro'
 require 'shoryuken'
+require 'json'
+require 'ostruct'
 
 MUTEX = Mutex.new
 
@@ -23,6 +25,18 @@ module Appraisal
       Figaro.env
     end
 
+    def self.environment
+      ENV['RACK_ENV'] || 'development'
+    end
+
+    def self.logger
+      file = 'log/logs.log'
+      File.new(file, 'w+') unless File.exist?(file)
+      log_file = File.open(file, 'a')
+
+      Logger.new(log_file)
+    end
+
     Shoryuken.sqs_client = Aws::SQS::Client.new(
       access_key_id: config.AWS_ACCESS_KEY_ID,
       secret_access_key: config.AWS_SECRET_ACCESS_KEY,
@@ -32,9 +46,12 @@ module Appraisal
     include Shoryuken::Worker
     # Shoryuken.sqs_client_receive_message_opts = { max_number_of_messages: 1 }
 
-    shoryuken_options queue: config.CLONE_QUEUE_URL, auto_visibility_timeout: true
+    shoryuken_options queue: config.CLONE_QUEUE_URL, auto_visibility_timeout: true, retry: 3
 
     def perform(sqs_msg, request)
+      @url = JSON.parse(request, object_class: OpenStruct).project.http_url
+      puts "Project: #{@url}"
+
       project, reporter, request_id, update = setup_job(request)
       gitrepo = CodePraise::GitRepo.new(project, Worker.config)
       service = Service.new(project, reporter, gitrepo, request_id)
@@ -73,8 +90,12 @@ module Appraisal
       end
 
       sqs_msg.delete
-    rescue => e
-      puts e.full_message
+    rescue StandardError => e
+      error_message = "Exception: #{@url}\n Message: #{e.full_message}"
+      puts error_message
+      # Worker.logger.error(error_message) unless Worker.environment == 'production'
+
+      sqs_msg.change_visibility(visibility_timeout: 0)
       cache_state.back(gitrepo)
     end
 
