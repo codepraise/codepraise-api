@@ -32,12 +32,17 @@ end
 namespace :run do
   desc 'Run API server in development mode'
   task :development do
-    sh 'puma config.ru -p 9090'
+    sh 'bundle exec puma config.ru -p 9090'
   end
 
   desc 'Run API server in test mode'
   task :test do
-    sh 'RACK_ENV=test puma config.ru -p 9090'
+    sh 'RACK_ENV=test bundle exec puma config.ru -p 9090'
+  end
+
+  desc 'Run API server in data mode'
+  task :data do
+    sh 'RACK_ENV=data bundle exec puma config.ru -p 9090'
   end
 end
 
@@ -100,8 +105,8 @@ namespace :worker do
       sh 'RACK_ENV=production bundle exec shoryuken -r ./workers/appraisal_worker.rb -C ./workers/shoryuken.yml'
     end
 
-    task :container => :config do
-      sh 'RACK_ENV=container bundle exec shoryuken -r ./workers/appraisal_worker.rb -C ./workers/shoryuken_dev.yml'
+    task :data => :config do
+      sh 'RACK_ENV=data bundle exec shoryuken -r ./workers/appraisal_worker.rb -C ./workers/shoryuken_data.yml'
     end
   end
 end
