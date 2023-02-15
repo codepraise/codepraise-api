@@ -24,7 +24,7 @@ module CodePraise
       end
     end
 
-    configure :development, :test, :container do
+    configure :development, :test, :data do
       require 'pry'
 
       Mongo::Logger.logger.level = Logger::FATAL
@@ -35,12 +35,12 @@ module CodePraise
       end
     end
 
-    configure :development, :test, :app_test do
+    configure :development, :test, :data do
       ENV['MONGODB_URI'] = 'mongodb://' + config.MONGO_URL
     end
 
-    configure :development do
-      puts 'RUNNING IN DEVELOPMENT MODE'
+    configure :development, :data do
+      puts 'RUNNING IN DEVELOPMENT OR DATA MODE'
       Mongo::Logger.logger.level = Logger::FATAL
 
       use Rack::Cache,

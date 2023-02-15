@@ -25,6 +25,7 @@ module CodePraise
         input[:project] = Repository::For.klass(Entity::Project).find_full_name(
           input[:requested].owner_name, input[:requested].project_name
         )
+
         if input[:project]
           Success(input)
         else
@@ -39,9 +40,8 @@ module CodePraise
         project_name = input[:requested].project_name
         appraisal = Repository::Appraisal.find_by(owner_name: owner_name,
                                                   project_name: project_name)
-        # binding.irb
+
         if !appraisal.nil? && appraisal.appraised? && !input[:requested].update?
-          # binding.irb
           Failure(Value::Result.new(status: :ok,
                                     message: appraisal))
         else
@@ -82,10 +82,8 @@ module CodePraise
         queues = [Api.config.CLONE_QUEUE_URL]
 
         queues.each do |queue_url|
-          Concurrent::Promise.execute do
-            Messaging::Queue.new(queue_url, Api.config)
-              .send(clone_request_json(input))
-          end
+          Messaging::Queue.new(queue_url, Api.config)
+            .send(clone_request_json(input))
         end
       end
     end

@@ -5,7 +5,7 @@ module CodePraise
     # Parse the file changes from git diff information
     module CommitDiff
       def self.parser(diff)
-        diff_files = diff.stats[:files]
+        diff_files = diff.stats[:files].reject { |k, _| k.nil? }
         diff_files.keys.map do |key|
           {
             path: key,

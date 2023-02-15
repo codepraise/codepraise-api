@@ -7,7 +7,7 @@ module CodePraise
     # Find all method in a file
     module MethodParser
       def self.parse_methods(line_entities)
-        ast = Parser::CurrentRuby.parse(line_of_code(line_entities))
+        ast = Parser::CurrentRuby.parse(line_of_code(line_entities).dump)
         all_methods_hash(ast, line_entities)
       end
 

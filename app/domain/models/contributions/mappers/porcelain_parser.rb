@@ -16,7 +16,6 @@ module CodePraise
         header_code = output.force_encoding('UTF-8').split(CODE_LINE_REGEX)
         header_code.each_slice(2).map(&:join)
       rescue StandardError => e
-        puts "OUTPUT: #{output}"
         raise 'git blame line parsing failed'
       end
 

@@ -37,6 +37,9 @@ module Appraisal
       @gitrepo.clone_locally do |line|
         @reporter.publish(CloneMonitor.progress(line), 'cloning', @request_id)
       end
+
+      rubocop_config = "app/infrastructure/git/repostore/#{@gitrepo.id}/.rubocop.yml"
+      File.delete(rubocop_config) if File.exist?(rubocop_config)
     end
 
     def appraise_project
@@ -73,8 +76,6 @@ module Appraisal
           @representer = representer
           JSON.parse(representer.to_json)
         end
-    rescue StandardError => e
-      puts e.full_message
     end
 
     def each_second(seconds)
