@@ -13,13 +13,16 @@ module CodePraise
       end
 
       def build_entity
+        all_comments = comments
+
         Entity::FileContributions.new(
           file_path: filename,
           lines: contributions,
           complexity: complexity,
           idiomaticity: idiomaticity,
           methods: methods,
-          comments: comments,
+          comments: all_comments,
+          readability: readability(all_comments),
           test_cases: test_cases,
           commits_count: commits_count,
           test_coverage: test_coverage
@@ -67,6 +70,13 @@ module CodePraise
         return [] unless ruby_file?
 
         Comments.new(contributions).build_entities
+      end
+
+      def readability(comments)
+        doc_comments = comments.select(&:is_documentation)
+        return 0 if doc_comments.empty?
+
+        doc_comments.map(&:readability).sum / doc_comments.length.to_f
       end
 
       def test_cases

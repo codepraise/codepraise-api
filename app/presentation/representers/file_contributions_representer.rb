@@ -37,6 +37,7 @@ module CodePraise
       property :complexity, extend: Representer::Complexity, class: OpenStruct
       property :idiomaticity, extend: Representer::Idiomaticity, class: OpenStruct
       collection :comments, extend: Representer::Comment, class: OpenStruct
+      property :readability
       collection :test_cases, extend: Representer::TestCase, class: OpenStruct
       # ownership information
       property :line_percentage

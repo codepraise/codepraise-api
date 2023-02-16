@@ -12,6 +12,7 @@ module CodePraise
 
       attribute :lines, Strict::Array.of(Entity::LineContribution)
       attribute :is_documentation, Strict::Bool
+      attribute :readability, Coercible::Float
 
       def type
         if lines.size >= MULTILINE
