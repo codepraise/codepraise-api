@@ -11,6 +11,7 @@ module CodePraise
 
       attribute :offenses, Strict::Array.of(Entity::Offense).optional
       attribute :offense_ratio, Strict::Float
+      attribute :cyclomatic_complexity, Strict::Integer
 
       def offense_count
         offenses.length

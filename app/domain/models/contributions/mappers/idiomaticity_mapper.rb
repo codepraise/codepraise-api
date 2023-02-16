@@ -12,9 +12,15 @@ module CodePraise
       def build_entity(file_path, file_contributions)
         offenses = offenses(file_path, file_contributions)
 
+        cyclomatic_complexity = offenses.select { |offense| offense.type == 'Metrics/CyclomaticComplexity' }
+                                        .map { |entity| entity.message.match(/\[(\d+)\//)&.captures&.first.to_i || 0 }
+                                        .reduce(0, :+)
+        offenses = offenses.reject { |offense| offense.type.include? 'Metrics/' }
+
         Entity::Idiomaticity.new(
           offenses: offenses,
-          offense_ratio: offense_ratio(offenses, file_contributions)
+          offense_ratio: offense_ratio(offenses, file_contributions),
+          cyclomatic_complexity: cyclomatic_complexity
         )
       end
 
