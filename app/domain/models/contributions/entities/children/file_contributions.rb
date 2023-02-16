@@ -12,15 +12,16 @@ module CodePraise
       EXTENSION_REGEX = /#{DOT}(#{WANTED_EXTENSION})#{LINE_END}/.freeze
 
       attr_reader :file_path, :lines, :complexity, :idiomaticity, :methods,
-                  :comments, :test_cases, :commits_count, :test_coverage
+                  :comments, :readability, :test_cases, :commits_count, :test_coverage
 
-      def initialize(file_path:, lines:, complexity:, idiomaticity:, methods:, comments:, test_cases:, commits_count:, test_coverage:)
+      def initialize(file_path:, lines:, complexity:, idiomaticity:, methods:, comments:, readability:, test_cases:, commits_count:, test_coverage:)
         @file_path = Value::FilePath.new(file_path)
         @lines = lines
         @complexity = complexity
         @idiomaticity = idiomaticity
         @methods = methods
         @comments = comments
+        @readability = readability
         @test_cases = test_cases
         @commits_count = commits_count
         @test_coverage = test_coverage

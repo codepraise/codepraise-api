@@ -12,6 +12,7 @@ module CodePraise
 
       property :type
       property :is_documentation
+      property :readability
       property :contributors
     end
   end
