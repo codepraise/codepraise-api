@@ -18,6 +18,7 @@ module CodePraise
       end
 
       def email_id
+        return 'unknown' if email.nil? || email.empty?
         email.split('@').first.delete('.')
       end
 
