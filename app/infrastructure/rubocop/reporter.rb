@@ -10,7 +10,7 @@ module CodePraise
       def initialize(git_repo_path)
         @command = Command.new
           .target(git_repo_path)
-          .except('Metrics')
+          .except('')
           .format('json')
       end
 

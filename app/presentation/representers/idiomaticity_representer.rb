@@ -12,6 +12,7 @@ module CodePraise
       include Roar::JSON
 
       property :offense_ratio
+      property :cyclomatic_complexity
       property :level
       property :offense_count
       collection :offenses, extend: Representer::Offense, class: OpenStruct

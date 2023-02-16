@@ -44,7 +44,10 @@ module CodePraise
       private
 
       def options
-        "--except #{@except.join(',')} -f #{@format}"
+        option = "-f #{@format}"
+        except = @except.join(',')
+        option += " --except #{except}" unless except.empty?
+        option
       end
     end
   end
