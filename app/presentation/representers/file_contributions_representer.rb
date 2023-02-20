@@ -9,6 +9,7 @@ require_relative 'file_path_representer'
 require_relative 'line_contribution_representer'
 require_relative 'complexity_representer'
 require_relative 'idiomaticity_representer'
+require_relative 'code_smell_representer'
 require_relative 'method_contributions_representer'
 require_relative 'comment_representer'
 require_relative 'test_case_representer'
@@ -36,6 +37,7 @@ module CodePraise
       property :test_coverage, extend: Representer::TestCoverage, class: OpenStruct
       property :complexity, extend: Representer::Complexity, class: OpenStruct
       property :idiomaticity, extend: Representer::Idiomaticity, class: OpenStruct
+      property :code_smells, extend: Representer::CodeSmell, class: OpenStruct
       collection :comments, extend: Representer::Comment, class: OpenStruct
       property :readability
       collection :test_cases, extend: Representer::TestCase, class: OpenStruct

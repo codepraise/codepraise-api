@@ -6,7 +6,7 @@ require 'roar/json'
 module CodePraise
   module Representer
     # Represent idiomaticity offense information
-    class Offense < Roar::Decorator
+    class RubocopOffense < Roar::Decorator
       include Roar::JSON
 
       property :type

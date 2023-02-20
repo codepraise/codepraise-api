@@ -32,7 +32,7 @@ module CodePraise
         return [] if idiomaticity_result.nil?
 
         idiomaticity_result.map do |offense_hash|
-          Entity::Offense.new(
+          Entity::RubocopOffense.new(
             type: offense_hash['cop_name'],
             message: offense_hash['message'],
             location: offense_hash['location'].slice('start_line', 'last_line'),

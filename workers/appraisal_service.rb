@@ -40,6 +40,9 @@ module Appraisal
 
       rubocop_config = "app/infrastructure/git/repostore/#{@gitrepo.id}/.rubocop.yml"
       File.delete(rubocop_config) if File.exist?(rubocop_config)
+
+      reek_config = "app/infrastructure/git/repostore/#{@gitrepo.id}/.reek.yml"
+      File.delete(reek_config) if File.exist?(reek_config)
     end
 
     def appraise_project

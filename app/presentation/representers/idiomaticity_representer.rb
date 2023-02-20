@@ -3,7 +3,7 @@
 require 'roar/decorator'
 require 'roar/json'
 
-require_relative 'offense_representer'
+require_relative 'rubocop_offense_representer'
 
 module CodePraise
   module Representer
@@ -15,7 +15,7 @@ module CodePraise
       property :cyclomatic_complexity
       property :level
       property :offense_count
-      collection :offenses, extend: Representer::Offense, class: OpenStruct
+      collection :offenses, extend: Representer::RubocopOffense, class: OpenStruct
     end
   end
 end
