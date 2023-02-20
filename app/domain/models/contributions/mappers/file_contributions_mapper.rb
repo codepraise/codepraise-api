@@ -4,10 +4,11 @@ module CodePraise
   module Mapper
     # Summarizes a single file's contributions by team members
     class FileContributions
-      def initialize(file_report, repo_path, idiomaticity_mapper, commits, test_coverage_mapper)
+      def initialize(file_report, repo_path, idiomaticity_mapper, code_smell_mapper, commits, test_coverage_mapper)
         @file_report = file_report
         @repo_path = repo_path
         @idiomaticity_mapper = idiomaticity_mapper
+        @code_smell_mapper = code_smell_mapper
         @test_coverage_mapper = test_coverage_mapper
         @commits = commits
       end
@@ -20,6 +21,7 @@ module CodePraise
           lines: contributions,
           complexity: complexity,
           idiomaticity: idiomaticity,
+          code_smells: code_smells,
           methods: methods,
           comments: all_comments,
           readability: readability(all_comments),
@@ -49,6 +51,12 @@ module CodePraise
         return nil unless ruby_file?
 
         @idiomaticity_mapper.build_entity(file_path, contributions)
+      end
+
+      def code_smells
+        return nil unless ruby_file?
+
+        @code_smell_mapper.build_entity(file_path, contributions)
       end
 
       def test_coverage

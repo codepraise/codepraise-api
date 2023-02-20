@@ -15,6 +15,8 @@ module CodePraise
         @contributions_reports = contributions_reports
         @repo_path = repo_path
         @idiomaticity_mapper = Mapper::Idiomaticity.new(repo_path)
+        @code_smell_mapper = Mapper::CodeSmell.new(repo_path)
+        @code_smell_mapper = Mapper::CodeSmell.new(repo_path)
         @test_coverage_mapper = Mapper::TestCoverage.new(repo_path)
         @commits = commits
       end
@@ -31,6 +33,7 @@ module CodePraise
         @contributions_reports.map do |file_report|
           Mapper::FileContributions.new(file_report, @repo_path,
                                         @idiomaticity_mapper,
+                                        @code_smell_mapper,
                                         @commits,
                                         @test_coverage_mapper).build_entity
         end

@@ -2,16 +2,15 @@
 
 require 'dry-types'
 require 'dry-struct'
-require_relative 'rubocop_offense'
+require_relative 'reek_offense'
 
 module CodePraise
   module Entity
-    class Idiomaticity < Dry::Struct
+    class CodeSmell < Dry::Struct
       include Dry.Types
 
-      attribute :offenses, Strict::Array.of(Entity::RubocopOffense).optional
+      attribute :offenses, Strict::Array.of(Entity::ReekOffense).optional
       attribute :offense_ratio, Strict::Float
-      attribute :cyclomatic_complexity, Strict::Integer
 
       def offense_count
         offenses.length

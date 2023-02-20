@@ -5,7 +5,7 @@ require 'dry-struct'
 
 module CodePraise
   module Entity
-    class Offense < Dry::Struct
+    class RubocopOffense < Dry::Struct
       include Dry.Types
 
       attribute :type,         Strict::String

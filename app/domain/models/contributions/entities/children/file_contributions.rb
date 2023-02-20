@@ -11,14 +11,15 @@ module CodePraise
       WANTED_EXTENSION = %w[rb js css html slim md coffee].join('|')
       EXTENSION_REGEX = /#{DOT}(#{WANTED_EXTENSION})#{LINE_END}/.freeze
 
-      attr_reader :file_path, :lines, :complexity, :idiomaticity, :methods,
+      attr_reader :file_path, :lines, :complexity, :idiomaticity, :code_smells, :methods,
                   :comments, :readability, :test_cases, :commits_count, :test_coverage
 
-      def initialize(file_path:, lines:, complexity:, idiomaticity:, methods:, comments:, readability:, test_cases:, commits_count:, test_coverage:)
+      def initialize(file_path:, lines:, complexity:, idiomaticity:, code_smells:, methods:, comments:, readability:, test_cases:, commits_count:, test_coverage:)
         @file_path = Value::FilePath.new(file_path)
         @lines = lines
         @complexity = complexity
         @idiomaticity = idiomaticity
+        @code_smells = code_smells
         @methods = methods
         @comments = comments
         @readability = readability
