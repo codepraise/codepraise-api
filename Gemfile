@@ -50,6 +50,7 @@ gem 'mongo', '~> 2.17'
 gem 'flog', '~> 4.6'
 gem 'rubocop', '~> 1.39'
 gem 'rubocop-performance', '~> 1.12'
+gem 'reek', '~> 6.0'
 
 # Switcher
 gem 'flipper-mongo'
@@ -57,7 +58,6 @@ gem 'flipper-mongo'
 group :development, :test do
   gem 'database_cleaner', '~> 2.0'
   gem 'factory_bot', '~> 6.2'
-  gem 'reek', '~> 6.0'
   gem 'sqlite3', '~> 1.4'
 end
 
