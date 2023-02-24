@@ -46,6 +46,11 @@ module CodePraise
         find_id(appraisal_odm.id)
       end
 
+      def self.delete(data)
+        appraisal_odm = Database::AppraisalOdm.find(data).first
+        appraisal_odm.delete
+      end
+
       def self.build_entity(odm)
         return nil unless odm
 
