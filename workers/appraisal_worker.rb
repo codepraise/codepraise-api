@@ -95,8 +95,9 @@ module Appraisal
       puts error_message
       # Worker.logger.error(error_message) unless Worker.environment == 'production'
 
+      data = { 'project_name': project.name, 'owner_name': project.owner.username }
+      CodePraise::Repository::Appraisal.delete(data)
       sqs_msg.change_visibility(visibility_timeout: 0)
-      cache_state.back(gitrepo)
     end
 
     private

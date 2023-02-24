@@ -52,6 +52,10 @@ module CodePraise
         credit_share.contributors
       end
 
+      def lines_count
+        @lines.count
+      end
+
       private
 
       def ruby_file?
