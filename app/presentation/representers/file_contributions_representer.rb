@@ -34,6 +34,7 @@ module CodePraise
       property :total_documentation
       property :has_documentation
       property :commits_count
+      property :lines_count
       property :test_coverage, extend: Representer::TestCoverage, class: OpenStruct
       property :complexity, extend: Representer::Complexity, class: OpenStruct
       property :idiomaticity, extend: Representer::Idiomaticity, class: OpenStruct
