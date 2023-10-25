@@ -1,2 +1,2 @@
 queues:
-  - https://sqs.ap-northeast-1.amazonaws.com/105441826549/codepraise-api-dev
+  - https://sqs.us-east-1.amazonaws.com/776863923358/Codepraise_dev
