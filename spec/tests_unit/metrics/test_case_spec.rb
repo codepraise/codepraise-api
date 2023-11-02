@@ -23,7 +23,6 @@ describe CodePraise::Entity::TestCase do
   describe '#message' do
     it 'show the message of this test' do
       _(@test_cases[0].message).must_be_kind_of String
-      binding.pry
     end
   end
 end

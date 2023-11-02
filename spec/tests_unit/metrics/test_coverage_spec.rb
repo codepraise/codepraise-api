@@ -17,9 +17,6 @@ describe CodePraise::Entity::TestCase do
     DatabaseHelper.wipe_database
   end
 
-  it 'debugging' do
-    binding.pry
-  end
   # describe '#coverage_report' do
   #   it 'receive file path as parameter and report the test coverage of file' do
   #     file = @measurement_helper.file

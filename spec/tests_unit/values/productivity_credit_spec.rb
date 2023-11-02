@@ -13,15 +13,9 @@ describe CodePraise::Value::ProductivityCredit do
     @file = @measurement_helper.file
     @productivity_credit = CodePraise::Value::ProductivityCredit
       .build_object(@file.lines, @file.methods)
-    binding.pry
   end
 
   after do
     DatabaseHelper.wipe_database
-  end
-
-  describe '' do
-    it '' do
-    end
   end
 end

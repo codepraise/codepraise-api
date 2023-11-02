@@ -37,7 +37,6 @@ describe 'File-Level Measurement' do
 
     it 'should sum all credit in a folder' do
       total_credit_share = @folder_contributions.credit_share
-      binding.pry
       total_complexity_credits = @folder_contributions.files.map do |file|
         file.credit_share.quality_credit.complexity_credits.values
       end.flatten.sum

@@ -13,19 +13,9 @@ describe CodePraise::Value::QualityCredit do
     @file = @measurement_helper.test_files[2]
     @quality_credits = CodePraise::Value::QualityCredit
       .build_object(@file.complexity, @file.idiomaticity, @file.comments, @file.test_cases)
-    binding.pry
   end
 
   after do
     DatabaseHelper.wipe_database
-  end
-
-  it '' do
-
-  end
-
-  describe '#complexity' do
-  end
-  describe '#idiomaticity' do
   end
 end

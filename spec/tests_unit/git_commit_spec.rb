@@ -11,13 +11,10 @@ describe GitCommit::CommitReporter do
   before do
     @measurement_helper = MeasurementHelper.setup
     @commit_reporter = GitCommit::CommitReporter.new(@measurement_helper.git_repo)
-    binding.pry
   end
 
   after do
     DatabaseHelper.wipe_database
   end
 
-  it '' do
-  end
 end

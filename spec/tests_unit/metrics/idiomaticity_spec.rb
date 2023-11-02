@@ -20,10 +20,6 @@ describe CodePraise::Entity::Complexity do
     DatabaseHelper.wipe_database
   end
 
-  it 'debuging' do
-    binding.pry
-  end
-
   # describe '#offenses' do
   #   it 'collect offense entities' do
   #     _(@idiomaticity.offenses[0]).must_be_kind_of CodePraise::Entity::Offense

@@ -11,15 +11,10 @@ describe CodePraise::Value::OwnershipCredit do
     @measurement_helper = MeasurementHelper.setup
     # @folder = @measurement_helper.folder_contributions
     # @ownership_credits = CodePraise::Value::OwnershipCredit.new(@folder).ownership_credits
-    binding.pry
   end
 
   after do
     DatabaseHelper.wipe_database
   end
 
-  describe '' do
-    it '' do
-    end
-  end
 end
