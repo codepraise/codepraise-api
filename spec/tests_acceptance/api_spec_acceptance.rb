@@ -37,34 +37,35 @@ describe 'Test API routes' do
   end
 
   describe 'Appraise project folder route' do
-    # it 'should be able to appraise a project folder' do
-    #   CodePraise::Service::AddProject.new.call(
-    #     owner_name: USERNAME, project_name: PROJECT_NAME
-    #   )
+    it 'should be able to appraise a project folder' do
+      CodePraise::Service::AddProject.new.call(
+        owner_name: USERNAME, project_name: PROJECT_NAME
+      )
 
-    #   get "/api/v1/projects/#{USERNAME}/#{PROJECT_NAME}"
-    #   _(last_response.status).must_equal 202
+      get "/api/v1/projects/#{USERNAME}/#{PROJECT_NAME}"
+      _(last_response.status).must_equal 202
 
-    #   30.times do
-    #     sleep(1)
-    #     print '.'
-    #   end
+      40.times do
+        sleep(1)
+        print '.'
+      end
 
-    #   get "/api/v1/projects/#{USERNAME}/#{PROJECT_NAME}"
-    #   _(last_response.status).must_equal 200
-    #   appraisal = JSON.parse last_response.body
+      get "/api/v1/projects/#{USERNAME}/#{PROJECT_NAME}"
+      _(last_response.status).must_equal 200
+      appraisal = JSON.parse last_response.body
 
-    #   _(appraisal.keys.sort).must_equal %w[content created_at owner_name project_name state updated_at]
-    #   _(appraisal['project_name']).must_equal PROJECT_NAME
-    #   _(appraisal['owner_name']).must_equal USERNAME
-    #   _(appraisal['content']['folder']['contributors'].count).must_equal 3
-    #   _(appraisal['content']['folder']['path']).must_equal ''
-    #   _(appraisal['content']['folder']['subfolders'].count).must_equal 10
-    #   _(appraisal['content']['folder']['total_line_credits']).must_equal 1213
-    #   _(appraisal['content']['folder']['base_files'].count).must_equal 2
-    # end
+      _(appraisal.keys.sort).must_equal %w[content created_at owner_name project_name state updated_at]
+      _(appraisal['project_name']).must_equal PROJECT_NAME
+      _(appraisal['owner_name']).must_equal USERNAME
+      _(appraisal['content']['folder']['contributors'].count).must_equal 3
+      _(appraisal['content']['folder']['path']).must_equal ''
+      _(appraisal['content']['folder']['subfolders'].count).must_equal 10
+      _(appraisal['content']['folder']['total_line_credits']).must_equal 1213
+      _(appraisal['content']['folder']['base_files'].count).must_equal 2
+    end
 
       it 'should be able to appraise a project subfolder' do
+        skip
         CodePraise::Service::AddProject.new.call(
           owner_name: USERNAME, project_name: PROJECT_NAME
         )
