@@ -40,13 +40,28 @@ describe 'AppraiseProject Service Integration Test' do
         folder_name: ''
       )
 
+      request_id = ['test', Time.now.to_f].hash
+
       appraisal = CodePraise::Service::AppraiseProject.new.call(
         requested: request,
+        request_id: request_id,
         config: CodePraise::Api.config
       ).value!.message
 
+      30.times do
+        sleep(1)
+        print '.'
+      end
+
+      appraisal = CodePraise::Service::AppraiseProject.new.call(
+        requested: request,
+        request_id: request_id,
+        config: CodePraise::Api.config
+      )
+
+      folder = appraisal.failure.message.appraisal["folder"]
+
       # THEN: we should get an appraisal
-      folder = appraisal[:folder]
 
       # _(folder).must_be_kind_of CodePraise::Entity::FolderContributions
       _(folder['subfolders'].count).must_equal 10
