@@ -13,7 +13,6 @@ describe CodePraise::Entity::Complexity do
     @comments = CodePraise::Mapper::Comments
       .new(@measurement_helper.folder_contributions.files[0].lines)
       .build_entities
-    p "######{@comments[0]}#####"
   end
 
   after do

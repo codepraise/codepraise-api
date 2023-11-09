@@ -5,7 +5,6 @@ require 'mongo'
 
 describe CodePraise::Database::AppraisalOdm do
   before do
-    p "#####{CodePraise::Api.config.MONGODB_URL}#####"
     @collection = Mongo::Client.new(CodePraise::Api.config.MONGODB_URL)['appraisals']
     @collection.drop
     @document = { test: 'test' }
