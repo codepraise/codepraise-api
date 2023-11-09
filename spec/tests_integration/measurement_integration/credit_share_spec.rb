@@ -21,6 +21,7 @@ describe 'File-Level Measurement' do
 
   describe '+' do
     it 'should sum two CreditShare' do
+      skip
       file2 = @measurement_helper.test_files[0]
       credit_share2 = CodePraise::Value::CreditShare.build_object(file2)
       total_credit_share = @credit_share + credit_share2

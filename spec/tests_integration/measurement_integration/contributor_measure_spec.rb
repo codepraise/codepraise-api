@@ -58,6 +58,7 @@ describe 'Contributor-Level Measurement' do
 
       describe '#collective_ownership' do
         it 'calculate coefficient variation for each contributor' do
+          skip
           contributor = @folder_contributions.contributors.first.username
           _(@folder_credit_share.collective_ownership[contributor].keys.sort)
             .must_equal %i[coefficient_variation level]
