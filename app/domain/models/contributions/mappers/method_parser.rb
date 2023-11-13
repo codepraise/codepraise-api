@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'parser/current'
+require 'parser/ruby31'
 
 module CodePraise
   module Mapper
     # Find all method in a file
     module MethodParser
       def self.parse_methods(line_entities)
-        ast = Parser::CurrentRuby.parse(line_of_code(line_entities).dump)
+        ast = Parser::Ruby31.parse(line_of_code(line_entities).dump)
         all_methods_hash(ast, line_entities)
       end
 
@@ -49,7 +49,13 @@ module CodePraise
           methods_ast.append(ast)
         else
           ast.children.each do |child_ast|
+            if child_ast.class == String
+              child_ast = Parser::Ruby31.parse(child_ast)
+            end
             find_methods_tree(child_ast, methods_ast)
+            rescue Parser::SyntaxError => e
+              puts "Parsing error :
+              #{e.message}"
           end
         end
       end
