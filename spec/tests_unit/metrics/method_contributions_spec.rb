@@ -12,6 +12,8 @@ describe CodePraise::Entity::FileContributions do
     @measurement_helper = MeasurementHelper.setup
     @method_contributions = CodePraise::Mapper::MethodContributions
       .new(@measurement_helper.file.lines).build_entity
+    rescue Racc::ParseError
+      binding.pry
   end
 
   after do
