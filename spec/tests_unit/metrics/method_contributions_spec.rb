@@ -12,6 +12,8 @@ describe CodePraise::Entity::FileContributions do
     @measurement_helper = MeasurementHelper.setup
     @method_contributions = CodePraise::Mapper::MethodContributions
       .new(@measurement_helper.file.lines).build_entity
+    rescue Racc::ParseError
+      binding.pry
   end
 
   after do
@@ -20,13 +22,11 @@ describe CodePraise::Entity::FileContributions do
 
   describe '#name' do
     it {
-      skip
       _(@method_contributions[0].name).must_be_kind_of String }
   end
 
   describe '#lines' do
     it 'collect line entities' do
-      skip
       _(@method_contributions[0].lines[0])
         .must_be_kind_of CodePraise::Entity::LineContribution
     end

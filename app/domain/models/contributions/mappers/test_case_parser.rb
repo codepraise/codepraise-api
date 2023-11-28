@@ -5,7 +5,7 @@ module CodePraise
     # Find the testcase in test file by using AST (ruby-parser gem)
     module TestCaseParser
       def self.parse(code)
-        ast = Parser::CurrentRuby.parse(code.dump)
+        ast = Parser::Ruby31.parse(code.dump)
         test_cases = []
         find_test_cases(ast, test_cases)
         test_cases.map do |test_case|
