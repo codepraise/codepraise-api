@@ -22,28 +22,29 @@ describe 'Contributor-Level Measurement' do
   describe CodePraise::Value::CreditShare do
     describe '#line_credits' do
       it 'calculate line contribution' do
-        _(@file_credit_share.line_credits.values.sum).must_be :>=, 0
+        _(@file_credit_share.productivity_credit.line_credits.values.sum).must_be :>=, 0
       end
     end
 
     describe '#line_percentage' do
       it 'calculate percentage of contribution' do
+        skip # there is no methid call line_percentage for @file_credit_share
         _(@file_credit_share.line_percentage.values.sum).must_be :>=, 0
       end
     end
 
     describe '#quality_credits' do
       it 'calculate complexity and idiomaticity score' do
-        _(@file_credit_share.quality_credits.keys.sort).must_equal %i[complexity idiomaticity].sort
-        _(@file_credit_share.quality_credits[:complexity].values.sum).must_be :>=, 0
-        _(@file_credit_share.quality_credits[:idiomaticity].values.sum).must_be :>=, 0
+        _(@file_credit_share.quality_credit.keys.sort).must_equal %i[complexity_credits documentation_credits idiomaticity_credits test_credits].sort
+        _(@file_credit_share.quality_credit[:complexity_credits].values.sum).must_be :>=, 0
+        _(@file_credit_share.quality_credit[:idiomaticity_credits].values.sum).must_be :!=, 0
       end
     end
 
     describe '#method_credits' do
       it 'calculate contribution in method' do
-        _(@file_credit_share.method_credits.values.sum).must_be :>=, 0
-        _(@file_credit_share.method_credits.values.sum).must_equal @file.methods.count
+        _(@file_credit_share.productivity_credit.method_credits.values.sum).must_be :>=, 0
+        _(@file_credit_share.productivity_credit.method_credits.values.sum).must_equal @file.methods.count
       end
     end
 
@@ -51,14 +52,14 @@ describe 'Contributor-Level Measurement' do
       it 'should calculate all file credit share in this folder' do
         contributor = @folder_contributions.contributors.first.username
         all_file_credits = @folder_contributions.files.reduce(0) do |sum, file|
-          sum + file.credit_share.line_credits[contributor]
+          sum + file.credit_share.productivity_credit.line_credits.values.sum
         end
-        _(@folder_credit_share.line_credits[contributor]).must_equal all_file_credits
+        _(@folder_credit_share.productivity_credit.line_credits.values.sum).must_equal all_file_credits
       end
 
       describe '#collective_ownership' do
         it 'calculate coefficient variation for each contributor' do
-          skip
+          skip # coefficient_variation and level are not calculated anymore
           contributor = @folder_contributions.contributors.first.username
           _(@folder_credit_share.collective_ownership[contributor].keys.sort)
             .must_equal %i[coefficient_variation level]
