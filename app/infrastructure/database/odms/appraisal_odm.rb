@@ -38,6 +38,13 @@ module CodePraise
         end
       end
 
+      def self.all
+        COLLECTION.find.map do |doc|
+          build_object(doc)
+        end
+      end
+      
+
       def delete
         COLLECTION.delete_one(@document)
       end

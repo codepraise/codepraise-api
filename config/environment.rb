@@ -36,7 +36,7 @@ module CodePraise
     end
 
     configure :development, :test, :data do
-      ENV['MONGODB_URI'] = 'mongodb://' + config.MONGO_URL
+      ENV['MONGODB_URL'] = 'mongodb://' + config.MONGO_URL
     end
 
     configure :development, :data do
@@ -75,7 +75,7 @@ module CodePraise
       end
 
       require 'mongo'
-      MONGO = Mongo::Client.new(ENV['MONGODB_URI'])
+      MONGO = Mongo::Client.new(ENV['MONGODB_URL'])
 
       def self.mongo
         MONGO

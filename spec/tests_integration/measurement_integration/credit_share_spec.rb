@@ -11,7 +11,7 @@ describe 'File-Level Measurement' do
   before do
     @measurement_helper = MeasurementHelper.setup
     @folder_contributions = @measurement_helper.folder_contributions
-    @file = @folder_contributions.files[85]
+    @file = @folder_contributions.files[59]
     @credit_share = CodePraise::Value::CreditShare.build_object(@file)
   end
 
@@ -37,7 +37,6 @@ describe 'File-Level Measurement' do
 
     it 'should sum all credit in a folder' do
       total_credit_share = @folder_contributions.credit_share
-      binding.pry
       total_complexity_credits = @folder_contributions.files.map do |file|
         file.credit_share.quality_credit.complexity_credits.values
       end.flatten.sum

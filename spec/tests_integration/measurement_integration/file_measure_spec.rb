@@ -44,11 +44,11 @@ describe 'File-Level Measurement' do
       end
 
       it 'should calculate number of method' do
-        _(@file.total_methods).must_be :>=, 0
+        _(@file.methods.length).must_be :>=, 0
       end
 
       it 'should calculate number of comment' do
-        _(@file.total_comments).must_be_kind_of Hash
+        _(@file.comments).must_be_kind_of Array
       end
     end
 

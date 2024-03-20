@@ -26,6 +26,8 @@ describe 'AddProject Service Integration Test' do
       project = CodePraise::Github::ProjectMapper
         .new(GITHUB_TOKEN).find(USERNAME, PROJECT_NAME)
 
+      CodePraise::Repository::For.entity(project).create(project)
+
       # WHEN: the service is called with the request form object
       project_made = CodePraise::Service::AddProject.new.call(
         owner_name: USERNAME, project_name: PROJECT_NAME)

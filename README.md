@@ -31,3 +31,10 @@ Status
 - 201: project stored (happy)
 - 404: project or folder not found on Github (sad)
 - 500: problems storing the project (bad)
+
+### Set up for test
+
+1. Run `RACK_ENV=test rake db:migrate` if you never run the test.
+2. Open a new kernal and run `rake worker:run:test`.
+3. Run `rake spec` or any other sperate file on the first kernal to go through the test. 
+
