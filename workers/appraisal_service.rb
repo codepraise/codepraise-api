@@ -18,7 +18,7 @@ module Appraisal
     end
 
     def find_or_init_cache(project_name, owner_name)
-      @cache = CodePraise::Repository::Appraisal.find_or_create_by(
+      @cache = CodePraise::Repository::Appraisal.find_or_create_by( # 存進 mongoDB
         project_name: project_name,
         owner_name: owner_name
       )
@@ -53,7 +53,7 @@ module Appraisal
       @project_folder_contribution = CodePraise::Value::ProjectFolderContributions
         .new(@project, folder_contributions, commit_contributions)
       @reporter.publish(CloneMonitor.progress('Appraised'), 'appraised', @request_id)
-      @gitrepo.delete
+      # @gitrepo.delete
     end
 
     def store_appraisal_cache
